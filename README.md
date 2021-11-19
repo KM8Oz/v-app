@@ -85,3 +85,6 @@ Done in 61.21s.
 ```
 C:\Users\30848\AppData\Roaming\应用名称
 ```
+docker run --name redacademica_net_db3 -e MYSQL_DATABASE=redacademica -e MYSQL_USER=redacademica -e MYSQL_PASSWORD=passskmozdevun000redacademica -e MYSQL_ROOT_PASSWORD=redacademicageneratdbpas1001 -d mysql:5.7
+docker run --name redacademica_net_wordpress -p 8030:80 -e WORDPRESS_DB_NAME=redacademica -e WORDPRESS_DB_HOST=redacademica_net_db3 -e WORDPRESS_DB_USER=redacademica -e WORDPRESS_DB_PASSWORD=passskmozdevun000redacademica -d wordpress
+docker network connect redacademica_net 

@@ -1,26 +1,19 @@
 import React, {useEffect} from 'react';
+
 import { MemoryRouter as Router, Switch, Route, useLocation, useHistory } from 'react-router-dom';
 // import icon from '../../assets/icon.svg';
 import './app.less';
 import { Login, Corp }  from "@render/components";
 import { createStore } from '@render/store/rootStore';
-import { StoreProvider } from '@render/store';
+import { StoreProvider, useStore } from '@render/store';
 import { persist } from "mst-persist";
 import localforage from 'localforage';
 // import env from "react-dotenv";
 const MENU = ["login", "Home"];
 // const history = useHistory();
 export default function App() {
-  console.log("started...");
-  
-  // const location = useLocation();
-
+  // console.log("started...");
  
-  useEffect(() => {
-    if (location) {
-      console.log(location);
-    }
-  }, [])
   const rootStore = createStore()
   persist("vignettes", rootStore, {
     storage: localforage,  // or AsyncStorage in react-native.

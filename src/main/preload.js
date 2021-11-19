@@ -1,4 +1,5 @@
-const { contextBridge, ipcRenderer } = require('electron');
+
+const { contextBridge, ipcRenderer,  } = require('electron');
 
 contextBridge.exposeInMainWorld('dup', {
   ipcRenderer: {
@@ -7,6 +8,9 @@ contextBridge.exposeInMainWorld('dup', {
     },
     exit() {
       ipcRenderer.send('ipc-dup', 'exit');
+    },
+    getCpuUsage(){
+      ipcRenderer.invoke('ipc-dup', 'PROCESS_UTILS_GET_CPU_USAGE');
     },
     miminize() {
       ipcRenderer.send('ipc-dup', 'minimize');

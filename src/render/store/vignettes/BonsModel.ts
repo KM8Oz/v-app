@@ -1,21 +1,27 @@
 import { Instance, types } from "mobx-state-tree";
+import { makeid } from "../../tools";
+enum TypesBons {M="M", J="J", C="C", H="H"};
 const MetaInfo = types.model({
-    id:types.identifier,
-    companyId:types.string,
-    createById:types.number,
-    lastEditById:types.number,
-    createByName:types.number,
-    lastEditByName:types.number,
-    lastEdit:types.Date,
+    companyId:types.maybe(types.string),
+    createById:types.maybe(types.string),
+    lastEditById:types.maybe(types.string),
+    createByName:types.maybe(types.string),
+    lastEditByName:types.maybe(types.string),
+    lastEdit:types.optional(types.string, new Date().toDateString()),
+    facturation_id:types.maybeNull(types.string),
+    factured:types.optional(types.boolean, false)
 })
 const Bon = types.model({
-    id:types.identifier,
+    meta:MetaInfo, 
+    id:types.optional(types.string, makeid(10)),
     city:types.maybeNull(types.string),
     Provider:types.maybeNull(types.string),
     Code0:types.string,
     Code1:types.string,
     Code2:types.string,
-    StationCode:types.string,
+    type:types.optional(types.enumeration(["M", "j", "C", "H"]), TypesBons.H),
+    Quantity:types.optional(types.string, "0"),
+    StationCode:types.optional(types.string, "0"),
     Comment:types.maybe(types.string),
     VouchersTotalNet:types.optional(types.string, "0"),
     VouchersTotalBrut:types.optional(types.string, "0"),
@@ -27,9 +33,38 @@ const Bon = types.model({
 })
 export type BonInstance =  Instance<typeof Bon>;
 const BonsModel = types.model({
-    meta:types.maybeNull(MetaInfo), 
     List:types.optional(types.array(Bon), [])
-}).actions((self)=>({
+}).views(()=>({
+    default:()=>({
+        meta:{
+            companyId:"",
+            createById:"",
+            lastEditById:"",
+            createByName:"",
+            lastEditByName:"",
+           lastEdit:new Date().toDateString(),
+           factured:false,
+           facturation_id:null
+        },
+        type:TypesBons.M, 
+        id:makeid(8),
+        city:"Agadir",
+        Provider:"LOCALUB",
+        Code0:"0",
+        Code1:"ADE00000000",
+        Code2:"0",
+        StationCode:"0",
+        Comment:"NB:",
+        VouchersTotalNet:"0",
+        VouchersTotalBrut:"0",
+        UnitPrice:"0",
+        VouchersCount:"0",
+        ConsumedKilos:"",
+        Quantity:"0",
+        signedBy:"Nom Complete",
+        issued:new Date().toDateString()
+    })
+})).actions((self)=>({
      add: async (bon:BonInstance)=>{
        const existCode0 = self.List.findIndex(e=>e.Code0 == bon.Code0) != -1;
        const existCode1 = self.List.findIndex(e=>e.Code1 == bon.Code1) != -1;

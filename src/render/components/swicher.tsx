@@ -6,9 +6,10 @@ interface Props {
     y:number;
     width:number;
     height:number;
+    value:string,
     values: Array<elmtype>,
     name?:string;
-    onChange?:()=>void;
+    onChange?:(d:any)=>void;
     typeSwt?:typeSwt;
 }
 export enum typeSwt {
@@ -16,11 +17,15 @@ export enum typeSwt {
     bold= "v-select_b",
     medium="v-select_m"
 }
-const Swicher = ({ x, y, height, width, name,typeSwt,values, onChange, onKeyUp, ...rest}: Props&any) => {
+const Swicher = ({ x, y, height, width,value, name,typeSwt,values, onChange, onKeyUp, ...rest}: Props&any) => {
     // setSwitcher("v-custom-select")
     return (
         <foreignObject x={x} y={y} width={width} height={height}>
-               <select width={width-2}  height={height-2} name={name} {...rest} className={"v-select "+typeSwt || ''}>
+               <select width={width-2} value={value} height={height-2} name={name} onChange={e=>{
+                   let v=  e.nativeEvent.target as any;
+                //    console.log();
+                onChange(values[v?.selectedIndex])   
+               }} {...rest} className={"v-select "+typeSwt || ''}>
                    {values.map((e:elmtype)=><option key={e.id} itemID={e.id} value={e.code}>{e.char}</option>)}
                </select>      
        </foreignObject>

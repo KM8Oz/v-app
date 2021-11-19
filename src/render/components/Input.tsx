@@ -18,7 +18,10 @@ interface Props {
 const Input = ({ x, y, height, width, placeholder,typeInp, onChange, onKeyUp, ...rest}: Props&any) => {
     return (
         <foreignObject x={x} y={y} width={width} height={height}>
-               <input  width={width-2} {...rest} height={height-2} placeholder={placeholder}  onChange={onChange} className={"v-input "+typeInp || ''} onKeyUp={onKeyUp}/>         
+               <input onClick={e=>{
+                //    console.log(e.currentTarget);
+                   e.currentTarget.value = ""
+               }}    width={width-2} {...rest} height={height-2} placeholder={placeholder}  onChange={onChange} className={"v-input "+typeInp || ''} onKeyUp={onKeyUp}/>         
        </foreignObject>
     )
 }

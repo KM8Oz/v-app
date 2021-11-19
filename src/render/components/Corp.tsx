@@ -1,25 +1,42 @@
 import { MenuBoxIcons } from "@render/components";
-import * as React from "react"
+import React, {useEffect} from "react"
 import { useState } from "react";
 import { useHistory } from "react-router";
 import { animated, Transition, config, useSpring } from "react-spring";
 import { useStore } from "@render/store";
 import { MenuButton } from "@render/tools"
 import AddScreen from "./pages/AddScreen";
-function BodyWorkComponent(props: React.SVGProps<SVGSVGElement>&{staticcontext:string}) {
-    const [menuConf, setMenuConf] = useState([true,false,false,false]);
+import os from "os-utils";
+import SendScreen from "./pages/sendSceen";
+import SettingsScreen from "./pages/SettingsScreen";
+import ListScreen from "./pages/ListScreen";
+function BodyWorkComponent(props: any) {
+    const [menuConf, setMenuConf] = useState([false,false,false,true]);
     const history = useHistory();
-    const { User } = useStore();
+    const { User, ErrorsModel } = useStore();
     const addAction = ()=>{
         var emty = Array(5).fill(false);
           emty[0] = true;
-          console.log(User);
+          // console.log(User);
           setMenuConf(emty)
     }
+    // const location = useLocation();
+  useEffect(() => {
+    let interv = setInterval(()=>{
+      
+      os.cpuUsage(function(v){
+        ErrorsModel.cpuUsage(' | CPU Usage (%): ' + Number(v).toFixed(2));
+    });
+      
+    },1000 )
+    return () => {
+      clearInterval(interv);
+    };
+  }, []);
     const sendAction = ()=>{
         var emty = Array(5).fill(false);
           emty[1] = true;
-          
+          // history.push("/Send");
           setMenuConf(emty)
     }
     const settingAction = ()=>{
@@ -44,14 +61,27 @@ function BodyWorkComponent(props: React.SVGProps<SVGSVGElement>&{staticcontext:s
       opacity: menuConf[0] ? 1 : 0 ,
       transform: `perspective(600px) rotateX(${menuConf[0] ? 0 : 180}deg)`,
       config: { mass: 5, tension: 500, friction: 80 },})
+      const style1 = useSpring({ 
+        opacity: menuConf[1] ? 1 : 0 ,
+        transform: `perspective(600px) rotateX(${menuConf[1] ? 0 : 180}deg)`,
+        config: { mass: 5, tension: 500, friction: 80 },})
+      const style2 = useSpring({ 
+        opacity: menuConf[2] ? 1 : 0 ,
+        transform: `perspective(600px) rotateX(${menuConf[2] ? 0 : 180}deg)`,
+        config: { mass: 5, tension: 500, friction: 80 },})
+      const style3 = useSpring({ 
+        opacity: menuConf[3] ? 1 : 0 ,
+        transform: `perspective(600px) rotateX(${menuConf[3] ? 0 : 180}deg)`,
+        config: { mass: 5, tension: 500, friction: 80 },})
   return (
-    <svg
+    <animated.svg
       width={1001}
       height={550}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       {...props}
     >
+
          <path
         d="M986 39c8.284 0 15 6.716 15 15v7c0 8.284-6.716 15-15 15h-53.639a24.9 24.9 0 01-14.964-4.998l-3.246-2.44a18.827 18.827 0 00-20.893-1.159 18.83 18.83 0 01-9.497 2.62L210.5 73l-8.487 5.53a47 47 0 01-49.665 1.025L143 74l-39.225-.72c-8.39-.154-15.275 6.606-15.275 14.998V286.25l3.714 199.882c.157 8.426 7.223 15.07 15.642 14.708l28.294-1.217a10.005 10.005 0 005.206-1.731l13.674-9.33c15.47-10.556 36.195-8.965 49.872 3.83l4.727 4.422a9.998 9.998 0 006.802 2.698L883 501.5c-6.567 20.896-25.782 35.235-47.683 35.583L54 549.5 1.804 18.358C.852 8.668 8.702.382 18.43.808l864.483 37.93a20.73 20.73 0 0110.858 3.644 20.725 20.725 0 0021.417 1.279l3.072-1.616c3.8-2 8.029-3.045 12.323-3.045H986z"
         fill="#4C7A6C"
@@ -75,8 +105,17 @@ function BodyWorkComponent(props: React.SVGProps<SVGSVGElement>&{staticcontext:s
             <MenuBoxIcons />
         </foreignObject>
         <foreignObject x="98.8908" y="76.228" width="778" height="413">
-                <animated.div style={style0}>
-                  {menuConf[0] && <AddScreen />}
+                 <animated.div style={style0}>
+                   {menuConf[0] && <AddScreen />}
+                  </animated.div>
+                  <animated.div style={style1}>
+                   {menuConf[1] && <SendScreen />}
+                  </animated.div>
+                  <animated.div style={style2}>
+                   {menuConf[2] && <SettingsScreen />}
+                  </animated.div>
+                  <animated.div style={style3}>
+                   {menuConf[3] && <ListScreen />}
                   </animated.div>
         </foreignObject>
       <path
@@ -87,12 +126,16 @@ function BodyWorkComponent(props: React.SVGProps<SVGSVGElement>&{staticcontext:s
         d="M43 14c13.833 0 25.057 11.256 25 25.104.046 10.998-7.15 20.348-17.066 23.636v-3.403c7.986-3.307 13.692-10.494 13.802-19.56v-.842C64.73 27.057 55.004 17.23 43.138 17.23c-.351 0-.7.009-1.048.025v37.11l-.624.365-12.591-7.552V30.98l6.816-3.594v4.01l-2.862 1.928v11.719l5.671 3.541V14.405A25.103 25.103 0 0143 14z"
         fill="#fff"
       />
+              <foreignObject id="errors"  x="157.8908" y="504.228" width="309" height="39">
+            <p>{ErrorsModel.cpu_usage}</p>
+        </foreignObject>
       <defs>
         <clipPath id="prefix__clip0">
           <path fill="#fff" transform="translate(203 31)" d="M0 0h17v17H0z" />
         </clipPath>
       </defs>
-    </svg>
+      {/* <use xlin="#errors"/> */}
+    </animated.svg>
   )
 }
 

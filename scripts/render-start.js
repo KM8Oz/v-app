@@ -21,7 +21,7 @@ server.listen(port, serverConfig.host || '0.0.0.0', err => {
   console.log(chalk.green(`APP IS LIVE AT http://localhost:${port}`));
 });
 
-// ctrl+c、kill 命令
+// ctrl+c、kill 
 ['SIGINT', 'SIGTERM'].forEach(function (sig) {
   process.on(sig, function () {
     server.close();

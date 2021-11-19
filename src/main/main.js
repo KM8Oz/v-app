@@ -1,6 +1,6 @@
 
 const path = require('path');
-const { app, BrowserWindow, ipcMain, contextBridge, ipcRenderer } = require('electron');
+const { app, BrowserWindow, ipcMain, contextBridge, ipcRenderer, protocol,  } = require('electron');
 const isDev = require('electron-is-dev');
 require('dotenv').config();
 
@@ -16,19 +16,23 @@ function createw_indow() {
   win = new BrowserWindow({
     show: true,
     width: 1001,
-    hasShadow:false,
+    hasShadow: false,
     height: 554,
-    frame:false,
-    resizable:false,
-    transparent: true, 
+    frame: false,
+    resizable: false,
+    transparent: true,
     // icon: getAssetPath('icon.png'),
     webPreferences: {
+      // nodeIntegration: true,
+      // sandbox: true,
+      // preload:path.join(__dirname, '/preload.js'),
       nodeIntegration: true,
+      // contextIsolation: true,
     },
   });
   const URL = isDev
-    ? `http://localhost:${process.env.PORT}`
-    : `file://${path.join(__dirname, '../dist/index.html')}`;
+    ? `http://localhost:${process.env.PORT}/`
+    : `dup://${path.join(__dirname, '../dist/index.html')}`;
 
   win.loadURL(URL);
 }
@@ -55,6 +59,11 @@ function toggleDevTools(bool) {
 
 ipcMain.on('toggle-devtools', (event, bool) => toggleDevTools(bool));
 ipcMain.on('miminize', (event, bool) => win.minimize());
-ipcMain.on('exit', (event, bool) =>  app.quit());
-
-app.whenReady().then(createw_indow);
+ipcMain.on('exit', (event, bool) => app.quit());
+app.whenReady().then(() => {
+  protocol.registerFileProtocol('dup', (request, callback) => { 
+    const url = request.url.substr(7)
+     callback({ path: path.normalize(`${__dirname}/${url}`) });
+    });
+    createw_indow();
+});

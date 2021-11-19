@@ -12,7 +12,9 @@ interface Props {
     value:string;
     format?: string | undefined;
     allowLeadingZeros:boolean,
-    maxLength:number
+    maxLength:number,
+    isQuantity?:boolean,
+    isKilos?:boolean
 }
 interface ValueType {
     floatValue: number
@@ -25,12 +27,15 @@ enum typeNInp {
     Sign="v-numberinput_sign",
     Total="v-numberinput_total"
 }
- function NumberInput({x, y, width,typeNInp , maxLength,format, allowLeadingZeros, height,value, isPrice = false, onChange, ...rest}: Props): ReactElement {
-       const moreAttrs = isPrice ? {prefix:'درهم‎ ',suffix:" DH"}: {};
+ function NumberInput({x, y, width,typeNInp , maxLength,format,isQuantity=false,isKilos=false, allowLeadingZeros, height,value, isPrice = false, onChange, ...rest}: Props): ReactElement {
+       const moreAttrs:object = isPrice ? {prefix:'درهم‎ ',suffix:" DH"}: isQuantity ? {suffix:" L"} : isKilos ? {suffix:" Km"}:{};
     //    console.log(value);
     return (
         <foreignObject x={x} y={y} width={width} height={height} >
-           <NumberFormater maxLength={maxLength} format={format} allowedDecimalSeparators={[",", "."]} allowLeadingZeros={allowLeadingZeros} value={value} className={"v-numberinput "+typeNInp} {...moreAttrs} {...rest} onValueChange={onChange} displayType={"input"}/>
+           <NumberFormater onClick={e=>{
+                //    console.log(e.currentTarget);
+                   e.currentTarget.value = ""
+               }} maxLength={maxLength} format={format} allowedDecimalSeparators={[",", "."]} allowLeadingZeros={allowLeadingZeros} value={value} className={"v-numberinput "+typeNInp} {...moreAttrs} {...rest} onValueChange={onChange} displayType={"input"}/>
         </foreignObject>
     )
 }

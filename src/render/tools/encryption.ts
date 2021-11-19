@@ -1,5 +1,5 @@
 import CryptoJS from "crypto-js";
-import { makeid } from "tools";
+import { makeid } from "@render/tools";
 enum types_entries {
     object="01",
     string="02",

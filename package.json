@@ -22,7 +22,7 @@
     "directories": {
       "buildResources": "assets",
       "output": "release"
-  },
+    },
     "files": [
       "assets/**/*",
       "!node_modules",
@@ -30,7 +30,7 @@
       "src/dist"
     ],
     "mac": {
-      "icon":"assets/icon.icns",
+      "icon": "assets/icon.icns",
       "type": "distribution",
       "hardenedRuntime": true,
       "entitlements": "assets/entitlements.mac.plist",
@@ -40,7 +40,8 @@
     "win": {
       "target": [
         "nsis",
-        "msi"]
+        "msi"
+      ]
     },
     "dmg": {
       "contents": [
@@ -84,14 +85,17 @@
     "mobx-react-lite": "^3.2.1",
     "mobx-state-tree": "^5.0.2",
     "mst-persist": "^0.1.3",
+    "os-utils": "^0.0.14",
     "react": "^16.13.1",
     "react-barcodes": "^1.2.0",
+    "react-date-range": "^1.4.0",
     "react-dom": "^16.13.1",
     "react-number-format": "^4.7.3",
     "react-router-dom": "^5.1.2",
     "react-select": "^4.3.1",
     "react-spring": "^9.2.4",
-    "socket.io-client": "^4.2.0"
+    "socket.io-client": "^4.2.0",
+    "styled-components": "^5.3.1"
   },
   "devDependencies": {
     "@babel/core": "^7.9.6",
@@ -102,9 +106,11 @@
     "@babel/preset-typescript": "^7.9.0",
     "@types/crypto-js": "^4.0.2",
     "@types/react": "^16.9.34",
+    "@types/react-date-range": "^1.4.1",
     "@types/react-dom": "^16.9.7",
     "@types/react-router-dom": "^5.1.5",
     "@types/react-select": "^4.0.17",
+    "@types/styled-components": "^5.1.14",
     "babel-loader": "^8.1.0",
     "babel-plugin-import": "^1.13.0",
     "chalk": "^4.0.0",
