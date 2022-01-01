@@ -1,60 +1,63 @@
-import { useStore } from "@render/store"
-import { Item, ItemSendScreen }  from "@render/components"
+/**
+    * @description      : 
+    * @author           : 
+    * @group            : 
+    * @created          : 19/12/2021 - 14:53:30
+    * 
+    * MODIFICATION LOG
+    * - Version         : 1.0.0
+    * - Date            : 19/12/2021
+    * - Author          : 
+    * - Modification    : 
+**/
+import { usePersistentStore } from "@render/store"
+import { observer } from 'mobx-react-lite';
+import { Item, ItemSendScreen } from "@render/components"
 import { mouseDownHandler, scrollerHandler } from "@render/tools";
-import React, { useState,useRef,  useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { animated, useSpring } from "react-spring";
 import Facturation from "../panels/Facturation";
+import { Spin } from 'antd';
+import { LoadingOutlined } from '@ant-design/icons';
+import styled from "styled-components"
 
-function SendScreen(props: React.SVGProps<SVGSVGElement>) {
-    const  { Bons } = useStore();
+const SendScreen = observer((props: React.SVGProps<SVGSVGElement>) => {
+    const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
+    const { Bons, hydrate, hydrated } = usePersistentStore();
     const [list, setlist] = useState<any>(Bons);
     const [panel, setPanel] = useState(false);
     useEffect(() => {
-         setlist(Bons);
+        hydrate()
+        setlist(Bons);
         return () => {
             setlist([]);
         };
     }, []);
     const TEST = new Array(9).fill(null);
-    const [scrollX, setScrollX] =  useState(0);
+    const [scrollX, setScrollX] = useState(0);
     const [number, setNumber] = useState(null)
+    const { User } = usePersistentStore()
     const scrolled = useRef(null);
-    //  useEffect(() => {
-    //      console.log(scrollX);
-         
-    //      return () => {
-    //          return null
-    //      };
-    //  }, [scrollX]);
-    const style0 = useSpring({ 
-        top:`${scrollX}%`,
-        config: { mass: 5, tension: 500, friction: 80 },})
-    return (
+    const style0 = useSpring({
+        top: `${scrollX}%`,
+        config: { mass: 5, tension: 500, friction: 80 },
+    })
+    return hydrated ? (
         <div style={{
             flex: 1
         }}>
-            <button onClick={()=>setPanel(true)} style={{
-                width: 70,
-                height:20,
-                fontSize:12,
-                position: "absolute",
-                top: 25,
-                left: 15,
-                textAlign:"center",
-                outline: "unset",
-                padding: "3px 7px",
-                fontFamily:"Archivo",
-                border:"1px solid #ccc"
+            <AddBtn onClick={() => {
+                setPanel(true);
             }}>
-               Ajouter
-            </button>
-             <div className="panelAddFacturation" style={{
-                 position: "absolute",
-                 top:panel ? 78 : 0,
-                 left:panel ? 217 : 168
-             }}>
-                    <Facturation open={panel} setPanel={setPanel}/>
-             </div>
+                Ajouter
+            </AddBtn>
+            <div className="panelAddFacturation" style={{
+                position: "absolute",
+                top: panel ? 78 : 0,
+                left: panel ? 217 : 168
+            }}>
+                <Facturation open={panel} setPanel={setPanel} />
+            </div>
             <svg
                 width={822}
                 height={417}
@@ -83,22 +86,22 @@ function SendScreen(props: React.SVGProps<SVGSVGElement>) {
                     <path fill="#C4C4C4" d="M2 2h798v413H2z" />
                 </mask>
                 <foreignObject width="107" height="50" x="5" y="20">
-                {/* <div className="facture_number">
+                    {/* <div className="facture_number">
                     <p>Nº de facture:</p>
                       <input  value={number} onChange={(e)=>setNumber(e.currentTarget.valueAsNumber)} maxLength={11} pattern="[0-9]{11}" type="number" placeholder="numero de facture" />
                   </div>  */}
-                  </foreignObject>
+                </foreignObject>
                 <foreignObject x="111" y="20" width="12" height="380">
-                    <animated.div  onMouseDown={(e)=>scrollerHandler(scrolled.current,e,setScrollX)} className="scroller" style={style0}>
+                    <animated.div onMouseDown={(e) => scrollerHandler(scrolled.current, e, setScrollX)} className="scroller" style={style0}>
                     </animated.div>
-                    </foreignObject>
+                </foreignObject>
                 <foreignObject x="140" y="-2" width="680" height="425">
-                    <div className="items-send-screen" ref={scrolled} onMouseDown={(e)=>mouseDownHandler(e,setScrollX)}>
-                      {
-            list.List.filter(e=>!e.meta.factured).
-                                map((e, i)=><ItemSendScreen bon={e} key={i} />)
-                        // TEST.map((e:any,i)=><ItemSendScreen key={i} />)
-                      }
+                    <div className="items-send-screen" ref={scrolled} onMouseDown={(e) => mouseDownHandler(e, setScrollX)}>
+                        {
+                            list.List.filter(e => !e.meta.factured).
+                                map((e, i) => <ItemSendScreen bon={e} key={i} />)
+                            // TEST.map((e:any,i)=><ItemSendScreen key={i} />)
+                        }
                     </div>
                 </foreignObject>
                 <defs>
@@ -127,7 +130,28 @@ function SendScreen(props: React.SVGProps<SVGSVGElement>) {
                 </defs>
             </svg>
         </div>
-    )
-}
-
+    ) : (<div style={{
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center"
+    }}>
+        <Spin indicator={antIcon} />
+    </div>);
+})
+const AddBtn = styled.button`
+    width: 70px;
+    height: 20px;
+    font-size: 12;
+    position: absolute;
+    top: 25;
+    left: 15;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    outline: unset;
+    padding: 3px 7px;
+    font-family: Archivo, Arial, Helvetica, sans-serif;
+    border: 1px solid #ccc;
+`;
 export default SendScreen

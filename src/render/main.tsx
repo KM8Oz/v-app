@@ -3,6 +3,7 @@
  * @render
  * @main
  */
+import "dotenv/config";
 import React from 'react'
 import ReactDom from 'react-dom'
 // import { HashRouter } from 'react-router-dom'

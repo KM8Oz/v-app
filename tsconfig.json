@@ -7,9 +7,23 @@
     "jsx": "preserve",
     "baseUrl": ".",
     "paths": {
-      "@root/*": ["./*"],
-      "@main/*": ["src/marin/*"],
-      "@render/*": ["src/render/*"],
+      "@root/*": [
+        "./*"
+      ],
+      "@main/*": [
+        "src/marin/*"
+      ],
+      "@render/*": [
+        "src/render/*"
+      ]
     }
   },
+  "include": [
+    "*/**/*"
+  ],
+  "exclude": [
+    "node_modules/**/*",
+    "config/*",
+    "eslint-rules/*"
+  ],
 }

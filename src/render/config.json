@@ -1,0 +1,28 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema",
+    "code_fournisseur":{
+        "format":"xxx",
+        "type":"digite",
+        "max":3
+    },
+    "num_facture":{
+        "format":"xxxxxx",
+        "type":"digite",
+        "max":6
+    },
+    "date_facture":{
+        "format":"mmyyyy",
+        "type":"date",
+        "max":6
+    },
+    "date_bon":{
+        "format":"ddmmyyyy",
+        "type":"date",
+        "max":8
+    },
+    "ref_bon":{
+        "format":"cxxxxxx",
+        "type":"mixte",
+        "max":7
+    }
+}

@@ -84,7 +84,7 @@ module.exports = function (env) {
           use: getStyleLoaders(true),
         },
         {
-          test: /\.(jpe?g|png|svg|gif)$/,
+          test: /\.(jpe?g|png|svg|gif|woff2|woff)$/,
           loader: 'file-loader',
         },
       ],

@@ -1,3 +1,15 @@
+/**
+    * @description      : 
+    * @author           : 
+    * @group            : 
+    * @created          : 19/12/2021 - 23:46:48
+    * 
+    * MODIFICATION LOG
+    * - Version         : 1.0.0
+    * - Date            : 19/12/2021
+    * - Author          : 
+    * - Modification    : 
+**/
 import React, { useState } from 'react';
 import { useSpring, animated } from "react-spring";
 import { useHistory } from 'react-router';
@@ -7,7 +19,6 @@ interface PropsMenu{
     action?:()=>void
 }
 export default function MenuButton({icon, active, action}:PropsMenu) {
-    const history = useHistory();
     const Icon = ({icon}:any)=>  {
         switch (icon) {
         case "add":
@@ -66,7 +77,7 @@ export default function MenuButton({icon, active, action}:PropsMenu) {
             </svg>);
     }
 }
-const styles = useSpring({ borderWidth: active ? 5 : 2 });
+const styles = useSpring({ boxShadow: active ? "0px 0px 0px 2.5px #2c2c2c":"0px 0px 0px 1px #2c2c2c" });
     return (
         <animated.div  className="menu-btn_add" onClick={action} style={styles}>
            <Icon icon={icon} />

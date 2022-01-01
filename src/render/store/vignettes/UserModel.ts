@@ -1,8 +1,22 @@
+/**
+    * @description      : 
+    * @author           : 
+    * @group            : 
+    * @created          : 17/12/2021 - 23:31:02
+    * 
+    * MODIFICATION LOG
+    * - Version         : 1.0.0
+    * - Date            : 17/12/2021
+    * - Author          : 
+    * - Modification    : 
+**/
 import { 
     // Instance, 
     types 
 } from "mobx-state-tree";
 import { makeid } from "@render/tools";
+import CryptoJS from "crypto-js";
+import { EncPacket } from "../../tools/encryption";
 // import { EncPacket } from "tools/encryption";
 const MetaInfo = types.model({
     id:types.optional(types.identifier, makeid(8)),
@@ -20,13 +34,17 @@ const EditEvent = types.model({
 })
 const UserModel = types.model({
     meta:types.optional(MetaInfo, {}), 
-    history:types.optional(types.array(EditEvent), [])
+    history:types.optional(types.array(EditEvent), []),
+    ssid:types.maybeNull(types.string)
 }).actions((self)=>({
    setUsername(val:string){
        self.meta.username = val;
    },
    login(username:string, password:string){
-   // const packet = EncPacket({username,password});
+ 
+   },
+   setssid(v:string){
+    self.ssid = v;
    }
 }))
 // type UserType = Instance<typeof UserModel>;

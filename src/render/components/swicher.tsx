@@ -1,5 +1,16 @@
-import React from 'react'
-import { elmtype } from '@render/store/vignettes/Configs'
+/**
+    * @description      : 
+    * @author           : 
+    * @group            : 
+    * @created          : 19/12/2021 - 16:52:04
+    * 
+    * MODIFICATION LOG
+    * - Version         : 1.0.0
+    * - Date            : 19/12/2021
+    * - Author          : 
+    * - Modification    : 
+**/
+import React from 'react';
 
 interface Props {
     x:number;
@@ -7,7 +18,7 @@ interface Props {
     width:number;
     height:number;
     value:string,
-    values: Array<elmtype>,
+    values: Array<any>,
     name?:string;
     onChange?:(d:any)=>void;
     typeSwt?:typeSwt;
@@ -26,7 +37,7 @@ const Swicher = ({ x, y, height, width,value, name,typeSwt,values, onChange, onK
                 //    console.log();
                 onChange(values[v?.selectedIndex])   
                }} {...rest} className={"v-select "+typeSwt || ''}>
-                   {values.map((e:elmtype)=><option key={e.id} itemID={e.id} value={e.code}>{e.char}</option>)}
+                   {values.map((e:any)=><option key={e.id} itemID={e.id} value={e.code}>{e.char}</option>)}
                </select>      
        </foreignObject>
     )

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import styled from "styled-components";
-import { useStore } from '../store';
+import { observer } from "mobx-react-lite"
+import { usePersistentStore } from '../store';
 interface Props {
     Bon?:any;
     setBon?:React.Dispatch<React.SetStateAction<any>>;
@@ -8,9 +9,8 @@ interface Props {
 }
 
 
-
-export const MenuLeft = ({Bon, setBon, saveAction}: Props) => {
-    const { Bons } = useStore()
+ const MenuLeft = observer(({Bon, setBon, saveAction}: Props) => {
+    const { Bons } = usePersistentStore()
     //  const [ShowModel, setShowModel] = useState(false);
      return (
         <MenuLeftWrapper>
@@ -28,7 +28,7 @@ export const MenuLeft = ({Bon, setBon, saveAction}: Props) => {
             <Souvegarder onClick={saveAction}>SOUVEGARDER</Souvegarder>
         </MenuLeftWrapper>
      )
-}
+})
 /**
  * coded by @kmoz000
  * styled component suited by profile brodcum
@@ -155,7 +155,7 @@ const Archiver = styled.button`
 //     }
 //   }
 // `;
-const Souvegarder = styled.button`
+ const Souvegarder = styled.button`
    border:none;
    outline:unset;
    width:90px;
@@ -180,3 +180,4 @@ const Burrger = ()=>(
 </svg>
 
 )
+export { MenuLeft, Souvegarder }

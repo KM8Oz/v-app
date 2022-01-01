@@ -2,6 +2,7 @@ import React from 'react'
 import { ipcRenderer } from 'electron';
 export default function () {
     const App = window as any;
+    
     return (
         <div className={"miClo"}>
             <div className="minimizeBn" onClick={

@@ -1,3 +1,15 @@
+/**
+    * @description      : 
+    * @author           : 
+    * @group            : 
+    * @created          : 18/12/2021 - 00:06:16
+    * 
+    * MODIFICATION LOG
+    * - Version         : 1.0.0
+    * - Date            : 18/12/2021
+    * - Author          : 
+    * - Modification    : 
+**/
 import CryptoJS from "crypto-js";
 import { makeid } from "@render/tools";
 enum types_entries {
@@ -37,4 +49,5 @@ function EncPacket(entries:object | string | Function){
             return encrypted(entries as string)+types_entries.string;
     }
 }
+
 export { EncPacket };

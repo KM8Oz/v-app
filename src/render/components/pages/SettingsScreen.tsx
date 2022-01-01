@@ -1,118 +1,224 @@
-import { useStore } from "@render/store"
-import { Item, ItemSendScreen }  from "@render/components"
+import { usePersistentStore } from "@render/store"
+import { Item, ItemSendScreen, Souvegarder } from "@render/components"
 import { mouseDownHandler, scrollerHandler } from "@render/tools";
-import React, { useState,useRef,  useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { animated, useSpring } from "react-spring";
 import Facturation from "../panels/Facturation";
-
-function SettingsScreen(props: React.SVGProps<SVGSVGElement>) {
-    const  { Bons } = useStore();
+import styled from "styled-components";
+import backSessings from "../../assets/bon_longline.svg";
+import ScrollContainer from 'react-indiana-drag-scroll';
+import CFournisseurs from "../settings/CFournisseurs";
+import NFacture from "../settings/NFacture";
+import DFacture from "../settings/DFacture";
+import DBon from "../settings/DBon";
+import CBon from "../settings/CBon";
+import CBar from "../settings/CBar";
+import CArticle from "../settings/CArticle";
+import Quantity from "../settings/Quantity";
+import PU from "../settings/PU";
+import MontantTotal from "../settings/MontantTotal";
+import { observer } from "mobx-react-lite";
+import { Tabs } from "antd";
+import Icon, { AppleOutlined, CloudSyncOutlined, SettingOutlined, UnorderedListOutlined } from "@ant-design/icons";
+const SettingsScreen = observer((props: React.SVGProps<SVGSVGElement>) => {
+    const { Bons, hydrate, hydrated } = usePersistentStore();
     const [list, setlist] = useState<any>(Bons);
     const [panel, setPanel] = useState(false);
     useEffect(() => {
-         setlist(Bons);
+        hydrate()
+        setlist(Bons);
         return () => {
             setlist([]);
         };
     }, []);
+    const saveAction = () => {
+        // console.log("faved");
+    }
     const TEST = new Array(9).fill(null);
-    const [scrollX, setScrollX] =  useState(0);
+    const [scrollX, setScrollX] = useState(0);
     const [number, setNumber] = useState(null)
-    const scrolled = useRef(null);
-    //  useEffect(() => {
-    //      console.log(scrollX);
-         
-    //      return () => {
-    //          return null
-    //      };
-    //  }, [scrollX]);
-    const style0 = useSpring({ 
-        top:`${scrollX}%`,
-        config: { mass: 5, tension: 500, friction: 80 },})
+    const [numbersStates, setnumbersStates] = useState([true, false, false, false, false, false, false, false, false, false])
+    const setActivestate = (i: number) => {
+        const _falses = new Array(10).fill(false);
+        _falses[i] = true;
+        setnumbersStates(_falses);
+    }
+    // const scrolled = useRef(null);
+    // const style0 = useSpring({
+    //     top: `${scrollX}%`,
+    //     config: { mass: 5, tension: 500, friction: 80 },
+    // })
     return (
-        <div style={{
-            flex: 1
-        }}>
-            {/* <button onClick={()=>setPanel(true)} style={{
-                width: 70,
-                height:20,
-                fontSize:12,
-                position: "absolute",
-                top: 25,
-                left: 15,
-                textAlign:"center",
-                outline: "unset",
-                padding: "3px 7px",
-                fontFamily:"Archivo",
-                border:"1px solid #ccc"
-            }}>
-               Ajouter
-            </button> */}
-            <svg
-                width={822}
-                height={417}
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                {...props}
-            >
-                <g filter="url(#prefix__filter0_d)">
-                    <path
-                        d="M136.5 6a4 4 0 00-4-4h-18.624c-.477 0-.942.148-1.331.425-20.12 14.293-47.08 14.293-67.2 0A2.298 2.298 0 0044.015 2H6a4 4 0 00-4 4v405a4 4 0 004 4h37.991c.488 0 .96-.174 1.332-.491 19.373-16.515 47.872-16.515 67.244 0 .372.317.844.491 1.332.491H132.5a4 4 0 004-4V6z"
-                        fill="#FDFDFD"
-                    />
-                </g>
-                <path stroke="#EFE9E9" strokeWidth={2} d="M117 21v375" />
-                <mask
-                    id="prefix__a"
-                    style={{
-                        maskType: "alpha",
-                    }}
-                    maskUnits="userSpaceOnUse"
-                    x={2}
-                    y={2}
-                    width={798}
-                    height={413}
-                >
-                    <path fill="#C4C4C4" d="M2 2h798v413H2z" />
-                </mask>
-                <foreignObject width="107" height="50" x="5" y="20">
-                {/* <div className="facture_number">
-                    <p>Nº de facture:</p>
-                      <input  value={number} onChange={(e)=>setNumber(e.currentTarget.valueAsNumber)} maxLength={11} pattern="[0-9]{11}" type="number" placeholder="numero de facture" />
-                  </div>  */}
-                  </foreignObject>
-                <foreignObject x="111" y="20" width="12" height="380">
-                    <animated.div  onMouseDown={(e)=>scrollerHandler(scrolled.current,e,setScrollX)} className="scroller" style={style0}>
-                    </animated.div>
-              </foreignObject>
-         
-                <defs>
-                    <filter
-                        id="prefix__filter0_d"
-                        x={0}
-                        y={0}
-                        width={138.5}
-                        height={417}
-                        filterUnits="userSpaceOnUse"
-                        colorInterpolationFilters="sRGB"
+        <BodySetings className="undraggble">
+            <Left>
+                <Souvegarder style={{
+                    gridArea: "save",
+                    alignSelf: "end"
+                }} onClick={saveAction}>SOUVEGARDER</Souvegarder>
+            </Left>
+            <Body>
+                <Tabs defaultActiveKey="1" animated={{
+                    inkBar: false,
+                    tabPane: false
+                }} tabBarStyle={{
+                    backgroundColor: "rgb(76, 122, 108)",
+                    color: "#fff"
+                }} >
+                    <Tabs.TabPane
+                        style={{
+                            // margin: "0px 19px"
+                        }}
+
+                        tab={
+                            <span>
+                                <UnorderedListOutlined />
+                                base de données
+                            </span>
+                        }
+                        key="0"
                     >
-                        <feFlood floodOpacity={0} result="BackgroundImageFix" />
-                        <feColorMatrix
-                            in="SourceAlpha"
-                            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-                            result="hardAlpha"
-                        />
-                        <feOffset />
-                        <feGaussianBlur stdDeviation={1} />
-                        <feComposite in2="hardAlpha" operator="out" />
-                        <feColorMatrix values="0 0 0 0 0.228083 0 0 0 0 0.991667 0 0 0 0 0.0371875 0 0 0 0.25 0" />
-                        <feBlend in2="BackgroundImageFix" result="effect1_dropShadow" />
-                        <feBlend in="SourceGraphic" in2="effect1_dropShadow" result="shape" />
-                    </filter>
-                </defs>
-            </svg>
-        </div>
+                        <Tabs
+                        type="card"
+                        animated={{
+                            inkBar: false,
+                            tabPane: false
+                        }} defaultActiveKey="0" tabPosition={"left"} style={{ height: 366 }}>
+                            <Tabs.TabPane tab={<ASpan><SettingOutlined />CArticle</ASpan>} key={"0"}>
+                                <CArticle />
+                            </Tabs.TabPane>
+                            <Tabs.TabPane tab={<ASpan><SettingOutlined />CBar</ASpan>} key={"1"}>
+                                <CBar />
+                            </Tabs.TabPane>
+                            <Tabs.TabPane tab={<ASpan><SettingOutlined />CBon</ASpan>} key={"2"}>
+                                <CBon />
+                            </Tabs.TabPane>
+                            <Tabs.TabPane tab={<ASpan><SettingOutlined />CFournisseur</ASpan>} key={"3"}>
+                                <CFournisseurs />
+                            </Tabs.TabPane>
+                            <Tabs.TabPane tab={<ASpan><SettingOutlined />DBon</ASpan>} key={"4"}>
+                                <DBon />
+                            </Tabs.TabPane>
+                            <Tabs.TabPane tab={<ASpan><SettingOutlined />DFacture</ASpan>} key={"5"}>
+                                <DFacture />
+                            </Tabs.TabPane>
+                            <Tabs.TabPane tab={<ASpan><SettingOutlined />MontantTotal</ASpan>} key={"6"}>
+                                <MontantTotal />
+                            </Tabs.TabPane>
+                            <Tabs.TabPane tab={<ASpan><SettingOutlined />NFacture</ASpan>} key={"7"}>
+                                <NFacture />
+                            </Tabs.TabPane>
+                            <Tabs.TabPane tab={<ASpan><SettingOutlined />PU</ASpan>} key={"8"}>
+                                <PU />
+                            </Tabs.TabPane>
+                            <Tabs.TabPane tab={<ASpan><SettingOutlined />Quantity</ASpan>} key={"9"}>
+                                <Quantity />
+                            </Tabs.TabPane>
+                        </Tabs>
+                    </Tabs.TabPane>
+                    <Tabs.TabPane
+                        tab={
+                            <span>
+                                <CloudSyncOutlined />
+                                synchronisation
+                            </span>
+                        }
+                        key="2"
+                    >
+                        Tab 2
+                    </Tabs.TabPane>
+                </Tabs>
+            </Body>
+        </BodySetings>
     )
-}
+})
+const BodySetings = styled.div`
+    background: url(${backSessings});
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 778px 430px;
+    width: 778px;
+    height: 430px;
+    margin-top: -5px;
+    display: grid; 
+    grid-template-columns: 0.21fr 1.2fr;
+    grid-template-rows: 1fr; 
+   gap: 0px 1px; 
+   grid-template-areas: 
+    "left panel"; 
+    /* margin-bottom: -5px; */
+`;
+const Left = styled.div`
+grid-area: left;
+display: grid; 
+justify-items: center;
+  grid-auto-columns: 1fr; 
+  grid-template-columns: 1fr; 
+  grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr; 
+  gap: 0px 1px; 
+  grid-template-areas: 
+    "save"
+    "."
+    "."
+    "."
+    "."
+    "."; 
+`;
+const ASpan = styled.span`
+font-family:Archivo, Arial;
+       cursor: pointer;
+  &:hover{
+      transform: scale(1.01);
+  }
+  &:active{
+      transform: scale(.99);
+  }
+`;
+const Body = styled.div`
+   grid-area: panel;
+   display:grid;
+   overflow:hidden;
+   grid-area: panel;
+    display: grid;
+    overflow: hidden;
+    align-self: flex-start;
+    margin: 9px 2px 9px -1px;
+    border-top-right-radius: 4px;
+`;
+const NumbersList = styled(ScrollContainer)`
+    max-width: 99%;
+    align-self: start;
+    justify-self: center;
+    grid-area: numbers;
+    align-items: center;
+    border-radius:5px;
+    justify-items: center;
+    display: grid;
+    grid-template-columns: 0.3fr 0.8fr 1fr 1fr 1fr 1fr .3fr 1fr 1fr 1fr;
+    gap: 0px 2px;
+    margin: unset;
+    padding:unset;
+`;
+const Numbers = styled.span<{ active?: boolean }>`
+   font-family: Arial, Helvetica, sans-serif;
+   font-size: 17px;
+   color: #000;
+   font-weight: bold;
+   border-radius: 14px;
+   letter-spacing: 35%;
+   padding: 0em 5px;
+   margin:unset;
+   background-color: #cccccc73;
+   display:flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+  &:hover{
+      transform: scale(1.01);
+  }
+  &:active{
+      transform: scale(.99);
+  }
+   border:${({ active }) => active ? '2px solid #4C7A6C' : '2px solid #4c7a6c0'};
+`;
 
 export default SettingsScreen

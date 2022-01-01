@@ -1,4 +1,3 @@
-import { useStore } from "@render/store"
 import { ItemSendScreen } from "@render/components"
 import { mouseDownHandler, mouseScroller, scrollerHandler } from "@render/tools";
 import React, { useState, useRef, useEffect } from "react";
@@ -9,15 +8,18 @@ import bodySvg from "@render/assets/body.svg";
 import DaterangePicker from "../panels/daterangePicker";
 import CalandarIcon from "../buttons/CalandarIcon";
 import SearchIcon from "../buttons/SearchIcon";
-import {BonItem} from "../BonItem";
-function ListScreen(props: React.SVGProps<SVGSVGElement>) {
-    const { Bons } = useStore();
+import { BonItem } from "../BonItem";
+import { usePersistentStore }  from "@render/store";
+import { observer } from "mobx-react-lite";
+const ListScreen = observer((props: React.SVGProps<SVGSVGElement>)=>{
+    const { Bons, hydrate, hydrated } = usePersistentStore();
     const [list, setlist] = useState<any>(Bons);
     const [order, setOrder] = useState([true, false, false]);
     const [ScrollingLeftPerCen, setScrollingLeftPerCen] = useState(0);
     const [panel, setPanel] = useState(false);
     const leftListRef = useRef(null);
     useEffect(() => {
+        hydrate()
         setlist(Bons);
         return () => {
             setlist([]);
@@ -27,90 +29,85 @@ function ListScreen(props: React.SVGProps<SVGSVGElement>) {
     const [scrollX, setScrollX] = useState(0);
     const [number, setNumber] = useState(null)
     const scrolled = useRef(null);
-    
     const [ShowDatePicker, setShowDatePicker] = useState(false);
     //  useEffect(() => {
-
     //  }, [ScrollingLeftPerCen]);
     const style0 = useSpring({
         top: `${scrollX}%`,
         config: { mass: 5, tension: 500, friction: 80 },
     })
-    
     // useEffect(()=>{
-     
     // }, [order])
     return (
         <Corp className="undraggble">
             <LeftCorp >
                 <LeftCorpHeader>
-                 <LeftCorpHeaderItem onClick={()=> setOrder([!order[0], false, false])} active={Array.isArray(order) && order[0]}>
-                 Nº
-                 </LeftCorpHeaderItem>
-                 <LeftCorpHeaderItem  onClick={()=> setOrder([false, !order[1], false])} active={order[1]}>
-                 Date
-                 </LeftCorpHeaderItem>
-                 <LeftCorpHeaderItem  onClick={()=> setOrder([false, false, !order[2]])} active={order[2]}>
-                 Order
-                 </LeftCorpHeaderItem>
+                    <LeftCorpHeaderItem onClick={() => setOrder([!order[0], false, false])} active={Array.isArray(order) && order[0]}>
+                        Nº
+                    </LeftCorpHeaderItem>
+                    <LeftCorpHeaderItem onClick={() => setOrder([false, !order[1], false])} active={order[1]}>
+                        Date
+                    </LeftCorpHeaderItem>
+                    <LeftCorpHeaderItem onClick={() => setOrder([false, false, !order[2]])} active={order[2]}>
+                        Order
+                    </LeftCorpHeaderItem>
                 </LeftCorpHeader>
-                <LiftScrollBar draggable={false} onMouseDown={
-                (e)=>{
-                    let limits = [136, 462]
-                    let rate = 672;
-                    let ev = (e.clientY/395) - .3;
-                    setScrollingLeftPerCen(ev)
-                    leftListRef.current.scrollTo({
-                        top:ScrollingLeftPerCen*100
-                    })
-                }
-            } className="undraggble" scrollRate={ScrollingLeftPerCen} />
-            <ListScroller ref={leftListRef} onScroll={(ev)=>setScrollingLeftPerCen(ev.currentTarget.scrollTop/(ev.currentTarget.scrollHeight - 17.8*20))}>
-             {Array(20).fill({fac_code:"091231238071",date:"03/04/2021", fac_num:"019/2021" })
-             .map((e,i)=><ListScrollerItm key={i} {...e} />)}
-            </ListScroller>
+                {/* <LiftScrollBar draggable={false} onMouseDown={
+                    (e) => {
+                        let limits = [136, 462]
+                        let rate = 672;
+                        let ev = (e.clientY / 395) - .3;
+                        setScrollingLeftPerCen(ev)
+                        leftListRef.current.scrollTo({
+                            top: ScrollingLeftPerCen * 100
+                        })
+                    }
+                } className="undraggble" scrollRate={ScrollingLeftPerCen} /> */}
+                <ListScroller ref={leftListRef} onScroll={(ev) => setScrollingLeftPerCen(ev.currentTarget.scrollTop / (ev.currentTarget.scrollHeight - 17.8 * 20))}>
+                    {Array(20).fill({ fac_code: "091231238071", date: "03/04/2021", fac_num: "019/2021" })
+                        .map((e, i) => <ListScrollerItm key={i} {...e} />)}
+                </ListScroller>
             </LeftCorp>
             <RightCorp>
-              <SearchTools>
-                  <SearchToolsInputs>
-                      <SearchToolsInput placeholder="Nº de facture _" type="text" pattern="\d*" maxLength={15} />
-                      <SearchToolsInput placeholder="Nº de Bon _" type="text" pattern="\d*" maxLength={15}/>
-                      <SearchToolsInput placeholder="Station_" type="text" pattern="[A-Za-z0-9]+" maxLength={15} />
-                  </SearchToolsInputs>
-                  <IconsSearch>
-                      <CalandarIcon onClick={()=>setShowDatePicker(!ShowDatePicker)} />
-                      <SearchIcon />
-                  </IconsSearch>
-              </SearchTools>
-              <ListBonsScroller>
-                {
-                   Array(10).fill({letter:"M", code:"208472", date:"01/01/2021", facNum:"091231238071"})
-                                    .map((e, i)=><BonItem bon={e} order={i} key={i} />)
-                }
-            </ListBonsScroller>
+                <SearchTools>
+                    <SearchToolsInputs>
+                        <SearchToolsInput placeholder="Nº de facture _" type="text" pattern="\d*" maxLength={15} />
+                        <SearchToolsInput placeholder="Nº de Bon _" type="text" pattern="\d*" maxLength={15} />
+                        <SearchToolsInput placeholder="Station_" type="text" pattern="[A-Za-z0-9]+" maxLength={15} />
+                    </SearchToolsInputs>
+                    <IconsSearch>
+                        <CalandarIcon onClick={() => setShowDatePicker(!ShowDatePicker)} />
+                        <SearchIcon />
+                    </IconsSearch>
+                </SearchTools>
+                <ListBonsScroller>
+                    {
+                        Array(10).fill({ letter: "M", code: "208472", date: "01/01/2021", facNum: "091231238071" })
+                            .map((e, i) => <BonItem bon={e} order={i} key={i} />)
+                    }
+                </ListBonsScroller>
             </RightCorp>
-            
             <DaterangePicker ShowDatePicker={ShowDatePicker} />
         </Corp>
     )
-}
+})
 const ListScrollerItm = ({
     fac_code,
     date,
     fac_num
-}:{
-    fac_code:string;
-    date:string;
-    fac_num:string;
+}: {
+    fac_code: string;
+    date: string;
+    fac_num: string;
 }) => {
     return (
         <Item className="undraggble">
-         <CodeAndDate before={fac_code} after={date}>
-             <hr />
-         </CodeAndDate>
-          <FacNum>
-              {fac_num}
-          </FacNum>
+            <CodeAndDate before={fac_code} after={date}>
+                <hr />
+            </CodeAndDate>
+            <FacNum>
+                {fac_num}
+            </FacNum>
         </Item>
     )
 }
@@ -219,11 +216,11 @@ const LeftCorpHeader = styled.div`
      align-items: center;
      justify-content: space-around;
 `;
-const LeftCorpHeaderItem = styled.span<{active:Boolean}>`
+const LeftCorpHeaderItem = styled.span<{ active: Boolean }>`
     background-color: #C4C4C4;
     border-radius: 8px;
     width: 49px;
-    border: ${({active})=> active ? '1px solid #000' : '1px solid #00000000'};
+    border: ${({ active }) => active ? '1px solid #000' : '1px solid #00000000'};
     text-align: center;
     color: #000000;
     font-size: 10px;
@@ -238,15 +235,25 @@ const ListScroller = styled.div`
   top: 45px;
   overflow-y: scroll;
   overflow-x: unset;
-  &::-webkit-scrollbar{
-    display: none;
+  /* Chrome, Edge, and Safari */
+  &::-webkit-scrollbar {
+    width: 2px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #50a081;
+    border-radius: 32px;
   }
   border-radius: 7px;
   display: flex;
   flex-direction: column;
   align-items: center;
 `;
-const ListBonsScroller =  styled.div`
+const ListBonsScroller = styled.div`
     width: 575px;
     height: 363px;
     /* background-color: #ccc; */
@@ -286,19 +293,20 @@ const Item = styled.div`
   justify-content: space-between;
 `;
 const FacNum = styled.span`
-   background-color: #4C7A6C;
-   border-radius: 8px;
-   color: #fff;
-   width: 48px;
-   padding: 1.5px 1.5px;
-   margin: 0px 2px;
-   height: 10px;
-   font-family: Arial, Helvetica, sans-serif;
-   font-weight: 500;
-   font-size: 9px;
-   text-align: center;
+    background-color: #4C7A6C;
+    border-radius: 8px;
+    color: #fff;
+    width: 47px;
+    padding: 0.5px 0.5px;
+    margin: 0px 2px;
+    height: 13px;
+    font-family: Arial,Helvetica,sans-serif;
+    font-weight: 500;
+    font-size: 8.5px;
+    font-weight: bold;
+    text-align: center;
 `;
-const CodeAndDate = styled.div<{before:string, after:string}>`
+const CodeAndDate = styled.div<{ before: string, after: string }>`
    /* width: 10px; */
    font-size:15.5px;
    /* color: #C4C4C4; */
@@ -308,12 +316,15 @@ const CodeAndDate = styled.div<{before:string, after:string}>`
     flex: 1;
     flex-direction: row;
     justify-content: space-between;
+    position:relative;
+    height: 16px;
    /* flex-direction: row; */
    /* justify-content: space-around; */
    hr{
-    background: #ccc;
-    height: 1px;
-    width: 15px;
+    position: absolute;
+    background: #8a8a8a;
+    width: 16px;
+    height: .1px;
     color: #C4C4C4;
     transform: rotate(90deg);
     margin: unset;
@@ -326,27 +337,27 @@ const CodeAndDate = styled.div<{before:string, after:string}>`
    &:before{
        display: block;
        position: absolute;
-       content: ${({before})=>"'"+String(before)+"'"};
+       content: ${({ before }) => "'" + String(before) + "'"};
        color: #000;
        font-size: 10px;
        font-family: Arial, Helvetica, sans-serif;
        text-align: center;
        width: 78px;
        height: 9px;
-       margin: 3px 5px;
+       left: 6px;
+    top: 1px;
    }
    &:after{
-       content: ${({after})=>"'"+String(after)+"'"};
+       content: ${({ after }) => "'" + String(after) + "'"};
        color: #000;
        font-size: 10px;
        font-family: Arial, Helvetica, sans-serif;
        text-align: center;
        width: 78px;
        height: 9px;
-       margin: 3px 5px;
    }
 `;
-const LiftScrollBar = styled.div<{scrollRate}>`
+const LiftScrollBar = styled.div<{ scrollRate }>`
     position: absolute;
     left: 7px;
     top: 39px;
@@ -369,7 +380,7 @@ const LiftScrollBar = styled.div<{scrollRate}>`
     background: #C4C4C4;
     position: absolute;
     left: -2px;
-     top: ${({scrollRate})=>scrollRate*331}px;
+     top: ${({ scrollRate }) => scrollRate * 331}px;
      cursor: grab;
    }
    /* height: 100%; */
