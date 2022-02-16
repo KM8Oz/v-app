@@ -12,7 +12,8 @@
 **/
 import { usePersistentStore } from "@render/store"
 import { observer } from 'mobx-react-lite';
-import { Item, ItemSendScreen } from "@render/components"
+import { Item } from "@render/components"
+import ItemSendScreen from "@render/components/itemSendScreen"
 import { mouseDownHandler, scrollerHandler } from "@render/tools";
 import React, { useState, useRef, useEffect } from "react";
 import { animated, useSpring } from "react-spring";
@@ -20,6 +21,7 @@ import Facturation from "../panels/Facturation";
 import { Spin } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
 import styled from "styled-components"
+import { BonSimpleType } from "../../store/vignettes/BonsModel";
 
 const SendScreen = observer((props: React.SVGProps<SVGSVGElement>) => {
     const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
@@ -28,11 +30,11 @@ const SendScreen = observer((props: React.SVGProps<SVGSVGElement>) => {
     const [panel, setPanel] = useState(false);
     useEffect(() => {
         hydrate()
-        setlist(Bons);
-        return () => {
-            setlist([]);
-        };
-    }, []);
+        // setlist(Bons.List);
+        // return () => {
+        //     setlist([]);
+        // };
+    }, []); 
     const TEST = new Array(9).fill(null);
     const [scrollX, setScrollX] = useState(0);
     const [number, setNumber] = useState(null)
@@ -57,6 +59,7 @@ const SendScreen = observer((props: React.SVGProps<SVGSVGElement>) => {
                 left: panel ? 217 : 168
             }}>
                 <Facturation open={panel} setPanel={setPanel} />
+                {/* <Exported setopen={setopenExport}  estyle={Escaling} /> */}
             </div>
             <svg
                 width={822}
@@ -91,15 +94,15 @@ const SendScreen = observer((props: React.SVGProps<SVGSVGElement>) => {
                       <input  value={number} onChange={(e)=>setNumber(e.currentTarget.valueAsNumber)} maxLength={11} pattern="[0-9]{11}" type="number" placeholder="numero de facture" />
                   </div>  */}
                 </foreignObject>
-                <foreignObject x="111" y="20" width="12" height="380">
+                {/* <foreignObject x="111" y="20" width="12" height="380">
                     <animated.div onMouseDown={(e) => scrollerHandler(scrolled.current, e, setScrollX)} className="scroller" style={style0}>
                     </animated.div>
-                </foreignObject>
+                </foreignObject> */}
                 <foreignObject x="140" y="-2" width="680" height="425">
                     <div className="items-send-screen" ref={scrolled} onMouseDown={(e) => mouseDownHandler(e, setScrollX)}>
                         {
-                            list.List.filter(e => !e.meta.factured).
-                                map((e, i) => <ItemSendScreen bon={e} key={i} />)
+                            Bons.List.filter((e:BonSimpleType) => !e.NFacture).
+                                map((e, i) => <ItemSendScreen remove={()=>Bons.removeBon(e.CBon)} factured={()=>Bons.editFactured(e.CBon)} bon={e} key={i} />)
                             // TEST.map((e:any,i)=><ItemSendScreen key={i} />)
                         }
                     </div>
@@ -143,8 +146,8 @@ const AddBtn = styled.button`
     height: 20px;
     font-size: 12;
     position: absolute;
-    top: 25;
-    left: 15;
+    top: 35px;
+    left: 25px;
     display:flex;
     justify-content: center;
     align-items: center;

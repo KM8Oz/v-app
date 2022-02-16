@@ -2,32 +2,87 @@ import React, { useState } from 'react'
 import styled from "styled-components";
 import { observer } from "mobx-react-lite"
 import { usePersistentStore } from '../store';
+import { Popover, Button, notification } from 'antd';
+import { BonSimpleType } from '../store/vignettes/BonsModel';
 interface Props {
-    Bon?:any;
-    setBon?:React.Dispatch<React.SetStateAction<any>>;
-    saveAction?:()=>void
+   setMenuConf: any,
+   Bon?: any;
+   setStoreBon?: React.Dispatch<React.SetStateAction<BonSimpleType>>,
+   reset?: () => void
 }
 
+const openNotification = (title: string, description: string) => {
+   const key = `open${Date.now()}`;
 
- const MenuLeft = observer(({Bon, setBon, saveAction}: Props) => {
-    const { Bons } = usePersistentStore()
-    //  const [ShowModel, setShowModel] = useState(false);
-     return (
-        <MenuLeftWrapper>
-            <ProfileBtn>
-                 <Burrger/>
-                  <ProfileName>
-                      {"O. Karimm"} 
-                  </ProfileName>
-                </ProfileBtn>
-            <ResetBtn onClick={()=>setBon(Bons.default as any)}>RESET</ResetBtn>
+   const btn = () => (
+      <Button type="primary" size="small" onClick={() => {
+         notification.close(key)
+      }}>
+         "Reset"
+      </Button>
+   );
+   notification.open({
+      message: title,
+      description: description,
+      btn,
+      key,
+      onClose: () => notification.close(key),
+   });
+};
+const MenuLeft = observer(({ Bon, setStoreBon, reset, setMenuConf }: Props) => {
+   const text = <span>Comment</span>;
+   const content = (
+      <div>
+         <TextInput value={Bon.comment || ""} onChange={(ev) => {
+            let _value = ev.currentTarget?.value;
+            setStoreBon((bon: BonSimpleType) => ({
+               ...bon,
+               comment: _value
+            }))
+         }} />
+      </div>
+   );
+   const { Bons, User } = usePersistentStore()
+   //  const [ShowModel, setShowModel] = useState(false);
+   const [saved, setSaved] = useState(false);
+   const save = () => {
+      setSaved(true)
+      Bons.add({
+         ...Bon,
+         meta: {
+            createById: User.ssid,
+            lastEditById: User.ssid,
+         }
+      })
+         .then((res) => {
+            // console.log(res);
+            setMenuConf([false, true, false, false])
+            setSaved(false)
+         })
+         .catch((err) => {
+            // console.log(err);
+            setSaved(false)
+            openNotification("échec de l'enregistrement", "Certaines informations manquent")
+         })
+   }
+   return (
+      <MenuLeftWrapper>
+         <ProfileBtn type="dashed" block>
+            <Burrger />
+            <ProfileName>
+               {User.meta?.username || "Machine " + User.ssid.substring(0, 4)}
+            </ProfileName>
+         </ProfileBtn>
+         <ResetBtn onClick={() => reset()}>RESET</ResetBtn>
+         <Popover placement="right" title={text} content={content} trigger="click">
             <Commentaire>
-            COMMENTAIRE
+               COMMENTAIRE
             </Commentaire>
-            <Archiver>ARCHIVER</Archiver>
-            <Souvegarder onClick={saveAction}>SOUVEGARDER</Souvegarder>
-        </MenuLeftWrapper>
-     )
+         </Popover>
+         {/* <Archiver>ARCHIVER</Archiver> */}
+         <Souvegarder loading={saved} onClick={save}>SOUVEGARDER</Souvegarder>
+      </MenuLeftWrapper>
+   )
 })
 /**
  * coded by @kmoz000
@@ -60,7 +115,7 @@ const MenuLeftWrapper = styled.div`
   -webkit-app-region: no-drag;
 `;
 
-const ProfileBtn = styled.div`
+const ProfileBtn = styled(Button)`
    /* border:none;
    outline:unset; */
    cursor: pointer;
@@ -70,9 +125,18 @@ const ProfileBtn = styled.div`
     /* flex: 1; */
     margin-bottom:2em;
     margin-top: 10px;
+    p{
+      margin: unset;
+      padding: unset;
+      font-size: 10px;
+      font-family: Archivo;
+      font-weight: 400;
+      color: #444;
+    }
     width:90px;
     height:21px;
     border-radius:17px;
+    padding: 4px 4px;
     display: flex;
     flex-direction: row;
     background-color: #ECECEC;
@@ -96,7 +160,7 @@ const Commentaire = styled.button`
    color:#fff;
    background-color: #4C7A6C;
 `;
-const ProfileName =  styled.p`
+const ProfileName = styled.p`
    margin: unset;
    padding: unset;
    font-size: 12px;
@@ -155,7 +219,7 @@ const Archiver = styled.button`
 //     }
 //   }
 // `;
- const Souvegarder = styled.button`
+const Souvegarder = styled(Button)`
    border:none;
    outline:unset;
    width:90px;
@@ -172,12 +236,28 @@ const Archiver = styled.button`
    color:#fff;
    background-color: #3ABC94;
 `;
-const Burrger = ()=>(
-    <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M1.875 7.5H13.125" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M1.875 3.75H13.125" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M1.875 11.25H13.125" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
+const Burrger = () => (
+   <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M1.875 7.5H13.125" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M1.875 3.75H13.125" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M1.875 11.25H13.125" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+   </svg>
 
 )
+const TextInput = styled.input`
+  outline:none;
+  border: 1px solid #ccc;
+  border-radius: 13px;
+  &:focus{
+   border: 1px solid #ccc;
+  border-radius: 13px;
+  }
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  letter-spacing: 1px;
+  font-weight: 600;
+  padding: 5px 3px;
+  text-align: start;
+  width: 100%;
+`;
 export { MenuLeft, Souvegarder }

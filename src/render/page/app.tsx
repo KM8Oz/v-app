@@ -10,18 +10,34 @@
     * - Author          : 
     * - Modification    : 
 **/
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import { MemoryRouter as Router, Switch, Route, useLocation, useHistory } from 'react-router-dom';
 // import icon from '../../assets/icon.svg';
 import './app.less';
 import { Login, Corp }  from "@render/components";
-import { PersistentStoreProvider } from '@render/store';
+import { PersistentStoreProvider, usePersistentStore } from '@render/store';
 
 // import env from "react-dotenv";
 const MENU = ["login", "Home"];
 // const history = useHistory();
+import Orbit from "../tools/orbitdb";
+import { onSnapshot } from 'mobx-state-tree';
+// import useOrbitdb from '../hooks/useOrbitdb';
+
+// const node  = new Orbit("jlhljashdjsbdlja");
+
 export default function App() {
+  // const stores = usePersistentStore()
+  //  useEffect(()=>{
+  //    let dispose = ()=> null as any;
+  //   node.init().then(()=>{
+  //     dispose = onSnapshot(stores, (snap)=>{
+  //       useOrbitdb._db.put(snap as any);
+  //     })
+  //   })
+  //   return ()=>dispose()
+  //  },[])
   return (
     <PersistentStoreProvider>
     <Router initialIndex={1} initialEntries={[

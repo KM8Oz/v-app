@@ -1,5 +1,5 @@
 import { usePersistentStore } from "@render/store"
-import { Item, ItemSendScreen, Souvegarder } from "@render/components"
+import { Item, Souvegarder } from "@render/components"
 import { mouseDownHandler, scrollerHandler } from "@render/tools";
 import React, { useState, useRef, useEffect } from "react";
 import { animated, useSpring } from "react-spring";
@@ -19,6 +19,7 @@ import PU from "../settings/PU";
 import MontantTotal from "../settings/MontantTotal";
 import { observer } from "mobx-react-lite";
 import { Tabs } from "antd";
+import { Configs } from "../settings/Configs"
 import Icon, { AppleOutlined, CloudSyncOutlined, SettingOutlined, UnorderedListOutlined } from "@ant-design/icons";
 const SettingsScreen = observer((props: React.SVGProps<SVGSVGElement>) => {
     const { Bons, hydrate, hydrated } = usePersistentStore();
@@ -57,7 +58,7 @@ const SettingsScreen = observer((props: React.SVGProps<SVGSVGElement>) => {
                 }} onClick={saveAction}>SOUVEGARDER</Souvegarder>
             </Left>
             <Body>
-                <Tabs defaultActiveKey="1" animated={{
+                <Tabs defaultActiveKey="2" animated={{
                     inkBar: false,
                     tabPane: false
                 }} tabBarStyle={{
@@ -115,17 +116,17 @@ const SettingsScreen = observer((props: React.SVGProps<SVGSVGElement>) => {
                             </Tabs.TabPane>
                         </Tabs>
                     </Tabs.TabPane>
-                    <Tabs.TabPane
+                    {/* <Tabs.TabPane
                         tab={
                             <span>
                                 <CloudSyncOutlined />
-                                synchronisation
+                                Sync et Config
                             </span>
                         }
                         key="2"
                     >
-                        Tab 2
-                    </Tabs.TabPane>
+                        <Configs />
+                    </Tabs.TabPane> */}
                 </Tabs>
             </Body>
         </BodySetings>

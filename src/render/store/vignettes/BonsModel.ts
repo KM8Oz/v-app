@@ -11,55 +11,106 @@
     * - Modification    : 
 **/
 import { Instance, types } from "mobx-state-tree";
+import { maybeNull } from "mobx-state-tree/dist/internal";
 import { makeid } from "../../tools";
 // enum TypesBons {M="M", J="J", C="C", H="H"};
 const MetaInfo = types.model({
-    createById:types.maybe(types.string),
-    lastEditById:types.maybe(types.string),
-    lastEdit:types.optional(types.string, new Date().toDateString()),
-    facturation_id:types.maybeNull(types.string),
-    factured:types.optional(types.boolean, false)
+    createById: types.maybeNull(types.string),
+    lastEditById: types.maybeNull(types.string),
+    lastEdit: types.optional(types.Date, new Date()),
+    factured: types.optional(types.boolean, false)
 })
 
 const Bon = types.model({
-    meta:types.maybeNull(MetaInfo), 
-    CFournisseur:types.string,
-    CArticle:types.string,
-    CBon:types.string,
-    codeStation:types.string,
-    CBar:types.string,
-    DBon:types.string,
-    DFacture:types.string,
-    MontantTotal:types.string,
-    NFacture:types.string,
-    PU:types.string,
-    Quantity:types.string,
-    Signature:types.string,
-    SNTL:types.maybeNull(types.string)
+    meta: MetaInfo,
+    CFournisseur: types.string,
+    CArticle: types.string,
+    CBon: types.string,
+    // codeStation:types.string,
+    CBar: types.string,
+    DBon: types.string,
+    Count: types.maybeNull(types.string),
+    MontantTotalBrut: types.maybeNull(types.string),
+    DFacture: types.maybeNull(types.string),
+    Kilos: types.maybeNull(types.string),
+    Ville: types.string,
+    MontantTotal: types.string,
+    NFacture: types.maybeNull(types.string),
+    PU: types.string,
+    Quantity: types.string,
+    Signature: types.string,
+    SNTL: types.maybeNull(types.string)
 })
-export type BonInstance =  Instance<typeof Bon>;
+export type BonInstance = Instance<typeof Bon>;
 const BonsModel = types.model({
-    List:types.optional(types.array(Bon), [])
-}).views(()=>({
-     
-})).actions((self)=>({
-      
-})) 
-type BonType = Instance<typeof BonsModel>;
+    List: types.optional(types.array(Bon), [])
+}).views((self) => ({
+    Signatures: () => self.List.map(e => ({ value: e.Signature }))
+})).actions((self) => ({
+    editFactured(code:string){
+    return new Promise((resolve, reject)=>{
+        try {
+            let _exist = self.List.find((s)=>s.CBon == code);
+            if(!_exist) reject("not exist!");
+            _exist.meta.factured = !_exist.meta.factured;
+            resolve(true)
+        } catch (error) {
+            reject(error)
+        }
+    })
+    },
+    removeBon(code:string){
+    return new Promise((resolve, reject)=>{
+        try {
+            let _exist = self.List.find((s)=>s.CBon == code);
+            if(!_exist) reject("not exist!");
+            self.List.remove(_exist)
+            resolve(true)
+        } catch (error) {
+            reject(error)
+        }
+    })
+    },
+    add(bon: BonSimpleType) {
+        return new Promise((resolve, reject) => {
+            try {
+                let exis = self.List.findIndex(W => W.CBon == bon?.CBon) !== -1;
+                if (exis) reject(false);
+                self.List.push(bon)
+                resolve(true)
+            } catch (error) {
+                console.log(error);
+                reject(false)
+            }
+        })
+
+    }
+}))
+type BonType = Instance<typeof Bon>;
 interface BonSimpleType {
-    // meta?:typeof MetaInfo;
-    CFournisseur?:string;
-    CArticle?:string;
-    CBon?:string;
-    codeStation?:string;
-    CBar?:string;
-    DBon?:string;
-    DFacture?:string;
-    MontantTotal?:string;
-    NFacture?:string;
-    PU?:string;
-    Quantity?:string;
-    Signature?:string;
-    SNTL?:string;
+    meta?: {
+        createById: string,
+        lastEditById: string,
+        lastEdit?:Date,
+        factured?:boolean
+    },
+    CFournisseur?: string;
+    CArticle?: string;
+    CBon?: string;
+    // codeStation?:string;
+    comment?: string,
+    CBar?: string;
+    MontantVignette?: string,
+    DBon?: string;
+    DFacture?: string;
+    Ville?: string,
+    Kilos?: string,
+    MontantTotalBrut?: string,
+    MontantTotal?: string;
+    NFacture?: string;
+    PU?: string;
+    Quantity?: string;
+    Signature?: string;
+    SNTL?: string;
 }
 export { BonsModel, BonType, BonSimpleType }

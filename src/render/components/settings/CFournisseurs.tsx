@@ -25,7 +25,7 @@ const CFournisseurs:FC = observer(({ }: Props) => {
     return (
         <SettingsWrapper >
             {useMemo(()=><Header  >
-                <Nomination type='text' maxLength={10} onChange={(ev=>setFilters({...emtyfilter, nom:ev.currentTarget.value.replace(/[^a-zA-Z]/g, '')}))}  value={filters.nom} placeholder='Nomination' />
+                <Nomination type='text' maxLength={10} onChange={(ev=>setFilters({...emtyfilter, nom:ev.currentTarget.value.replace(/[^a-zA-Z0-9 ]/g, '')}))}  value={filters.nom} placeholder='Nomination' />
                 <Code type='text' placeholder='Code' maxLength={6} onChange={(ev=>setFilters({...emtyfilter, code:ev.currentTarget.value.replace(/[^0-9]/g, '')}))}  value={filters.code}/>
                 <Format type='text' placeholder='Format' maxLength={10} onChange={(ev=>setFilters({...emtyfilter, format:ev.currentTarget.value.replace(/[^XYxy]/g, "").toLocaleUpperCase()}))}  value={filters.format}/>
                 {/* <Direction type='text' placeholder='Direction' maxLength={10} onChange={(ev=>setFilters({...filters, nom:ev.currentTarget.value.replace(/[^a-zA-Z]/g, '')}))}  value={filters.nom}/> */}
@@ -55,7 +55,7 @@ const ItemSetting = ({em,id, nom,rm, code, format, direction, active}:itemsSetti
         const [temp, setTemp] = useState({nom, code, format, direction, active});
    return (
     <SettingItem >
-    <ItemNom type='text' maxLength={10} onChange={(ev=>setITEM({...item, nom:ev.currentTarget.value.replace(/[^a-zA-Z]/g, ''), active:false}))} placeholder='Nom' value={item.nom} />
+    <ItemNom type='text' maxLength={25} onChange={(ev=>setITEM({...item, nom:ev.currentTarget.value.replace(/[^a-zA-Z0-9 ]/g, ''), active:false}))} placeholder='Nom' value={item.nom} />
     <ItemCode type='text' maxLength={7} onChange={(ev)=>{
       setITEM({...item, code:ev.currentTarget.value.replace(/[^0-9]/g, ""), active:false})
       setTemp({...item, code:ev.currentTarget.value.replace(/[^0-9]/g, "")})

@@ -166,7 +166,19 @@ export const SettingItem = styled.div<{areas?:string}>`
   background-color: #F1F4F2;
   margin: 14px auto 0px auto;
 `;
-
+export const SettingItemArticle = styled.div<{areas?:string}>`
+  width: 496px;
+  height: 34px;
+  border-radius: 10px;
+  display: grid;
+  grid-template-rows: 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr .5fr .5fr;
+  grid-template-areas: ${({areas})=>areas?areas:"'nom Code taux format direction remove add'"};
+  justify-items: center;
+  align-items: center;
+  background-color: #F1F4F2;
+  margin: 14px auto 0px auto;
+`;
 
 export const Nomination = styled.input`
   width: 98px;
@@ -191,6 +203,18 @@ export const Header = styled.div<{areas?:string}>`
   grid-template-rows: 1fr;
   grid-template-columns: 1fr 1fr 1fr 1fr .5fr .5fr;
   grid-template-areas:${({areas})=>areas?areas:"'nom code format direction . add'"};
+  justify-items: center;
+  align-content: center;
+  height: 100%;
+`;
+export const HeaderArticle = styled.div<{areas?:string}>`
+  grid-area: header-settings;
+  display: grid;
+  padding-top: 8px;
+  grid-template-rows: 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr .5fr .5fr;
+  grid-template-areas:${({areas})=>areas?areas:"'nom Code taux format direction . add'"};
+  grid-gap:2px;
   justify-items: center;
   align-content: center;
   height: 100%;

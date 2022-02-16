@@ -1,4 +1,5 @@
 import { AutoComplete } from 'antd';
+import { AutoCompleteProps } from 'antd/lib/auto-complete';
 import React, { ChangeEventHandler, ReactElement, useEffect } from 'react'
 import { InputProps } from 'react-select'
 import styled from 'styled-components';
@@ -16,14 +17,14 @@ interface Props {
     maxchars?: number,
     placeholder: string,
     suggestions?: string[],
-    options: { value: string }[]
+    options: any[]
     // classForAuto?:string
 }
 enum typeText {
     normal = "v-normal-text",
     small = "v-small-text",
 }
-function TextInput({ x, y, options, placeholder, suggestions = [], width, maxchars, height, value, typeText, onchange, ...rest }: Props): ReactElement {
+function TextInput({ x, y, options, placeholder, suggestions = [], width, maxchars, height, value, typeText, onchange, ...rest }: Props&AutoCompleteProps): ReactElement {
     const uniqueId = makeid(8);
     useEffect(() => {
         const isAuto = suggestions.length > 0;
@@ -34,16 +35,17 @@ function TextInput({ x, y, options, placeholder, suggestions = [], width, maxcha
     return (
         <foreignObject x={x} y={y} width={width} height={height}>
             <StyledAutoComplete
+             {...rest}
                 options={options}
                 filterOption={(inputValue, option) =>
-                    option!.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                    option!.value.toUpperCase().search(inputValue.toUpperCase()) !== -1
                 }
                 onClick={inputValue => {
                     //    console.log(e.currentTarget);
                     inputValue.currentTarget.nodeValue = ""
                 }}
                 placeholder={placeholder} value={value} maxTagTextLength={maxchars || 15}
-                className={`v-text-input ${typeText} ${uniqueId}`} {...rest} onChange={onchange} />
+                className={`v-text-input ${typeText} ${uniqueId}`} onChange={onchange} />
         </foreignObject>
     )
 }

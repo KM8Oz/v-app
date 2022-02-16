@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "allowSyntheticDefaultImports": true, // 允许自动合成 import * as React from 'react'
-    "moduleResolution": "Node", // import {} from '@ant-design/icon'
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "Node", 
     "allowJs": true,
     "jsx": "preserve",
     "baseUrl": ".",

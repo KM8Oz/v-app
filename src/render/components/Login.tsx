@@ -22,6 +22,7 @@ import styled from "styled-components";
 import Icon from "../assets/icon.svg"
 import { usePersistentStore } from "../store";
 import { usePrivate } from "../hooks/privateconnection";
+// import useOrbitdb from '../hooks/useOrbitdb';
 interface _COLORS {
   NORMAL: string[];
   ERROR: string[];
@@ -30,7 +31,7 @@ interface _COLORS {
 function Login(props: any) {
   const COLORS: _COLORS = { NORMAL: ["#4C7A6C", "#6C6C6C", "Login"], ERROR: ["#F45C5C", "#575757", "Try again"], ACTIVATION: ["#f31237", "#575757", "Activate"] };
   const history = useHistory();
-  const { User } = usePersistentStore()
+  const { User, setMachine } = usePersistentStore()
   const [color, setColor] = useState(COLORS.NORMAL);
   const [key, setkey] = useState("");
   const [userPass, setUserPass] = useState("");
@@ -44,24 +45,30 @@ function Login(props: any) {
     setshow(true)
     ipcRenderer.invoke("id").then((ID) => {
       setmachinID(ID);
+      setMachine(ID)
       setColor(COLORS.NORMAL)
-      IOPublic.emit("call", "licence.check", { deviceid: ID }, (err, res) => {
+      IOPublic.emit("call", "licence.check", { deviceid: ID }, async (err, res) => {
+        // dcid
+        console.log(err, res)
         if (!res?.status || err) {
           setshow(false)
           setColor(COLORS.ACTIVATION)
         } else {
+          
           let _private = IOPrivate(User.ssid);
           _private.on("error", () => {
             history.push("Login")
             setshow(true)
             setshowqrcode(false)
           });
-          _private.on("tk_save", (res:any)=>{
-              if(res.tk){
-                User.setssid(res.tk)
-                history.push("Home")
-              }
+          _private.on("tk_save", async (res: any) => {
+            if (res.tk) {
+              User.setssid(res.tk)
+              history.push("Home")
+              // await orbitInit(res.dcid);
+            }
           })
+          
         }
       })
     })
@@ -81,11 +88,12 @@ function Login(props: any) {
   }
 
   const LoginAction = () => {
-    IOPublic.emit("call", "machine.login", { deviceid: machinID, otpcode:userPass }, (err, res)=>{
+    IOPublic.emit("call", "machine.login", { deviceid: machinID, otpcode: userPass }, (err, res) => {
+      // console.log(err, res)
       if (res && res?.status) {
         setColor(COLORS.NORMAL);
         User.setssid(res?.ssid)
-       if(User.ssid) history.push("Home");
+        if (User.ssid) history.push("Home");
       } else {
         setColor(COLORS.ERROR)
       };
@@ -159,14 +167,14 @@ function Login(props: any) {
           alignItems: "center",
 
         }}>
-        <p style={{
-          fontFamily:"Arial",
-          fontSize:17,
-          fontWeight:600,
-          textAlign:"center"
-        }}>
-          TOTP CODE
-        </p>
+          <p style={{
+            fontFamily: "Arial",
+            fontSize: 17,
+            fontWeight: 600,
+            textAlign: "center"
+          }}>
+            TOTP CODE
+          </p>
         </div>
       </foreignObject>
       <foreignObject x="25.8908" y="262.228" width="238" height="40">
@@ -257,7 +265,7 @@ function Login(props: any) {
         />}
         {showqrcode && <foreignObject x="25.8908" y="60.228" width="238" height="40">
           <div
-            onClick={()=>{
+            onClick={() => {
               setshow(true)
               setshowqrcode(false)
             }}

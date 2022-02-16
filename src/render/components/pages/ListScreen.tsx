@@ -1,4 +1,4 @@
-import { ItemSendScreen } from "@render/components"
+// import { ItemSendScreen } from "@render/components"
 import { mouseDownHandler, mouseScroller, scrollerHandler } from "@render/tools";
 import React, { useState, useRef, useEffect } from "react";
 import { animated, useSpring } from "react-spring";
@@ -11,9 +11,11 @@ import SearchIcon from "../buttons/SearchIcon";
 import { BonItem } from "../BonItem";
 import { usePersistentStore }  from "@render/store";
 import { observer } from "mobx-react-lite";
+import useOrbitdb from "../../hooks/useOrbitdb";
 const ListScreen = observer((props: React.SVGProps<SVGSVGElement>)=>{
     const { Bons, hydrate, hydrated } = usePersistentStore();
     const [list, setlist] = useState<any>(Bons);
+    const { db } = useOrbitdb();
     const [order, setOrder] = useState([true, false, false]);
     const [ScrollingLeftPerCen, setScrollingLeftPerCen] = useState(0);
     const [panel, setPanel] = useState(false);

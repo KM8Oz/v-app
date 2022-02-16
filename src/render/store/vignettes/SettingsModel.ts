@@ -28,9 +28,10 @@ const SettingsModel = types.model({
     .actions((self) => ({
         genCArticle() {
             if (isAlive(self)) self.CArticle.push({
-                nom: "nom",
+                nom: "Article",
                 code: "140",
                 format: "XXX",
+                Tauxremise:"0.5",
                 active: false,
                 direction: true
             })
@@ -242,8 +243,12 @@ const SettingsModel = types.model({
         
     }))
     .views((self) => ({
-        Articles: () => self.CArticle,
-        CodeBon: () => self.CBon
+        Articles: () => self.CArticle.map(e=>({value:e.code,label:e.nom,format:e.format})),
+        CodeBon: () => self.CBon,
+        CodeFournisseur: () => self.CFournisseurs.map(e=>({value:e.nom,code:e.code,format:e.format, dr:e.direction})),
+        DateBon: () => self.DBon,
+        Quntity: () => self.Quantity,
+        PrisUnite: () => self.PU
     }))
 type TypeSettingsModel = Instance<typeof SettingsModel>;
 

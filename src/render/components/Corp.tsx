@@ -23,10 +23,13 @@ import SettingsScreen from "./pages/SettingsScreen";
 import ListScreen from "./pages/ListScreen";
 import { observer } from "mobx-react-lite";
 import { IOPrivate } from "../tools/sockets";
+import { onSnapshot } from "mobx-state-tree";
+import useOrbitdb from "../hooks/useOrbitdb";
 const BodyWorkComponent = observer((props: any) => {
-  const [menuConf, setMenuConf] = useState([true, false, false, false]);
+  const [menuConf, setMenuConf] = useState([false, false, true, false]);
   const history = useHistory();
-  const { User, Errors, hydrate, hydrated } = usePersistentStore();
+  const { User, Errors, hydrate, hydrated, Bons } = usePersistentStore();
+
   const addAction = () => {
     var emty = Array(5).fill(false);
     emty[0] = true;
@@ -35,6 +38,10 @@ const BodyWorkComponent = observer((props: any) => {
   }
   // const location = useLocation();
   useEffect(() => {
+    let dispose = onSnapshot(Bons, (snap)=>{
+      // let  _json = JSON.stringify(snap, null, 2);
+      useOrbitdb._db?.put(snap);
+    })
     hydrate()
     let _private = IOPrivate(User.ssid);
     _private.on("error", () => {
@@ -46,6 +53,7 @@ const BodyWorkComponent = observer((props: any) => {
           // console.log(res);
         }
     })
+    return ()=>dispose()
   }, [menuConf]);
   const sendAction = () => {
     var emty = Array(5).fill(false);
@@ -122,7 +130,7 @@ const BodyWorkComponent = observer((props: any) => {
       </foreignObject>
       <foreignObject x="98.8908" y="76.228" width="778" height="413">
         <animated.div style={style0}>
-          {menuConf[0] && <AddScreen />}
+          {menuConf[0] && <AddScreen setMenuConf={setMenuConf}/>}
         </animated.div>
         <animated.div style={style1}>
           {menuConf[1] && <SendScreen />}

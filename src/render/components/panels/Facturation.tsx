@@ -26,18 +26,17 @@ function Facturation({open, setPanel,...props}: any&{open?:boolean, setPanel:any
          config:config.wobbly
         })
       const [Facture, setFacture] = useState<FactureType>({} as any);
-      useEffect(() => {
-        setopenExport(!open)
-        return () => {
-          setopenExport(false)
+      // useEffect(() => {
+      //   setopenExport(!open)
+      //   return () => {
+      //     setopenExport(false)
 
-        };
-      }, [open]);
+      //   };
+      // }, [open]);
   return (
     <div style={{
       flex:1
     }}>
-      <Exported setopen={setopenExport}  estyle={Escaling} />
       <animated.svg
         width={573}
         height={245}
@@ -79,6 +78,7 @@ function Facturation({open, setPanel,...props}: any&{open?:boolean, setPanel:any
         /> */}
         <TextInput
         // suggestions={suggestions?.FactureNumber}
+        options={[]}
          maxchars={20} placeholder="Nº de facture" value={Facture?.FactureNumber}
          x={60} y={48} width={191} height={20}  typeText={typeText.normal} onchange={(ev:any)=>{
               setFacture({
@@ -95,6 +95,7 @@ function Facturation({open, setPanel,...props}: any&{open?:boolean, setPanel:any
         /> */}
         <TextInput
         // suggestions={suggestions?.FactureNumber}
+        options={[]}
          maxchars={20} placeholder="Société et/ou Nom du client" value={Facture?.Nomduclient}
          x={60} y={90} width={191} height={20}  typeText={typeText.small} onchange={(ev:any)=>{
               setFacture({
@@ -110,14 +111,14 @@ function Facturation({open, setPanel,...props}: any&{open?:boolean, setPanel:any
           fill="#6C6C6C"
         /> */}
           <TextInput
-        // suggestions={suggestions?.FactureNumber}
-         maxchars={20} placeholder="Référence" value={Facture?.Reference}
-         x={60} y={134} width={191} height={20}  typeText={typeText.normal} onchange={(ev:any)=>{
-              setFacture({
-                  ...Facture,
-                  Reference:ev.currentTarget.value
-              })
-          }}/>
+          // suggestions={suggestions?.FactureNumber}
+          maxchars={20} placeholder="Référence" value={Facture?.Reference}
+          x={60} y={134} width={191} height={20} typeText={typeText.normal} onchange={(ev: any) => {
+            setFacture({
+              ...Facture,
+              Reference: ev.currentTarget.value
+            });
+          } } options={[]}/>
         <g filter="url(#prefix__filter3_i)">
           <rect x={45} y={172} width={221} height={30} rx={15} fill="#FDFDFD" />
         </g>
@@ -127,6 +128,7 @@ function Facturation({open, setPanel,...props}: any&{open?:boolean, setPanel:any
         /> */}
         <TextInput
         // suggestions={suggestions?.FactureNumber}
+        options={[]}
          maxchars={20} placeholder="N°client" value={Facture?.Nclient}
          x={60} y={177} width={191} height={20}  typeText={typeText.normal} onchange={(ev:any)=>{
               setFacture({
@@ -168,6 +170,7 @@ function Facturation({open, setPanel,...props}: any&{open?:boolean, setPanel:any
           fill="#6C6C6C"
         /> */}
           <TextInput
+          options={[]}
         // suggestions={suggestions?.FactureNumber}
          maxchars={20} placeholder="Adresse" value={Facture?.Adresse}
          x={310} y={92} width={191} height={20}  typeText={typeText.normal} onchange={(ev:any)=>{
@@ -185,6 +188,7 @@ function Facturation({open, setPanel,...props}: any&{open?:boolean, setPanel:any
           fill="#6C6C6C"
         /> */}
             <TextInput
+            options={[]}
         // suggestions={suggestions?.FactureNumber}
          maxchars={20} placeholder="Intitulé" value={Facture?.Intitule}
          x={310} y={128} width={191} height={20}  typeText={typeText.normal} onchange={(ev:any)=>{
