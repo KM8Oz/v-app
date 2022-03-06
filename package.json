@@ -13,12 +13,14 @@
     "start": "concurrently -n=react,electron -c=blue,green \"npm run dev:react\" \"npm run dev:electron\"",
     "dev:react": "node scripts/render-start",
     "dev:electron": "node scripts/main-build --env=development --watch",
-    "build-win": "node scripts/render-build && node scripts/main-build --env=production && electron-builder -wl",
-    "build-mac": "node scripts/render-build && node scripts/main-build --env=production && electron-builder -m"
+    "build-win": "node scripts/render-build && node scripts/main-build --env=production && electron-builder -w --x64",
+    "build-mac": "node scripts/render-build && node scripts/main-build --env=production && electron-builder -m",
+    "build-win-docker":"docker run --rm -ti --env-file <(env | grep -iE 'DEBUG|NODE_|ELECTRON_|YARN_|NPM_|CI|CIRCLE|TRAVIS_TAG|TRAVIS|TRAVIS_REPO_|TRAVIS_BUILD_|TRAVIS_BRANCH|TRAVIS_PULL_REQUEST_|APPVEYOR_|CSC_|GH_|GITHUB_|BT_|AWS_|STRIP|BUILD_') -v ${PWD}:/project -v ~/.cache/electron:/root/.cache/electron -v ~/.cache/electron-builder:/root/.cache/electron-builder electronuserland/builder:wine bash -c \"yarn run whatever-command-you-want-here\"",
+    "postinstall": "electron-builder install-app-deps"
   },
   "build": {
     "productName": "Facturation des vignettes",
-    "appId": "ma.dup.vignettes",
+    "appId": "sarl.dup.vignettes",
     "directories": {
       "buildResources": "assets",
       "output": "release"
@@ -38,6 +40,7 @@
       "gatekeeperAssess": false
     },
     "win": {
+      "icon": "assets/icon.ico",
       "target": [
         "nsis",
         "msi"

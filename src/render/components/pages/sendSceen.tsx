@@ -22,6 +22,7 @@ import { Spin } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
 import styled from "styled-components"
 import { BonSimpleType } from "../../store/vignettes/BonsModel";
+import NoBons from "../icons/noBons";
 
 const SendScreen = observer((props: React.SVGProps<SVGSVGElement>) => {
     const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
@@ -34,7 +35,7 @@ const SendScreen = observer((props: React.SVGProps<SVGSVGElement>) => {
         // return () => {
         //     setlist([]);
         // };
-    }, []); 
+    }, []);
     const TEST = new Array(9).fill(null);
     const [scrollX, setScrollX] = useState(0);
     const [number, setNumber] = useState(null)
@@ -99,13 +100,24 @@ const SendScreen = observer((props: React.SVGProps<SVGSVGElement>) => {
                     </animated.div>
                 </foreignObject> */}
                 <foreignObject x="140" y="-2" width="680" height="425">
-                    <div className="items-send-screen" ref={scrolled} onMouseDown={(e) => mouseDownHandler(e, setScrollX)}>
-                        {
-                            Bons.List.filter((e:BonSimpleType) => !e.NFacture).
-                                map((e, i) => <ItemSendScreen remove={()=>Bons.removeBon(e.CBon)} factured={()=>Bons.editFactured(e.CBon)} bon={e} key={i} />)
-                            // TEST.map((e:any,i)=><ItemSendScreen key={i} />)
-                        }
-                    </div>
+
+                    {(Bons.List.length == 0) ? <div style={{
+                        display:"flex",
+                        height:"-webkit-fill-available",
+                        width:"-webkit-fill-available",
+                        justifyContent: "center",
+                        alignItems: "center"
+                    }}>
+                        <NoBons />
+                    </div> :
+                        <div className="items-send-screen" ref={scrolled} onMouseDown={(e) => mouseDownHandler(e, setScrollX)}>
+                            {
+                                Bons.List.filter((e: BonSimpleType) => !e.NFacture).
+                                    map((e, i) => <ItemSendScreen remove={() => Bons.removeBon(e.CBon)} factured={() => Bons.editFactured(e.CBon)} bon={e} key={i} />)
+                                // TEST.map((e:any,i)=><ItemSendScreen key={i} />)
+                            }
+                        </div>
+                    }
                 </foreignObject>
                 <defs>
                     <filter

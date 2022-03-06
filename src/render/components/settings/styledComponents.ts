@@ -194,6 +194,20 @@ export const Nomination = styled.input`
   border-radius: 22px;
   grid-area: nom;
 `;
+export const NominationArticle = styled.input`
+  width: 120px;
+  height: 28px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #AEAEAE;
+  background-color: #F1F4F2;
+  outline: unset;
+  text-align: center;
+  border: 1px solid #E5E5E5;
+  border-radius: 22px;
+  grid-area: nom;
+`;
 
 
 export const Header = styled.div<{areas?:string}>`

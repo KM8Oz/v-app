@@ -24,12 +24,13 @@ import { InputCodeBon } from '../CBon'
 import { frmt, KILOSFORMATTER, PUFORMATTER } from '../../tools/formaters'
 import moment from 'moment'
 import DateInputSend from '../DateInputSend'
+import { dirhame_formatter } from '../../tools/formatters'
 const villes = require("../../assets/ville.json");
 interface Props {
-    setMenuConf:any
+    setMenuConf: any
 }
 
-export default observer(({setMenuConf }: Props): ReactElement => {
+export default observer(({ setMenuConf }: Props): ReactElement => {
     const { Bons, hydrate, hydrated, Settings } = usePersistentStore();
     const [save, setSave] = useState(0)
     const [suggestions, setSuggestions] = useState({ city: [] })
@@ -224,28 +225,36 @@ export default observer(({setMenuConf }: Props): ReactElement => {
             
                 })
             }} width={135} height={40}  typeNInp={typeNInp.Table} /> */}
-                <NumberInput x={335.191}
-                    value={StoreBonTemp.Quantity} y={234}
+                <NumberInput 
+                    x={335.191}
+                    value={StoreBonTemp.Quantity} 
+                    y={234}
                     decimalSeparator="."
                     placeholder='____,___'
                     displayType="input"
                     type="text"
-                    thousandSeparator={false}
-                    allowNegative={true}
-                    decimalScale={4}
-                    fixedDecimalScale={true}
-                    format="####,##"
-                    mask="_"
+                    // thousandSeparator={false}
+                    // allowNegative={true}
+                    // autoFocus
+                    // decimalScale={4}
+                    // fixedDecimalScale={true}
+                    isNumericString
+                    // format="####,##"
+                    // mask="_"
                     onChange={(value) => {
                         setStoreBonTemp({
                             ...StoreBonTemp,
-                            Quantity: value.formattedValue
+                            // Quantity: dirhame_formatter.format(value.formattedValue.replace(/[^0-9]/g, ""))
+                            Quantity:value.formattedValue
                         })
                         setStoreBon({
                             ...StoreBon,
-                            Quantity: value.formattedValue.replace(/\_/g, "0").replace(",", "")
+                            Quantity: value.formattedValue
                         })
-                    }} width={75} height={40} typeNInp={typeNInp.Table} />
+                    }} 
+                    width={75} 
+                    height={40} 
+                    typeNInp={typeNInp.Table} />
                 <NumberInput x={411.191}
                     value={StoreBonTemp.PU} y={234}
                     decimalSeparator="."
@@ -281,7 +290,7 @@ export default observer(({setMenuConf }: Props): ReactElement => {
                 <NumberInput x={593.191} value={StoreBonTemp.MontantVignette} y={234}
                     //    disabled
                     type='text'
-                    suffix=' hd'
+                    suffix=' dh'
                     decimalScale={0}
                     displayType='text'
                     onChange={(value) => {

@@ -1,4 +1,4 @@
-import DocumentStore from 'orbit-db-docstore';
+// import DocumentStore from 'orbit-db-docstore';
 import { useState, useEffect } from 'react';
 import { RootStoreModelType } from '../store';
 import Orbitdb from '../tools/orbitdb';
@@ -14,10 +14,10 @@ import Orbitdb from '../tools/orbitdb';
  
 
 
-const useOrbitdb = {
-    _db: null as DocumentStore<RootStoreModelType>,
-    set db(v : DocumentStore<RootStoreModelType>) {
-        this._db = v;
-    }
-}
-export default useOrbitdb;
+// const useOrbitdb = {
+    // _db: null as DocumentStore<RootStoreModelType>,
+    // set db(v : DocumentStore<RootStoreModelType>) {
+        // this._db = v;
+    // }
+// }
+// export default useOrbitdb;

@@ -21,8 +21,8 @@ import { PersistentStoreProvider, usePersistentStore } from '@render/store';
 // import env from "react-dotenv";
 const MENU = ["login", "Home"];
 // const history = useHistory();
-import Orbit from "../tools/orbitdb";
-import { onSnapshot } from 'mobx-state-tree';
+// import Orbit from "../tools/orbitdb";
+// import { onSnapshot } from 'mobx-state-tree';
 // import useOrbitdb from '../hooks/useOrbitdb';
 
 // const node  = new Orbit("jlhljashdjsbdlja");
