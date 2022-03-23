@@ -18,7 +18,7 @@ require('dotenv').config();
 const fs = require("fs");
 const Protocol = require("./protocol");
 const Store = require("secure-electron-store").default;
-var client = require('electron-connect').client;
+// var client = require('electron-connect').client;
 const { machineId } = require("node-machine-id")
 let win = null;
 // const useMachine = () => ({
@@ -60,20 +60,18 @@ function createw_indow() {
     transparent: true,
     // icon: getAssetPath('icon.png'),
     webPreferences: {
-      // devTools: isDev,
+      devTools: isDev,
       nodeIntegration: true,
       // nodeIntegrationInWorker: false,
       // nodeIntegrationInSubFrames: false,
       // contextIsolation: true,
-      // enableRemoteModule: false,
+      enableRemoteModule: false,
       // additionalArguments: [`storePath:${app.getPath("userData")}`],
       // preload: "./preload.js", /* eng-disable PRELOAD_JS_CHECK */
       // disableBlinkFeatures: "Auxclick"
     }
   });
-  // const URL = isDev
-  //   ? `http://localhost:${process.env.PORT}/`
-  //   : `dup://${path.join(__dirname, '../dist/index.html')}`;
+ 
     const callback = function (success, initialStore) {
       console.log(`${!success ? "Un-s" : "S"}uccessfully retrieved store in main process.`);
       console.log(initialStore); // {"key1": "value1", ... }
@@ -81,12 +79,12 @@ function createw_indow() {
 
     store.mainBindings(ipcMain, win, fs, callback);
        // Load app
-   if (isDev) {
-    win.loadURL(`http://localhost:${process.env.PORT}`);
-  } else {
-    win.loadURL(`${Protocol.scheme}://rse/index.html`);
-  }
-  client.create(win);
+       const URL = isDev
+       ? `http://localhost:${process.env.PORT}`
+       : `file://${path.join(__dirname, '../dist/index.html')}`;
+     
+     win.loadURL(URL);
+  // client.create(win);
 }
 
 app.on('window-all-closed', () => {
@@ -98,13 +96,13 @@ app.on('window-all-closed', () => {
     store.clearMainBindings(ipcMain);
   }
 });
-protocol.registerSchemesAsPrivileged([{
-  scheme: Protocol.scheme,
-  privileges: {
-    standard: true,
-    secure: true
-  }
-}]);
+// protocol.registerSchemesAsPrivileged([{
+//   scheme: Protocol.scheme,
+//   privileges: {
+//     standard: true,
+//     secure: true
+//   }
+// }]);
 function toggleDevTools(bool) {
   if (win) {
     if (bool !== undefined) {
@@ -125,9 +123,9 @@ machineId(true).then((id)=>{
 })
 
 app.whenReady().then(() => {
-  protocol.registerFileProtocol('dup', (request, callback) => { 
-    const url = request.url.substr(7)
-     callback({ path: path.normalize(`${__dirname}/${url}`) });
-    });
+  // protocol.registerFileProtocol('dup', (request, callback) => { 
+  //   const url = request.url.substr(7)
+  //    callback({ path: path.normalize(`${__dirname}/${url}`) });
+  //   });
     createw_indow();
 });

@@ -5,8 +5,7 @@ import { FacturesModel } from './vignettes/FacturesModel';
 import { SettingsModel } from './vignettes/SettingsModel';
 import { UserModel } from './vignettes/UserModel';
 import createPersistentStore from 'mst-persistent-store';
-// import Orbitdb from '../tools/orbitdb';
-// import useOrbitdb from '../hooks/useOrbitdb';
+
 const RootStoreModel = types.model("RootStore", {
     User: types.optional(UserModel, {}),
     Bons: types.optional(BonsModel, {}),

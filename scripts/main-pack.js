@@ -4,27 +4,27 @@ const builder = require('electron-builder');
 const Platform = builder.Platform
 
 builder.build({
-  "files": [
+  targets:Platform.MAC.createTarget(),
+  files: [
     path.join(__dirname, '../src/main'),
     path.join(__dirname, '../src/dist'),
   ],
-  "win": {
-    "target": [
+  win: {
+    target: [
       {
-        "target": "nsis",
-        "arch": [
-          "x64",
-          "ia32"
+        target: "nsis",
+        arch: [
+          "x64"
         ]
       }
     ],
-    "artifactName": "${productName}_setup_${version}.${ext}"
+    artifactName: "${productName}_setup_${version}.${ext}"
   },
-  "directories": {
-    "output": "release"
+  directories: {
+    output: "release"
   },
-  "extends": null,
-  "productName": "vignettes",
+  extends: null,
+  productName: "vignettes",
 })
   .then((...args) => {
     console.log(args)

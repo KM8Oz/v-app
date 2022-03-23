@@ -22,6 +22,7 @@ const mimeTypes = {
   ".html": "text/html",
   ".htm": "text/html",
   ".json": "application/json",
+  ".xlsx": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
   ".css": "text/css",
   ".less": "text/css",
   ".svg": "image/svg+xml",

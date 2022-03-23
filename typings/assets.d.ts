@@ -3,6 +3,6 @@ declare module '*.jpeg'
 declare module '*.png'
 declare module '*.gif'
 declare module '*.svg'
-
+declare module '*.xlsx'
 declare module '*.less'
 declare module '*.css'

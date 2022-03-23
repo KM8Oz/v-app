@@ -24,9 +24,9 @@ import ListScreen from "./pages/ListScreen";
 import { observer } from "mobx-react-lite";
 import { IOPrivate } from "../tools/sockets";
 import { onSnapshot } from "mobx-state-tree";
-import useOrbitdb from "../hooks/useOrbitdb";
+// import useOrbitdb from "../hooks/useOrbitdb";
 const BodyWorkComponent = observer((props: any) => {
-  const [menuConf, setMenuConf] = useState([false, false, true, false]);
+  const [menuConf, setMenuConf] = useState([true, false, false, false]);
   const history = useHistory();
   const { User, Errors, hydrate, hydrated, Bons } = usePersistentStore();
 
@@ -40,7 +40,7 @@ const BodyWorkComponent = observer((props: any) => {
   useEffect(() => {
     let dispose = onSnapshot(Bons, (snap)=>{
       // let  _json = JSON.stringify(snap, null, 2);
-      useOrbitdb._db?.put(snap);
+      // useOrbitdb._db?.put(snap);
     })
     hydrate()
     let _private = IOPrivate(User.ssid);
@@ -119,9 +119,9 @@ const BodyWorkComponent = observer((props: any) => {
       <foreignObject x="190.8908" y="25.228" width="39" height="39">
         <MenuButton icon="setting" active={menuConf[2]} action={settingAction} />
       </foreignObject>
-      <foreignObject x="240.8908" y="25.228" width="39" height="39">
+      {/* <foreignObject x="240.8908" y="25.228" width="39" height="39">
         <MenuButton icon="listing" active={menuConf[3]} action={listingAction} />
-      </foreignObject>
+      </foreignObject> */}
       <foreignObject x="290.8908" y="25.228" width="39" height="39">
         <MenuButton icon="logout" active={menuConf[4]} action={logoutAction} />
       </foreignObject>

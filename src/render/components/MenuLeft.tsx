@@ -3,10 +3,10 @@ import styled from "styled-components";
 import { observer } from "mobx-react-lite"
 import { usePersistentStore } from '../store';
 import { Popover, Button, notification } from 'antd';
-import { BonSimpleType } from '../store/vignettes/BonsModel';
+import { BonSimpleType, BonsModel } from '../store/vignettes/BonsModel';
 interface Props {
    setMenuConf: any,
-   Bon?: any;
+   Bon?: BonSimpleType;
    setStoreBon?: React.Dispatch<React.SetStateAction<BonSimpleType>>,
    reset?: () => void
 }
@@ -46,6 +46,7 @@ const MenuLeft = observer(({ Bon, setStoreBon, reset, setMenuConf }: Props) => {
    //  const [ShowModel, setShowModel] = useState(false);
    const [saved, setSaved] = useState(false);
    const save = () => {
+      if (Math.abs(Number(Bon.MontantTotalBrut) - Number(Bon.MontantVignette)) >= 5) return openNotification("échec de l'enregistrement", "(MontantVignette - MontantTotalBrut) > 5 dh")
       setSaved(true)
       Bons.add({
          ...Bon,
@@ -54,7 +55,7 @@ const MenuLeft = observer(({ Bon, setStoreBon, reset, setMenuConf }: Props) => {
             lastEditById: User.ssid,
          }
       })
-         .then((res) => {
+      .then((res) => {
             // console.log(res);
             setMenuConf([false, true, false, false])
             setSaved(false)

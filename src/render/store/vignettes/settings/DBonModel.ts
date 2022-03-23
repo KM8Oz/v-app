@@ -1,6 +1,6 @@
 import { makeid } from "@root/src/render/tools";
 import { types ,Instance} from "mobx-state-tree";
-export interface CBonpayload {
+export interface DBonpayload {
     code:string;
     format:string;
     active:boolean;

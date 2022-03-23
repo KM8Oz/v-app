@@ -11,9 +11,12 @@ import {
     PUModel,
     QuantityModel,
     TypeCArticleModel,
-    CArticlepayload
+    CArticlepayload,
+    StationModel,
+    Stationpayload
 } from "./settings"
 const SettingsModel = types.model({
+    Station:types.optional(types.array(StationModel), []),
     CFournisseurs: types.optional(types.array(CFournisseursModel), []),
     CArticle: types.optional(types.array(CArticleModel), []),
     CBon: types.optional(types.array(CBonModel), []),
@@ -240,6 +243,25 @@ const SettingsModel = types.model({
                 if (_em) self.Quantity.remove(_em);
             }
         },
+        genStation() {
+            if (isAlive(self)) self.Station.push({
+                nom:"station 0",
+                active: false
+            })
+        },
+        editStation: (id:string, payload: Stationpayload) => {
+            if (isAlive(self)) {
+                let _em = self.Station.find(e => e.id == id)
+                if (_em) self.Station.remove(_em);
+                self.Station.push(payload)
+            }
+        },
+        rmStation(id: string) {
+            if (isAlive(self)) {
+                let _em = self.Station.find(e => e.id == id)
+                if (_em) self.Station.remove(_em);
+            }
+        },
         
     }))
     .views((self) => ({
@@ -248,7 +270,8 @@ const SettingsModel = types.model({
         CodeFournisseur: () => self.CFournisseurs.map(e=>({value:e.nom,code:e.code,format:e.format, dr:e.direction})),
         DateBon: () => self.DBon,
         Quntity: () => self.Quantity,
-        PrisUnite: () => self.PU
+        PrisUnite: () => self.PU,
+        Stations: () => self.Station
     }))
 type TypeSettingsModel = Instance<typeof SettingsModel>;
 

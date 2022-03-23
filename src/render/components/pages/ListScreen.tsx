@@ -118,7 +118,6 @@ const ListScrollerItm = ({
 * (ev)=>console.log((ev.currentTarget.scrollTop /(ev.currentTarget.scrollHeight - 17.8*20))*100+"%", )
 */
 const LeftCorp = styled.div`
-
     max-width: 282px;
     width: 282px;
     margin: -3px 4px;

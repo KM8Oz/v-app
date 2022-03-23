@@ -151,6 +151,18 @@ export const ItemNom = styled.input`
   grid-area: nom;
   background-color: transparent;
 `;
+export const ItemNomStation = styled.input`
+  font-family: Archivo;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  width: 80%;
+  height: 19px;
+  outline: none;
+  border: unset;
+  grid-area: nom;
+  background-color: transparent;
+`;
 
 
 export const SettingItem = styled.div<{areas?:string}>`
@@ -161,6 +173,19 @@ export const SettingItem = styled.div<{areas?:string}>`
   grid-template-rows: 1fr;
   grid-template-columns: 1fr 1fr 1fr 1fr .5fr .5fr;
   grid-template-areas: ${({areas})=>areas?areas:"'nom code format direction remove add'"};
+  justify-items: center;
+  align-items: center;
+  background-color: #F1F4F2;
+  margin: 14px auto 0px auto;
+`;
+export const SettingItemStation = styled.div<{areas?:string}>`
+  width: 496px;
+  height: 34px;
+  border-radius: 10px;
+  display: grid;
+  grid-template-rows: 1fr;
+  grid-template-columns: 3fr 1fr .5fr .5fr;
+  grid-template-areas: ${({areas})=>areas?areas:"'nom . remove add'"};
   justify-items: center;
   align-items: center;
   background-color: #F1F4F2;
@@ -217,6 +242,17 @@ export const Header = styled.div<{areas?:string}>`
   grid-template-rows: 1fr;
   grid-template-columns: 1fr 1fr 1fr 1fr .5fr .5fr;
   grid-template-areas:${({areas})=>areas?areas:"'nom code format direction . add'"};
+  justify-items: center;
+  align-content: center;
+  height: 100%;
+`;
+export const HeaderStation = styled.div<{areas?:string}>`
+  grid-area: header-settings;
+  display: grid;
+  padding-top: 8px;
+  grid-template-rows: 1fr;
+  grid-template-columns: 4fr .5fr .5fr;
+  grid-template-areas:${({areas})=>areas?areas:"'nom  . add'"};
   justify-items: center;
   align-content: center;
   height: 100%;

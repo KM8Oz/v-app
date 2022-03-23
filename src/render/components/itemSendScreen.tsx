@@ -25,7 +25,11 @@ const dateoptions = { year: 'numeric', month: 'long', day: 'numeric' };
 function ItemSendScreen({ selected = false,remove, factured, bon, ...props }: React.SVGProps<SVGSVGElement> & Props) {
   const { Settings } = usePersistentStore()
   const EditComponent = (
-    <div>
+    <div style={{
+      display:"flex",
+      justifyContent:"center",
+      flexDirection:"row"
+    }}>
       <Button type="dashed" size="small" 
       onClick={()=>{
         remove().then((res)=>{
@@ -41,12 +45,12 @@ function ItemSendScreen({ selected = false,remove, factured, bon, ...props }: Re
       }} danger>
         supprimer
       </Button>
-      <Button style={{
+      {/* <Button style={{
         marginLeft: 5,
         marginRight: 5
       }} type="primary" size="small">
         modifier
-      </Button>
+      </Button> */}
     </div>
   )
   return (

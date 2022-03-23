@@ -21,6 +21,7 @@ import { observer } from "mobx-react-lite";
 import { Tabs } from "antd";
 import { Configs } from "../settings/Configs"
 import Icon, { AppleOutlined, CloudSyncOutlined, SettingOutlined, UnorderedListOutlined } from "@ant-design/icons";
+import Station from "../settings/Station";
 const SettingsScreen = observer((props: React.SVGProps<SVGSVGElement>) => {
     const { Bons, hydrate, hydrated } = usePersistentStore();
     const [list, setlist] = useState<any>(Bons);
@@ -95,6 +96,9 @@ const SettingsScreen = observer((props: React.SVGProps<SVGSVGElement>) => {
                             </Tabs.TabPane>
                             <Tabs.TabPane tab={<ASpan><SettingOutlined />CFournisseur</ASpan>} key={"3"}>
                                 <CFournisseurs />
+                            </Tabs.TabPane>
+                            <Tabs.TabPane tab={<ASpan><SettingOutlined />Station</ASpan>} key={"10"}>
+                                <Station />
                             </Tabs.TabPane>
                             <Tabs.TabPane tab={<ASpan><SettingOutlined />DBon</ASpan>} key={"4"}>
                                 <DBon />
