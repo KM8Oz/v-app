@@ -112,3 +112,5 @@ dist
 release
 src/main/bundle.js
 src/main/bundle.js.map
+/orbitdb/
+package-lock.json
