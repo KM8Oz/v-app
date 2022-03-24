@@ -37,7 +37,13 @@ const SendScreen = observer((props: React.SVGProps<SVGSVGElement>) => {
     
     useEffect(() => {
         hydrate()
-    
+    // let list = Array.from(document.getElementsByTagName("svg"));
+    //   if (list && list?.length > 0) {
+    //     list.forEach((element: any) => {
+    //       element.style.webkitAppRegion = "no-drag"
+    //       element.style.boxSizing = "border-box"
+    //     });
+    //   }
         // setlist(Bons.List);
         // return () => {
         //     setlist([]);
