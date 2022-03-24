@@ -8,7 +8,7 @@ import { observer } from 'mobx-react-lite';
 import { FC } from 'react';
 import { useMemo } from 'react';
 import { Body, Code, Direction, Format, Header, IconAdd, ItemCode, ItemFormat, ItemNom, Nomination, SettingItem, SettingsWrapper } from "./styledComponents";
-
+import AddIconSettings from '../buttons/AddIconSettings'
 interface Props {
 }
 const Quantity: FC = observer(({ }: Props) => {
@@ -29,7 +29,7 @@ const Quantity: FC = observer(({ }: Props) => {
         {/* <Code area='code' type='text' placeholder='Code' maxLength={8} onChange={(ev => setFilters({ ...emtyfilter, code: ev.currentTarget.value.replace(/[^0-9A-Z]/g, '') }))} value={filters.code} /> */}
         <Format type='text' placeholder='Format' maxLength={10} onChange={(ev => setFilters({ ...emtyfilter, format: ev.currentTarget.value.replace(/[^XYxy]/g, "").toLocaleUpperCase() }))} value={filters.format} />
         {/* <Direction type='text' placeholder='Direction' maxLength={10} onChange={(ev=>setFilters({...filters, direction:ev.currentTarget.value.replace(/[^a-zA-Z]/g, '')}))}  value={filters.nom}/> */}
-        <IconAdd onClick={() => Settings.genQuantity()} />
+        <AddIconSettings className='add-btn' onClick={() => Settings.genQuantity()} />
       </Header>, [filters])}
       <Body >
         {

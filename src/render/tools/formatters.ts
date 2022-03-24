@@ -45,35 +45,49 @@ export async function exportFacture({ data, nfacture, dfacture, name }: {
                 // console.log(res.data);
                 
                 _workbook.xlsx.load(res.data).then(function (workbook) {
-                var worksheet = workbook.getWorksheet("facture");
+                var worksheet = workbook.getWorksheet("facture 212205"); //  facture 212205
                 // console.log('file:', res.data, { worksheet, _workbook });
                 // console.log(worksheet.getRows(0,49));
-                let replacement  = [
-                    {text: "                           "},
-                    {text: "           "},
-                    {text: "  "},
-                    {text: `FACTURE : ${nfacture} `},
-                    {text: "                                                  …                                                 "},
-                    {text: `Date : ${dfacture.toLocaleString()}`},
-                ]
-                worksheet.getRow(10).values = [{
-                    richText: worksheet.getRow(12).values[1].richText.map((s:any, i:number)=>s={...s,text:replacement[i].text})
-                }]
+                // let replacement  = [
+                //     {text: "                           "},
+                //     {text: "           "},
+                //     {text: "  "},
+                //     {text: `FACTURE : ${nfacture} `},
+                //     {text: "                                                  …                                                 "},
+                //     {text: `Date : ${dfacture.toLocaleString()}`},
+                // ]
+                // console.log(worksheet.getRow(11));
+                // console.log(worksheet.getRow(12));
+                // console.log(worksheet.getRow(13));
+                // worksheet.getRow(13).values = [
+                //     ,{
+                //     richText: worksheet.getRow(13).values[1].richText.map((s:any, i:number)=>s={...s,text:replacement[i].text})
+                // }]
+                // worksheet.mergeCells('B11:C11')
+                worksheet.getRow(11).getCell("B").value = `FACTURE : ${nfacture}`
+                // worksheet.getRow(11).getCell('B').alignment = { horizontal:'center'} ;
+                // worksheet.getRow(11).getCell("C").value = `FACTURE : ${nfacture}`
+                // worksheet.mergeCells('I11:K11')
+                worksheet.getRow(11).getCell("I").value = `Date : ${dfacture.toLocaleString()}`
+                // worksheet.getRow(11).getCell('I').alignment = { horizontal:'center'} ;
+                // worksheet.getRow(11).getCell("J").value = `Date : ${dfacture.toLocaleString()}}`
+                // worksheet.getRow(11).getCell("K").value = `Date : ${dfacture.toLocaleString()}`
                 worksheet.name = name;
                 data.forEach((ce, i) => {
-                    worksheet.getRow(15+i).values = [
-                    ce.codebar, 
-                    ce.date, 
-                    ce.station,
-                    ce.codebon,
-                    ce.article,
-                    ce.qte,
-                    ce.pu,
-                    ce.mt_vignette,
-                    ce.montant_brut,
-                    ce.remise,
-                    ce.montant_total
-                    ];
+                    // worksheet.getRow(15+i).getCell("A").value = ce.codebar
+                    // worksheet.getRow(15+i).values = [
+                        worksheet.getRow(15+i).getCell("A").value = ce.codebar;
+                        worksheet.getRow(15+i).getCell("B").value = ce.date;
+                        worksheet.getRow(15+i).getCell("C").value = ce.station;
+                        worksheet.getRow(15+i).getCell("D").value = ce.codebon;
+                        worksheet.getRow(15+i).getCell("E").value = ce.article;
+                        worksheet.getRow(15+i).getCell("F").value = ce.qte;
+                        worksheet.getRow(15+i).getCell("G").value = ce.pu;
+                        worksheet.getRow(15+i).getCell("H").value = ce.mt_vignette;
+                        worksheet.getRow(15+i).getCell("I").value = ce.montant_brut;
+                        worksheet.getRow(15+i).getCell("J").value = ce.remise;
+                        worksheet.getRow(15+i).getCell("K").value = ce.montant_total;
+                    // ];
                 })
                 workbook.xlsx.writeBuffer({ filename: name }).then((buffer) => {
                     // const element = document.createElement("a");

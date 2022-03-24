@@ -59,12 +59,13 @@ const SettingsScreen = observer((props: React.SVGProps<SVGSVGElement>) => {
                 }} onClick={saveAction}>SOUVEGARDER</Souvegarder>
             </Left>
             <Body>
-                <Tabs defaultActiveKey="2" animated={{
+                <Tabs defaultActiveKey="2" type="card" animated={{
                     inkBar: false,
                     tabPane: false
                 }} tabBarStyle={{
                     backgroundColor: "rgb(76, 122, 108)",
-                    color: "#fff"
+                    color: "#fff",
+                    margin:"unset"
                 }} >
                     <Tabs.TabPane
                         style={{
@@ -150,6 +151,12 @@ const BodySetings = styled.div`
    gap: 0px 1px; 
    grid-template-areas: 
     "left panel"; 
+    .anticon {
+        color: #4C7A6C !important;
+    }
+    .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+        color: #4C7A6C !important;
+    }
     /* margin-bottom: -5px; */
 `;
 const Left = styled.div`

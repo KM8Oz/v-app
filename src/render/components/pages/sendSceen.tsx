@@ -86,7 +86,8 @@ const SendScreen = observer((props: React.SVGProps<SVGSVGElement>) => {
                 width={822}
                 height={417}
                 fill="none"
-                {...props}
+                // style
+                // {...props}
             >
                 <g filter="url(#prefix__filter0_d)">
                     <path

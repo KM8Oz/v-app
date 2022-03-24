@@ -40,7 +40,11 @@ const BodyWorkComponent = observer((props: any) => {
     setMenuConf(emty)
   }
   // const location = useLocation();
+  useEffect(()=>{
+    Settings.init()
+  }, [])
   useEffect(() => {
+
     let dispose = onSnapshot(Bons, (snap) => {
       // let  _json = JSON.stringify(snap, null, 2);
       // useOrbitdb._db?.put(snap);
@@ -96,13 +100,13 @@ const BodyWorkComponent = observer((props: any) => {
       }
     })
     return () => {
-      let list = Array.from(document.getElementsByTagName("svg"));
-      if (list && list?.length > 0) {
-        list.forEach((element: any) => {
-          element.style.webkitAppRegion = "no-drag"
-          element.style.boxSizing = "border-box"
-        });
-      }
+      // let list = Array.from(document.getElementsByTagName("svg"));
+      // if (list && list?.length > 0) {
+      //   list.forEach((element: any) => {
+      //     element.style.webkitAppRegion = "no-drag"
+      //     element.style.boxSizing = "border-box"
+      //   });
+      // }
       dispose()
     }
   }, [menuConf]);

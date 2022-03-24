@@ -262,7 +262,7 @@ export const HeaderArticle = styled.div<{areas?:string}>`
   display: grid;
   padding-top: 8px;
   grid-template-rows: 1fr;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr .5fr .5fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr .4fr .6fr;
   grid-template-areas:${({areas})=>areas?areas:"'nom Code taux format direction . add'"};
   grid-gap:2px;
   justify-items: center;

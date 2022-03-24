@@ -143,13 +143,30 @@ a:hover {
 .ant-tabs-nav .ant-tabs-tab{
   font-weight: 600;
   font-family: archivo;
-  margin-left: 12px !important;
+  margin-left: -12px !important;
 }
 .ant-tabs-nav .ant-tabs-tab-active{
   color: #182d2f !important;
 }
 .ant-tabs-nav .ant-tabs-tab:hover {
   color: #182d2f !important;
+}
+.ant-tabs-left > .ant-tabs-content-holder > .ant-tabs-content > .ant-tabs-tabpane, .ant-tabs-left > div > .ant-tabs-content-holder > .ant-tabs-content > .ant-tabs-tabpane {
+  padding-left: 9px;
+}
+.add-btn{
+  grid-area: add;
+  transition: all .2s ease-in-out;
+  cursor:pointer;
+  &:hover{
+      transform:scale(1.02)
+  }
+  &:active{
+      transform:scale(.98)
+  }
+}
+.ant-tabs-card > .ant-tabs-nav .ant-tabs-tab, .ant-tabs-card > div > .ant-tabs-nav .ant-tabs-tab {
+  padding: 6px 4px 6px 17px;
 }
 .ant-tabs .ant-tabs-left-bar .ant-tabs-ink-bar {
   display: none !important;

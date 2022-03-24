@@ -42,7 +42,6 @@ function Login(props: any) {
   const [QrUrl, setQrUrl] = useState("");
 
   React.useEffect(() => {
-    let all = Settings.init()
     setColor(COLORS.ERROR)
     setshow(true)
     machineId().then((ID) => {
