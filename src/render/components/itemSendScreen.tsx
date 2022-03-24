@@ -44,7 +44,7 @@ function ItemSendScreen({ selected = false, remove, factured, bon, ...props }: A
             console.log(res);
             machineId().then((ID) => {
               let onlineBon:VignettestypeFromServer|any = {
-                 archived:false,
+                 archived:true,
                  machine:ID
               } 
               _private.emit("call", "vignettes.addOrUpdate", onlineBon , async (err:any, res:any) => {
