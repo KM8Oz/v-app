@@ -45,7 +45,8 @@ function ItemSendScreen({ selected = false, remove, factured, bon, ...props }: A
             machineId().then((ID) => {
               let onlineBon:VignettestypeFromServer|any = {
                  archived:true,
-                 machine:ID
+                 machine:ID,
+                 CBon:bon.CBon
               } 
               _private.emit("call", "vignettes.addOrUpdate", onlineBon , async (err:any, res:any) => {
                   if(res){
@@ -74,7 +75,8 @@ function ItemSendScreen({ selected = false, remove, factured, bon, ...props }: A
             machineId().then((ID) => {
                let onlineBon:VignettestypeFromServer|any = {
                   factured:false,
-                  machine:ID
+                  machine:ID,
+                  CBon:bon.CBon
                } 
                _private.emit("call", "vignettes.addOrUpdate", onlineBon , async (err:any, res:any) => {
                    if(res){
