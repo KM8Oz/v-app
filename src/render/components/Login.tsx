@@ -50,7 +50,8 @@ function Login(props: any) {
       setColor(COLORS.NORMAL)
       IOPublic.emit("call", "licence.check", { deviceid: ID }, async (err, res) => {
         // dcid
-
+        console.log(ID);
+        
         if (!res?.status || err) {
           setshow(false)
           setColor(COLORS.ACTIVATION)

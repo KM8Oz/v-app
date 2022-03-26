@@ -147,7 +147,7 @@ function ItemSendScreen({ selected = false, remove, factured, bon, ...props }: A
           >
             {bon?.CBar}
           </strong>
-          <i>N: {bon?.CBon.replace(/[^0-9]/g, '')}</i>
+          <i>N: {bon?.CBon?.replace(/[^0-9]/g, '')}</i>
         </p>
       </foreignObject>
       {/* <path
@@ -161,7 +161,7 @@ function ItemSendScreen({ selected = false, remove, factured, bon, ...props }: A
           fontWeight: "bold",
           margin: "auto"
         }}>
-          {bon?.CBon.replace(/[^a-zA-Z]/g, '')}
+          {bon?.CBon?.replace(/[^a-zA-Z]/g, '')}
         </p>
       </foreignObject>
       <path

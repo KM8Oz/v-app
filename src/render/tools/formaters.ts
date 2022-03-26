@@ -2,7 +2,7 @@
 
 import { Button, notification } from "antd";
 
-export const frmt = (input: string, format: string, dr: boolean) => {
+export const frmt = (input: string, format: string, dr: boolean|string) => {
      let d = Array.from(format.replace(/[^X]/g, '')).length;
      let d0 = String(Number(String(input).replace(/[^0-9]/g, ''))).substring(0, d)
      let dC = Array.from(format.replace(/[^Y]/g, '')).length;

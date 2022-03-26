@@ -51,6 +51,9 @@ const MenuLeft = observer(({ Bon, setStoreBon, reset, setMenuConf }: Props) => {
    const [saved, setSaved] = useState(false);
    const save = () => {
       if (Math.abs(Number(Bon.MontantTotalBrut) - Number(Bon.MontantVignette)) >= 5) return openNotification("échec de l'enregistrement", "(MontantVignette - MontantTotalBrut) > 5 dh")
+      // console.log(!Bon?.CArticle , !Bon?.CBar ,!Bon?.CBon ,!Bon?.CFournisseur ,!Bon?.DBon  ,!Bon?.Kilos ,!Bon?.MontantTotal ,!Bon?.MontantTotalBrut,!Bon?.MontantVignette,!Bon?.PU,!Bon?.Quantity,!Bon?.Signature,!Bon?.Ville,!Bon?.station);
+      
+      if (!Bon?.CArticle || !Bon?.CBar ||!Bon?.CBon ||!Bon?.CFournisseur ||!Bon?.DBon  ||!Bon?.Kilos ||!Bon?.MontantTotal ||!Bon?.MontantTotalBrut||!Bon?.MontantVignette||!Bon?.PU||!Bon?.Quantity||!Bon?.Signature||!Bon?.Ville||!Bon?.station) return openNotification("échec de l'enregistrement", "Certaines informations manquent")
       setSaved(true)
       Bons.add({
          ...Bon,
@@ -98,7 +101,7 @@ const MenuLeft = observer(({ Bon, setStoreBon, reset, setMenuConf }: Props) => {
          })
          .catch((err) => {
             setSaved(false)
-            openNotification("échec de l'enregistrement", "Certaines informations manquent")
+            openNotification("échec de l'enregistrement", "le bon a déjà existe ou bien malformé")
          })
    }
    return (

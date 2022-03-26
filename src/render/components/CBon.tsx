@@ -11,19 +11,21 @@ interface Props {
     onChange?: () => void;
     onKeyUp?: () => void;
     typeInp?: typeInp;
-    format?: string
+    format?: string,
+    onOut?:() => void
 }
 enum typeInp {
     normal = "v-input_n",
     bold = "v-input_b",
     medium = "v-input_m"
 }
-const InputCodeBon = ({ x, y, height, width, format, placeholder, typeInp, onChange, onKeyUp, ...rest }: Props & any) => {
+const InputCodeBon = ({ x, y, height, width,onOut ,format, placeholder, typeInp, onChange, onKeyUp, ...rest }: Props & any) => {
     return (
         <foreignObject x={x} y={y} width={width} height={height}>
              <ContextMenuTrigger id="CBon" renderTag='tr' holdToDisplay={1000}>
             <input 
             // onFocusCapture={(ev)=>console.log(ev.currentTarget)}
+            onBlur={onOut}
             onClick={(e:any)=> {
                 //    console.log(e.currentTarget);
                 e.currentTarget.value = ""

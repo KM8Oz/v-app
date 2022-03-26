@@ -47,7 +47,9 @@ export type BonInstance = Instance<typeof Bon>;
 const BonsModel = types.model({
     List: types.optional(types.array(Bon), [])
 }).views((self) => ({
-    Signatures: () => self.List.map(e => ({ value: e.Signature }))
+    Signatures: () => self.List
+    .filter(a => !(self.List.findIndex(s=>s.Signature == a.Signature) != -1))
+    .map(e => ({ value: e.Signature }))
 })).actions((self) => ({
     editFactured(code:string){
     return new Promise((resolve, reject)=>{
