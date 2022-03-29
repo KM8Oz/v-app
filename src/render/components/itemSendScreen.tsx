@@ -244,7 +244,7 @@ function ItemSendScreen({ selected = false, remove, factured, bon,edit, ...props
           <foreignObject width="85" height="58" x="0" y="0">
             <Center>
               <CheckBox
-                active={bon.meta.selected}
+                active={bon.meta.selected || bon.meta.factured}
                 onClick={() => {
                   factured().then((res) => {
                     // console.log(res);

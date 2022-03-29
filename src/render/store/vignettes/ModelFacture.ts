@@ -54,8 +54,10 @@ const FactureModel = types.model({
 })).actions((self) => ({
     addReplaceFacture(facture:any){
         if(isAlive(self)){
-            self.List = self.List.filter(s=>s.NFacture != facture.NFacture) as any;
+            if(facture && !facture.archived){
+            self.List = self.List.filter(s=>s.NFacture != facture.NFacture &&  s.vignettes && s.vignettes.length > 0) as any;
             self.List.push(facture)
+            }
         }
     },
     editActive(id:number){

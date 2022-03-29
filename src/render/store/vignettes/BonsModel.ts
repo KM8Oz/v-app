@@ -58,7 +58,7 @@ const BonsModel = types.model({
     return new Promise((resolve, reject)=>{
         try {
             let _exist = self.List.find((s)=>s.uuid == code);
-            if(!_exist) reject("not exist!");
+            if(!_exist && !_exist.meta.factured) reject("not exist!");
             _exist.meta.selected = !_exist.meta.selected;
             resolve(true)
         } catch (error) {

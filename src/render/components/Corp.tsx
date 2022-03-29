@@ -176,37 +176,6 @@ const BodyWorkComponent = observer((props: any) => {
   let marginf = 50;
   return (
     <>
-      <div style={{ ...iconsbtnstyle }}>
-        <MenuButton icon="add" active={menuConf[0]} action={addAction} />
-      </div>
-      {
-        Settings.ismaster &&
-        <div style={{ ...iconsbtnstyle, left: iconsbtnstyle.left + marginf }}>
-          <MenuButton icon="send" active={menuConf[1]} action={sendAction} />
-        </div>
-      }
-      <div style={{ ...iconsbtnstyle, left: iconsbtnstyle.left + marginf * 2 }}>
-        <MenuButton icon="setting" active={menuConf[2]} action={settingAction} />
-      </div>
-      <div style={{ ...iconsbtnstyle, left: iconsbtnstyle.left + marginf * 3 }}>
-        <MenuButton icon="listing" active={menuConf[3]} action={listingAction} />
-      </div>
-      <div style={{ ...iconsbtnstyle, left: iconsbtnstyle.left + marginf * 4 }}>
-        <MenuButton icon="logout" active={menuConf[4]} action={logoutAction} />
-      </div>
-      <div style={{
-        position: "absolute",
-        right: 38.8908,
-        top: 43.228,
-        zIndex: 9,
-        width: 39,
-        height: 39,
-        display: "grid",
-        gridTemplateColumns: "repeat(2, 1fr)",
-        gap: 10
-      }}>
-        <MenuBoxIcons />
-      </div>
       <animated.svg
         width={1001}
         height={550}
@@ -244,6 +213,37 @@ const BodyWorkComponent = observer((props: any) => {
           </clipPath>
         </defs>
       </animated.svg>
+      <div style={{ ...iconsbtnstyle }}>
+        <MenuButton icon="add" active={menuConf[0]} action={addAction} />
+      </div>
+      {
+        Settings.ismaster &&
+        <div style={{ ...iconsbtnstyle, left: iconsbtnstyle.left + marginf }}>
+          <MenuButton icon="send" active={menuConf[1]} action={sendAction} />
+        </div>
+      }
+      <div style={{ ...iconsbtnstyle, left: iconsbtnstyle.left + marginf * 2 }}>
+        <MenuButton icon="setting" active={menuConf[2]} action={settingAction} />
+      </div>
+      <div style={{ ...iconsbtnstyle, left: iconsbtnstyle.left + marginf * 3 }}>
+        <MenuButton icon="listing" active={menuConf[3]} action={listingAction} />
+      </div>
+      <div style={{ ...iconsbtnstyle, left: iconsbtnstyle.left + marginf * 4 }}>
+        <MenuButton icon="logout" active={menuConf[4]} action={logoutAction} />
+      </div>
+      <div style={{
+        position: "absolute",
+        right: 38.8908,
+        top: 43.228,
+        zIndex: 9,
+        width: 39,
+        height: 39,
+        display: "grid",
+        gridTemplateColumns: "repeat(2, 1fr)",
+        gap: 10
+      }}>
+        <MenuBoxIcons />
+      </div>
       <animated.svg
         style={{
           position: "absolute",
