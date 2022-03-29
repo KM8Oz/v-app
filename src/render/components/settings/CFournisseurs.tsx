@@ -7,7 +7,7 @@ import { usePersistentStore } from '../../store';
 import { observer } from 'mobx-react-lite';
 import { FC } from 'react';
 import { useMemo } from 'react';
-import AddIconSettings from '../buttons/AddIconSettings'
+import {AddBtnSettings } from "./styledComponents";
 import {Body,Code,Direction,Format,Header,IconAdd,ItemCode,ItemFormat,ItemNom,Nomination,SettingItem,SettingsWrapper } from "./styledComponents";
 
 interface Props {
@@ -30,7 +30,7 @@ const CFournisseurs:FC = observer(({ }: Props) => {
                 <Code type='text' placeholder='Code' maxLength={6} onChange={(ev=>setFilters({...emtyfilter, code:ev.currentTarget.value.replace(/[^0-9]/g, '')}))}  value={filters.code}/>
                 <Format type='text' placeholder='Format' maxLength={10} onChange={(ev=>setFilters({...emtyfilter, format:ev.currentTarget.value.replace(/[^XYxy]/g, "").toLocaleUpperCase()}))}  value={filters.format}/>
                 {/* <Direction type='text' placeholder='Direction' maxLength={10} onChange={(ev=>setFilters({...filters, nom:ev.currentTarget.value.replace(/[^a-zA-Z]/g, '')}))}  value={filters.nom}/> */}
-                <AddIconSettings className='add-btn' onClick={()=>Settings.genCFournisseurs()} />
+                <AddBtnSettings children={"add"}  onClick={()=>Settings.genCFournisseurs()} />
             </Header>,[filters])}
             <Body >
               {

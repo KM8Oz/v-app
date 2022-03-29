@@ -55,7 +55,7 @@ function Facturation({ open, setPanel, ...props }: any & { open?: boolean, setPa
     let list = Bons.List.filter(s => s.meta.selected);
    
     list.forEach((element, i) => {
-      Bons.changeFacturationData(element.CBon, Facture?.issued, Facture?.FactureNumber, User.ssid)
+      Bons.changeFacturationData(element.uuid, Facture?.issued, Facture?.FactureNumber, User.ssid)
       if(i===(list.length-1)) sendAllToPrivateNet(Facture?.issued, Facture?.FactureNumber).then(()=>{
         console.log("facturation sent!");
       })

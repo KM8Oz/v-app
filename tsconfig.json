@@ -13,5 +13,5 @@
       "@render/*": ["src/render/*"],
     }
   },
-  "exclude": ["./config/webpack.*"]
+  "exclude": ["node_modules","config/*.js", "**/*.spec.ts"]
 }

@@ -7,6 +7,9 @@ import { BonSimpleType, BonsModel } from '../store/vignettes/BonsModel';
 import { makeid } from '../tools';
 import { VignettestypeFromServer } from '../tools/formatters';
 import { IOPrivate } from '../tools/sockets';
+const computerName = require("os").userInfo().username
+console.log(computerName);
+
 const { machineId } = require("node-machine-id")
 interface Props {
    setMenuConf: any,
@@ -108,7 +111,8 @@ const MenuLeft = observer(({ Bon, setStoreBon, reset, setMenuConf }: Props) => {
          <ProfileBtn type="dashed" block>
             <Burrger />
             <ProfileName>
-               {User.meta?.username || "Machine " + User.ssid.substring(0, 2)}
+               {/* {User.meta?.username || "Machine " + User.ssid.substring(0, 2)} */}
+               {computerName}
             </ProfileName>
          </ProfileBtn>
          <ResetBtn onClick={() => reset()}>RESET</ResetBtn>
@@ -171,7 +175,7 @@ const ProfileBtn = styled(Button)`
       font-weight: 400;
       color: #444;
     }
-    width:90px;
+    width: 85% !important;
     height:21px;
     border-radius:17px;
     padding: 4px 4px;
@@ -205,6 +209,10 @@ const ProfileName = styled.p`
    font-family:Arial, Helvetica, sans-serif;
    font-weight:400;
    color: #444;
+   text-overflow: ellipsis;
+  overflow: hidden; 
+  max-width: 67px;
+  white-space: nowrap;
 `;
 const Archiver = styled.button`
    border:none;

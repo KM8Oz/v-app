@@ -15,7 +15,7 @@ interface Props {
   width: number,
   height: number,
   setBon:React.Dispatch<React.SetStateAction<BonSimpleType>>,
-  max: number | 5
+  max: number | 1
 }
 enum Carburant {
   Diesel = "Diesel",
@@ -77,7 +77,7 @@ export default observer(({ max, y, x,setBon, width, height }: Props): ReactEleme
         // menuIsOpen={true}
         onChange={(ev=>{
           // console.log(ev);
-          let _option = ev[0].value;
+          let _option = ev[0]?.value;
           setBon((bon:BonSimpleType)=>({
             ...bon,
             CArticle:_option
@@ -182,6 +182,7 @@ export default observer(({ max, y, x,setBon, width, height }: Props): ReactEleme
           },
         }}
         isMulti
+      
         options={Settings.Articles()}
       />
     </foreignObject>

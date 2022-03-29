@@ -8,7 +8,7 @@ import { observer } from 'mobx-react-lite';
 import { FC } from 'react';
 import { useMemo } from 'react';
 import {Body,Code,Direction,Format,Header,HeaderStation,IconAdd,ItemCode,ItemFormat,ItemNom,ItemNomStation,Nomination,SettingItem,SettingItemStation,SettingsWrapper } from "./styledComponents";
-import AddIconSettings from '../buttons/AddIconSettings'
+import {AddBtnSettings } from "./styledComponents";
 interface Props {
 }
 const Station:FC = observer(({ }: Props) => {
@@ -27,7 +27,7 @@ const Station:FC = observer(({ }: Props) => {
             {useMemo(()=><HeaderStation  >
                 <Nomination type='text' maxLength={10} onChange={(ev=>setFilters({...emtyfilter, nom:ev.currentTarget.value.replace(/[^a-zA-Z0-9 ]/g, '')}))}  value={filters.nom} placeholder='Nomination' />
                 {/* <Direction type='text' placeholder='Direction' maxLength={10} onChange={(ev=>setFilters({...filters, nom:ev.currentTarget.value.replace(/[^a-zA-Z]/g, '')}))}  value={filters.nom}/> */}
-                <AddIconSettings className='add-btn' onClick={()=>Settings.genStation()} />
+                <AddBtnSettings children={"add"}  onClick={()=>Settings.genStation()} />
             </HeaderStation>,[filters])}
             <Body >
               {

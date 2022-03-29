@@ -9,7 +9,8 @@ import { FC } from 'react';
 import { TypeCArticleModel } from '../../store/vignettes/settings';
 import { useMemo } from 'react';
 import {Body,Code,Direction,Format,Header,HeaderArticle,IconAdd,ItemCode,ItemFormat,ItemNom,Nomination,SettingItem,SettingsWrapper,SettingItemArticle } from "./styledComponents";
-import AddIconSettings from '../buttons/AddIconSettings'
+import { AddBtnSettings } from "./styledComponents";
+
 interface Props {
   
 }
@@ -32,7 +33,7 @@ const CArticle:FC = observer(({ }: Props) => {
                 <Code type='text' area="taux" placeholder='taux' maxLength={6} onChange={(ev=>setFilters({...emtyfilter, Tauxremise:ev.currentTarget.value.replace(/[^0-9.]/g, '')}))}  value={filters.Tauxremise}/>
                 <Format type='text' placeholder='Format' maxLength={10} onChange={(ev=>setFilters({...emtyfilter, format:ev.currentTarget.value.replace(/[^XYxy]/g, "").toLocaleUpperCase()}))}  value={filters.format}/>
                 {/* <Direction type='text' placeholder='Direction' maxLength={10} onChange={(ev=>setFilters({...filters, nom:ev.currentTarget.value.replace(/[^a-zA-Z]/g, '')}))}  value={filters.nom}/> */}
-                <AddIconSettings className='add-btn' onClick={()=>Settings.genCArticle()} />
+                <AddBtnSettings children={"add"} onClick={()=>Settings.genCArticle()} />
                 </HeaderArticle>
             ,[filters])}
             <Body >

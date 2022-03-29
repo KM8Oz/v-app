@@ -140,7 +140,7 @@ const SendScreen = observer(({setMenuConf, ...props}: React.SVGProps<SVGSVGEleme
                         <div className="items-send-screen" ref={scrolled} onMouseDown={(e) => mouseDownHandler(e, setScrollX)}>
                             {
                                 Bons.List.filter((s) => filter ? !!s?.NFacture : !s?.NFacture).
-                                    map((e, i) => <ItemSendScreen edit={()=>setMenuConf([false, false, false, false, true])} remove={() => Bons.removeBon(e.CBon)} factured={() => Bons.editFactured(e.CBon)} bon={e} key={i} />)
+                                    map((e, i) => <ItemSendScreen edit={()=>setMenuConf([false, false, false, false, true])} remove={() => Bons.removeBon(e.uuid)} factured={() => Bons.editFactured(e.uuid)} bon={e} key={i} />)
                                 // TEST.map((e:any,i)=><ItemSendScreen key={i} />)
                             }
                         </div>

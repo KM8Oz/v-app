@@ -12,7 +12,7 @@ import { DateInput } from '..';
 import { DatePicker, Select } from 'antd';
 import moment from 'moment';
 import { useRef } from 'react';
-import AddIconSettings from '../buttons/AddIconSettings'
+import {AddBtnSettings } from "./styledComponents";
 interface Props {
 }
 const DBon: FC = observer(({ }: Props) => {
@@ -33,7 +33,7 @@ const DBon: FC = observer(({ }: Props) => {
                 {/* <Code area='code' type='date'  placeholder='Code' maxLength={8} onChange={(ev=>setFilters({...emtyfilter, code:ev.currentTarget.value.replace(/[^0-9]/g, '')}))}  value={filters.code}/> */}
                 <Format type='text' placeholder='Format' maxLength={10} onChange={(ev => setFilters({ ...emtyfilter, format: ev.currentTarget.value.replace(/[^dmyDMY]/g, "").toLocaleUpperCase() }))} value={filters.format} />
                 {/* <Direction type='text' placeholder='Direction' maxLength={10} onChange={(ev=>setFilters({...filters, direction:ev.currentTarget.value.replace(/[^a-zA-Z]/g, '')}))}  value={filters.nom}/> */}
-                <AddIconSettings className='add-btn' onClick={() => Settings.genDBon()} />
+                <AddBtnSettings children={"add"}  onClick={() => Settings.genDBon()} />
             </Header>, [filters])}
             <Body >
                 {

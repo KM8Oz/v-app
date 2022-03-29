@@ -13,7 +13,19 @@ export const IconAdd = styled(AddIconSettings)`
   }
 `;
 
-
+export const AddBtnSettings = styled.div`
+grid-area: add;
+transition: all 0.2s ease-in-out;
+cursor: pointer;
+font-family: sans-serif;
+font-weight: 900;
+background: #46925D;
+color: #fff;
+padding: 3px 10px;
+margin: 0px 13px 0px 0px;
+border-radius: 32px;
+box-shadow: 0px 0px 0.1px 3px #469287;
+`;
 export const Body = styled.div`
   flex: 1;
   grid-area: body-settings;
@@ -262,7 +274,7 @@ export const HeaderArticle = styled.div<{areas?:string}>`
   display: grid;
   padding-top: 8px;
   grid-template-rows: 1fr;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr .4fr .6fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1.1fr .4fr .5fr;
   grid-template-areas:${({areas})=>areas?areas:"'nom Code taux format direction . add'"};
   grid-gap:2px;
   justify-items: center;
