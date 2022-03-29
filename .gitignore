@@ -113,3 +113,4 @@ release
 src/main/bundle.js
 src/main/bundle.js.map
 Archive.zip
+package-lock.json
