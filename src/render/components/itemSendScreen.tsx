@@ -17,7 +17,8 @@ interface Props {
   bon?: BonType
   factured?: () => Promise<any>,
   remove?: () => Promise<any>,
-  selected?: boolean
+  selected?: boolean,
+  edit?:any
 }
 let ListFormats = {
   "DDMMYYYY": "DD-MM-YYYY",
@@ -28,8 +29,8 @@ let ListFormats = {
   "MMYYYYDD": "MM-YYYY-DD"
 }
 const dateoptions = { year: 'numeric', month: 'long', day: 'numeric' };
-function ItemSendScreen({ selected = false, remove, factured, bon, ...props }: AnimationProps<SVGAElement> & Props) {
-  const { Settings, Bons, User } = usePersistentStore()
+function ItemSendScreen({ selected = false, remove, factured, bon,edit, ...props }: AnimationProps<SVGAElement> & Props) {
+  const { Settings, Bons, User, TempBon } = usePersistentStore()
   const [popover, setPopover] = useState(false)
   let _private = IOPrivate(User.ssid);
   const EditComponent = (
@@ -46,7 +47,7 @@ function ItemSendScreen({ selected = false, remove, factured, bon, ...props }: A
               let onlineBon:VignettestypeFromServer|any = {
                  archived:true,
                  machine:ID,
-                 CBon:bon.CBon
+                 uuid: bon.uuid
               } 
               _private.emit("call", "vignettes.addOrUpdate", onlineBon , async (err:any, res:any) => {
                   if(res){
@@ -76,7 +77,7 @@ function ItemSendScreen({ selected = false, remove, factured, bon, ...props }: A
                let onlineBon:VignettestypeFromServer|any = {
                   factured:false,
                   machine:ID,
-                  CBon:bon.CBon
+                  uuid: bon.uuid
                } 
                _private.emit("call", "vignettes.addOrUpdate", onlineBon , async (err:any, res:any) => {
                    if(res){
@@ -95,12 +96,38 @@ function ItemSendScreen({ selected = false, remove, factured, bon, ...props }: A
         }} danger>
         DeFacturé
       </Button>}
-      {/* <Button style={{
+      {
+      !bon.meta.factured &&<Button style={{
         marginLeft: 5,
         marginRight: 5
-      }} type="primary" size="small">
+      }} 
+      onClick={()=>{
+        let _bon = {
+          CFournisseur: bon.CFournisseur,
+          CArticle: bon.CArticle,
+          CBon: bon.CBon,
+          station:bon.station,
+          CBar:bon.CBar,
+          DBon: bon.DBon,
+          Count: bon.Count,
+          MontantTotalBrut: bon.MontantTotalBrut,
+          Kilos: bon.Kilos,
+          Ville: bon.Ville,
+          MontantVignette:bon.MontantVignette,
+          MontantTotal: bon.MontantTotal,
+          PU: bon.PU,
+          Quantity: bon.Quantity,
+          Signature: bon.Signature
+        }
+        TempBon.setTempBon(_bon).then(()=>{
+          edit()
+        }).catch((err)=>{
+          console.log(err);
+        })
+        }}
+      type="primary" size="small">
         modifier
-      </Button> */}
+      </Button>}
     </div>
   )
 

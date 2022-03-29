@@ -51,7 +51,7 @@ const SettingsScreen = observer((props: React.SVGProps<SVGSVGElement>) => {
     //     config: { mass: 5, tension: 500, friction: 80 },
     // })
     return (
-        <BodySetings className="undraggble">
+        <BodySetings className="undraggbleimportant">
             <Left>
                 <Souvegarder style={{
                     gridArea: "save",

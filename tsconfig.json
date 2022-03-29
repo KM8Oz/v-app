@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "target": "ESNext",
+    "experimentalDecorators":true,
     "allowSyntheticDefaultImports": true, // 允许自动合成 import * as React from 'react'
     "moduleResolution": "Node", // import {} from '@ant-design/icon'
     "allowJs": true,
@@ -12,4 +13,5 @@
       "@render/*": ["src/render/*"],
     }
   },
+  "exclude": ["./config/webpack.*"]
 }

@@ -22,7 +22,7 @@ function Export({ status, setstatus }: { status: boolean, setstatus:any }) {
     })
     return (
         <Card
-            classname={"scrollbar"}
+        className={"scrollbar"}
             style={{...style, display: status ? "list-item" : "none"}}
         >
             <Closebtn
@@ -33,7 +33,7 @@ function Export({ status, setstatus }: { status: boolean, setstatus:any }) {
                 right: 5,
                 cursor:"pointer"
             }} />
-            {_Bons.List.filter(s => s.DFacture && s.meta.factured).map(f => (<p style={{
+            {_Bons.List.filter(s => s.DFacture && s.meta.factured && s.meta.selected).map(f => (<p style={{
                 border: "1px solid #444",
                 padding: "0px 10px",
                 userSelect: "all",

@@ -96,7 +96,18 @@ button {
     -webkit-app-region: no-drag;
   }
 }
+.undraggbleimportant {
+  -webkit-user-select: none;
+    user-select: none;
+    -webkit-app-region: no-drag !important;
+    box-sizing: unset !important;
 
+  &* {
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-app-region: no-drag;
+  }
+}
 button:hover {
   transform: scale(1.05);
 }

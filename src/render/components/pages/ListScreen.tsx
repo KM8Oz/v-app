@@ -11,26 +11,56 @@ import SearchIcon from "../buttons/SearchIcon";
 import { BonItem } from "../BonItem";
 import { usePersistentStore }  from "@render/store";
 import { observer } from "mobx-react-lite";
+import { IOPrivate } from "../../tools/sockets";
+import { Checkbox, Spin } from 'antd';
+import { LoadingOutlined } from '@ant-design/icons';
+const { machineId } = require("node-machine-id")
 // import useOrbitdb from "../../hooks/useOrbitdb";
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
 const ListScreen = observer((props: React.SVGProps<SVGSVGElement>)=>{
-    const { Bons, hydrate, hydrated } = usePersistentStore();
-    const [list, setlist] = useState<any>(Bons);
+    const { Bons, hydrate, hydrated, User, Factures, OnlineFactures } = usePersistentStore();
+    const [list, setlist] = useState<any[]>([] as any[]);
     // const { db } = useOrbitdb();
+    const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
+
     const [order, setOrder] = useState([true, false, false]);
     const [ScrollingLeftPerCen, setScrollingLeftPerCen] = useState(0);
     const [panel, setPanel] = useState(false);
+    const [loading, setLoading]=useState(false);
     const leftListRef = useRef(null);
     useEffect(() => {
         hydrate()
-        setlist(Bons);
+        // setlist(Bons);
+        let _private = IOPrivate(User.ssid);
+        machineId().then((ID) => {
+            _private.emit("call", "factures.getAll", {  FP: ID }, async (err: any, res: any) => {
+              if (res&&res.status) {
+                Array.from(res?.payload)?.forEach((el:any, i:number)=>{
+                    if(el){
+                        OnlineFactures.addReplaceFacture({...el, active:i==0?true:false, selected:false})
+                    }
+                })
+                setTimeout(()=>{
+                    setLoading(false)
+                },100)
+              }
+              })
+            })
         return () => {
-            setlist([]);
+            setlist(list);
         };
     }, []);
     const TEST = new Array(9).fill(null);
     const [scrollX, setScrollX] = useState(0);
     const [number, setNumber] = useState(null)
     const scrolled = useRef(null);
+    const [search, setSearch] = useState({
+        ville:"",
+        station:"",
+        number:""
+    })
     const [ShowDatePicker, setShowDatePicker] = useState(false);
     //  useEffect(() => {
     //  }, [ScrollingLeftPerCen]);
@@ -38,10 +68,31 @@ const ListScreen = observer((props: React.SVGProps<SVGSVGElement>)=>{
         top: `${scrollX}%`,
         config: { mass: 5, tension: 500, friction: 80 },
     })
+    const myfilter = ()=>{
+     return  order[0] ? (a,b)=>{
+                // number
+                return Number(b.DFacture) - Number(a.DFacture)
+       } : order[1] ? (a,b)=>{
+                // date
+                let dt_b = new Date(`${b.DFacture.substr(2,2)}/${b.DFacture.substr(0,2)}/20${b.DFacture.substr(4,4)}`) as any;
+                let dt_a = new Date(`${a.DFacture.substr(2,2)}/${a.DFacture.substr(0,2)}/20${a.DFacture.substr(4,4)}`) as any;
+                return dt_b-dt_a;
+    }: (a,b)=>{
+                // id/year
+                return Number(b.id) - Number(a.id)
+        return 
+    }
+    }
     // useEffect(()=>{
     // }, [order])
-    return (
-        <Corp className="undraggble">
+    return loading ? (<div style={{
+        width:"100%",
+        height:"100%",
+        flexDirection:"row",
+        justifyContent:"center",
+        alignItems:"center"
+    }}><Spin indicator={antIcon} /></div>):(
+        <Corp className="undraggbleimportant">
             <LeftCorp >
                 <LeftCorpHeader>
                     <LeftCorpHeaderItem onClick={() => setOrder([!order[0], false, false])} active={Array.isArray(order) && order[0]}>
@@ -54,7 +105,9 @@ const ListScreen = observer((props: React.SVGProps<SVGSVGElement>)=>{
                         Order
                     </LeftCorpHeaderItem>
                 </LeftCorpHeader>
-                {/* <LiftScrollBar draggable={false} onMouseDown={
+                {/* <LiftScrollBar 
+                draggable={false} 
+                onMouseDown={
                     (e) => {
                         let limits = [136, 462]
                         let rate = 672;
@@ -64,28 +117,64 @@ const ListScreen = observer((props: React.SVGProps<SVGSVGElement>)=>{
                             top: ScrollingLeftPerCen * 100
                         })
                     }
-                } className="undraggble" scrollRate={ScrollingLeftPerCen} /> */}
+                } 
+                className="undraggble" 
+                scrollRate={ScrollingLeftPerCen} /> */}
                 <ListScroller ref={leftListRef} onScroll={(ev) => setScrollingLeftPerCen(ev.currentTarget.scrollTop / (ev.currentTarget.scrollHeight - 17.8 * 20))}>
-                    {Array(20).fill({ fac_code: "091231238071", date: "03/04/2021", fac_num: "019/2021" })
-                        .map((e, i) => <ListScrollerItm key={i} {...e} />)}
+                    {
+                    // Array(20).fill({ fac_code: "091231238071", date: "03/04/2021", fac_num: "019/2021" })
+                    OnlineFactures.list().slice().sort(myfilter())
+                        ?.map((e, i) => <ListScrollerItm key={i} {...e} />)}
                 </ListScroller>
             </LeftCorp>
             <RightCorp>
                 <SearchTools>
                     <SearchToolsInputs>
-                        <SearchToolsInput placeholder="Nº de facture _" type="text" pattern="\d*" maxLength={15} />
-                        <SearchToolsInput placeholder="Nº de Bon _" type="text" pattern="\d*" maxLength={15} />
-                        <SearchToolsInput placeholder="Station_" type="text" pattern="[A-Za-z0-9]+" maxLength={15} />
+                        <SearchToolsInput onChange={(ev)=>{
+                            ev.preventDefault()
+                            setSearch(s=>({
+                                number:"",
+                                station:""
+                                , ville:capitalizeFirstLetter(ev?.currentTarget.value)}))
+                        }} placeholder="Ville _" type="text" pattern="\d*" maxLength={15} />
+                        <SearchToolsInput 
+                        onChange={(ev)=>{
+                            ev.preventDefault()
+                            setSearch(s=>({
+                                ville:"",
+                                station:""
+                                , number:ev?.currentTarget.value}))
+                        }} placeholder="Nº de Bon _" type="text" pattern="\d*" maxLength={15} />
+                        <SearchToolsInput
+                        onChange={(ev)=>{
+                            ev.preventDefault()
+                            setSearch(s=>({
+                                number:"",
+                                ville:""
+                                , station:ev?.currentTarget.value}))
+                        }} placeholder="Station_" type="text" pattern="[A-Za-z0-9]+" maxLength={15} />
                     </SearchToolsInputs>
                     <IconsSearch>
-                        <CalandarIcon onClick={() => setShowDatePicker(!ShowDatePicker)} />
-                        <SearchIcon />
+                        {/* <CalandarIcon onClick={() => setShowDatePicker(!ShowDatePicker)} />
+                        <SearchIcon /> */}
+                        <MutiActionBtn active={OnlineFactures.listselected().length > 0}>
+                            {OnlineFactures.listselected().length > 1 ? "Relevé" : "Facturé"}
+                        </MutiActionBtn>
                     </IconsSearch>
                 </SearchTools>
                 <ListBonsScroller>
                     {
-                        Array(10).fill({ letter: "M", code: "208472", date: "01/01/2021", facNum: "091231238071" })
-                            .map((e, i) => <BonItem bon={e} order={i} key={i} />)
+                        // Array(10).fill({ letter: "M", code: "208472", date: "01/01/2021", facNum: "091231238071" })
+                        OnlineFactures
+                        .active()
+                        .slice()
+                        .filter((f)=>{
+                           if(search.number) return f.CBon.search(search.number) != -1
+                           if(search.ville) return f.Ville.search(search.ville) != -1
+                           if(search.station) return f.station.search(search.station) != -1
+                           return true
+                        })
+                        .map((e, i) => <BonItem bon={e} order={i} key={i} />)
                     }
                 </ListBonsScroller>
             </RightCorp>
@@ -94,22 +183,37 @@ const ListScreen = observer((props: React.SVGProps<SVGSVGElement>)=>{
     )
 })
 const ListScrollerItm = ({
-    fac_code,
-    date,
-    fac_num
+    NFacture,
+    DFacture,
+    archived,
+    id,
+    vignettes,
+    active,
+    selected
 }: {
-    fac_code: string;
-    date: string;
-    fac_num: string;
+    NFacture: string;
+    DFacture: string;
+    id: string;
+    archived:boolean;
+    vignettes: any;
+    active?:boolean
+    selected?:boolean
 }) => {
+    const { OnlineFactures } = usePersistentStore()
+    const onChange =  (e:any)=>{
+        OnlineFactures.editSelected(Number(id),e.target.checked)
+    }
     return (
-        <Item className="undraggble">
-            <CodeAndDate before={fac_code} after={date}>
+        <Item className="undraggble" active={active} onClick={()=>{
+                OnlineFactures.editActive(Number(id))
+        }}>
+            <CodeAndDate before={NFacture} after={`${DFacture.substr(2,2)}/${DFacture.substr(0,2)}/20${DFacture.substr(4,4)}`}>
                 <hr />
             </CodeAndDate>
-            <FacNum>
-                {fac_num}
+            <FacNum factured={!archived}>
+                {id}/{String(DFacture ||"22")?.substr(4,2)}
             </FacNum>
+            <MycheckBox onChange={onChange}/>
         </Item>
     )
 }
@@ -120,8 +224,8 @@ const ListScrollerItm = ({
 const LeftCorp = styled.div`
     max-width: 282px;
     width: 282px;
-    margin: -3px 4px;
-    height: 423px;
+    margin: 1px 4px;
+    height: 417px;
     /* box-shadow: 0px 0px 2px 0px #444; */
      background:url(${bodySvg});
      background-position: center;
@@ -135,6 +239,32 @@ const LeftCorp = styled.div`
      /* justify-content: center; */
      align-items: center;
 `;
+const MutiActionBtn = styled.div<{active?:boolean}>`
+width: 90px;
+height: 26px;
+cursor: ${({active})=>active ? 'pointer' : 'not-allowed'};
+font-family: 'Arial Hebrew';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 100%;
+display: grid;
+align-items: center;
+text-align: center;
+color: #6C6C6C;
+
+
+background: linear-gradient(180deg, #FFFFFF 0%, #D6D6D6 100%);
+box-shadow: 0px 9.73px 15.47px -10px rgba(51, 51, 51, 0.25), inset 0px -2.57778px 2.57778px #CCCCCC, inset 0px 2.57778px 2.57778px #FFFFFF;
+border-radius: 14px;
+margin:0px 3px;
+&:hover{
+    border-radius: 11px;  
+}
+transition-timing-function: ease-in-out;
+    transition-duration: .2s;
+    transition-property: all;
+`;
 const Corp = styled.div`
         flex: 1;
         flex-direction: row;
@@ -144,6 +274,7 @@ const Corp = styled.div`
         /* display: flex; */
         /* justify-content:space-around; */
 `;
+
 /**
  * right corp styled component
  */
@@ -155,6 +286,22 @@ const RightCorp = styled.div`
     /* background-color: #cccc; */
     left: 288px;
     border-radius: 9px;
+`;
+const MycheckBox = styled(Checkbox)`
+,.ant-checkbox{
+    right: -1px;
+    top: 2.97px;
+    border: .5px #444 solid;
+    border-radius: 15px;
+    overflow: hidden;
+}
+::selection {
+    color: #444;
+    background: #5CF47D;
+  }
+  ,.ant-checkbox-checked::after {
+    border: unset;
+  }
 `;
 const SearchToolsInputs = styled.div`
     width: 125.29px;
@@ -228,7 +375,7 @@ const LeftCorpHeaderItem = styled.span<{ active: Boolean }>`
     cursor: pointer;
 `;
 const ListScroller = styled.div`
-  width: 234px;
+    width: 250px;
   height: 356px;
   /* background-color: #ccc; */
   position: absolute;
@@ -256,7 +403,7 @@ const ListScroller = styled.div`
 `;
 const ListBonsScroller = styled.div`
     width: 575px;
-    height: 363px;
+    height: 356px;
     /* background-color: #ccc; */
     position: absolute;
     left: 0px;
@@ -274,11 +421,11 @@ const ListBonsScroller = styled.div`
   }
 `;
 
-const Item = styled.div`
+const Item = styled.div<{active?:boolean}>`
   border-radius: 76px;
-  border:.5px solid #6C6C6C ;
+  border:.5px solid${({active})=>{return active? "#23b720" :"#6C6C6C"}} ;
   margin: 2px 0px;
-  width: 226px;
+  width: 240px;
   height: 17px;
   display: flex;
   flex-direction: row;
@@ -293,8 +440,8 @@ const Item = styled.div`
   /* margin: 3px 3px; */
   justify-content: space-between;
 `;
-const FacNum = styled.span`
-    background-color: #4C7A6C;
+const FacNum = styled.span<{factured?:boolean}>`
+    background-color: ${({factured})=>factured?"#4C7A6C":"#F45C5C"};
     border-radius: 8px;
     color: #fff;
     width: 47px;

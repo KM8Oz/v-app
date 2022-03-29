@@ -17,6 +17,7 @@ interface Props {
 
 const openNotification = (title: string, description: string) => {
    const key = makeid(10);
+
    const btn = () => (
       <Button type="primary" size="small" onClick={() => {
          notification.close(key)
@@ -32,7 +33,7 @@ const openNotification = (title: string, description: string) => {
       onClose: () => notification.close(key),
    });
 };
-const MenuLeft = observer(({ Bon, setStoreBon, reset, setMenuConf }: Props) => {
+const MenuLeftEdit = observer(({ Bon, setStoreBon, reset, setMenuConf }: Props) => {
    const text = <span>Comment</span>;
    const content = (
       <div>
@@ -51,9 +52,10 @@ const MenuLeft = observer(({ Bon, setStoreBon, reset, setMenuConf }: Props) => {
    const save = () => {
       if (Math.abs(Number(Bon.MontantTotalBrut) - Number(Bon.MontantVignette)) >= 5) return openNotification("échec de l'enregistrement", "(MontantVignette - MontantTotalBrut) > 5 dh")
       // console.log(!Bon?.CArticle , !Bon?.CBar ,!Bon?.CBon ,!Bon?.CFournisseur ,!Bon?.DBon  ,!Bon?.Kilos ,!Bon?.MontantTotal ,!Bon?.MontantTotalBrut,!Bon?.MontantVignette,!Bon?.PU,!Bon?.Quantity,!Bon?.Signature,!Bon?.Ville,!Bon?.station);
+      
       if (!Bon?.CArticle || !Bon?.CBar ||!Bon?.CBon ||!Bon?.CFournisseur ||!Bon?.DBon  ||!Bon?.Kilos ||!Bon?.MontantTotal ||!Bon?.MontantTotalBrut||!Bon?.MontantVignette||!Bon?.PU||!Bon?.Quantity||!Bon?.Signature||!Bon?.Ville||!Bon?.station) return openNotification("échec de l'enregistrement", "Certaines informations manquent")
       setSaved(true)
-      Bons.add({
+      Bons.edit({
          ...Bon,
          meta: {
             createById: User.ssid,
@@ -63,18 +65,17 @@ const MenuLeft = observer(({ Bon, setStoreBon, reset, setMenuConf }: Props) => {
       .then((res:string) => {
             let _private = IOPrivate(User.ssid);
             machineId().then((ID) => {
-               let onlineBon:VignettestypeFromServer = {
-                  MontantTotalBrut:Bon.MontantTotalBrut,
+               let onlineBon = {
+                  bon:{
+                     MontantTotalBrut:Bon.MontantTotalBrut,
                   MontantVignette:Bon.MontantVignette,
                   MontantTotal:Bon.MontantTotal,
                   CFournisseur:Bon.CFournisseur,
                   Quantity:Bon.Quantity,
                   CArticle:Bon.CArticle,
-                  DFacture:Bon.DFacture,
-                  NFacture:Bon.NFacture,
                   Kilos:Bon.Kilos,
-                  uuid:makeid(12),
                   station:Bon.station,
+                  uuid:Bon.uuid,
                   CBar:Bon.CBar,
                   CBon:Bon.CBon,
                   DBon:Bon.DBon,
@@ -83,11 +84,11 @@ const MenuLeft = observer(({ Bon, setStoreBon, reset, setMenuConf }: Props) => {
                   Signature:Bon.Signature,
                   Ville:Bon.Ville,
                   archived:false,
-                  factured:false,
-                  machine:ID,
-                  lastmachine:ID
+                  factured:false
+                  },
+                  FP:ID,
                } 
-               _private.emit("call", "vignettes.addOrUpdate", onlineBon , async (err:any, res:any) => {
+               _private.emit("call", "vignettes.editBon", onlineBon , async (err:any, res:any) => {
                    if(res){
                      console.log(res);
                    } else {
@@ -100,7 +101,7 @@ const MenuLeft = observer(({ Bon, setStoreBon, reset, setMenuConf }: Props) => {
          })
          .catch((err) => {
             setSaved(false)
-            openNotification("échec de l'enregistrement", "le bon a déjà existe ou bien malformé")
+            openNotification("échec de l'enregistrement", "le bon a n'existe pas ou bien malformé")
          })
    }
    return (
@@ -108,7 +109,7 @@ const MenuLeft = observer(({ Bon, setStoreBon, reset, setMenuConf }: Props) => {
          <ProfileBtn type="dashed" block>
             <Burrger />
             <ProfileName>
-               {User.meta?.username || "Machine " + User.ssid.substring(0, 2)}
+               {User.meta?.username || "Machine " + User.ssid.substring(0, 4)}
             </ProfileName>
          </ProfileBtn>
          <ResetBtn onClick={() => reset()}>RESET</ResetBtn>
@@ -138,8 +139,8 @@ const ResetBtn = styled.button`
    display: flex;
    margin: 5px 0px;
    font-weight: 700;
-   justify-content: center;
-   align-items: center;
+    justify-content: center;
+     align-items: center;
    color:#fff;
    background-color: #F45C5C;
 `;
@@ -275,7 +276,7 @@ const Souvegarder = styled(Button)`
    background-color: #3ABC94;
 `;
 const Burrger = () => (
-   <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+   <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
       <path d="M1.875 7.5H13.125" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
       <path d="M1.875 3.75H13.125" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
       <path d="M1.875 11.25H13.125" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -298,4 +299,4 @@ const TextInput = styled.input`
   text-align: start;
   width: 100%;
 `;
-export { MenuLeft, Souvegarder }
+export { MenuLeftEdit, Souvegarder }

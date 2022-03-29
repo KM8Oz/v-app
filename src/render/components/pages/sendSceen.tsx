@@ -27,7 +27,7 @@ import { IOPrivate } from "../../tools/sockets";
 import { VignettestypeFromServer } from "../../tools/formatters";
 
 
-const SendScreen = observer((props: React.SVGProps<SVGSVGElement>) => {
+const SendScreen = observer(({setMenuConf, ...props}: React.SVGProps<SVGSVGElement>&{setMenuConf?:any}) => {
     const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
     const { Bons, User, hydrate, hydrated } = usePersistentStore();
     const [list, setlist] = useState<any>(Bons);
@@ -94,6 +94,7 @@ const SendScreen = observer((props: React.SVGProps<SVGSVGElement>) => {
                 fill="none"
                 // style
                 // {...props}
+                className="undraggbleimportant"
             >
                 <g filter="url(#prefix__filter0_d)">
                     <path
@@ -139,7 +140,7 @@ const SendScreen = observer((props: React.SVGProps<SVGSVGElement>) => {
                         <div className="items-send-screen" ref={scrolled} onMouseDown={(e) => mouseDownHandler(e, setScrollX)}>
                             {
                                 Bons.List.filter((s) => filter ? !!s?.NFacture : !s?.NFacture).
-                                    map((e, i) => <ItemSendScreen remove={() => Bons.removeBon(e.CBon)} factured={() => Bons.editFactured(e.CBon)} bon={e} key={i} />)
+                                    map((e, i) => <ItemSendScreen edit={()=>setMenuConf([false, false, false, false, true])} remove={() => Bons.removeBon(e.CBon)} factured={() => Bons.editFactured(e.CBon)} bon={e} key={i} />)
                                 // TEST.map((e:any,i)=><ItemSendScreen key={i} />)
                             }
                         </div>

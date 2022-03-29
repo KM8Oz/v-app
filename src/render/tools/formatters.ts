@@ -112,14 +112,16 @@ export interface VignettestypeFromServer {
     CArticle: string;
     CBar: string;
     CBon: string;
+    uuid: string;
     CFournisseur: string;
     DBon: string;
-    DFacture: string;
+    DFacture?: string;
+    facture?:any;
     Kilos: string;
     MontantTotal: string;
     MontantTotalBrut: string;
     MontantVignette: string;
-    NFacture: string;
+    NFacture?: string;
     station:string;
     PU: string;
     Quantity: string;

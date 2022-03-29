@@ -2,7 +2,7 @@
  * 主进程入口文件
  */
 const path = require('path');
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, Tray, nativeImage, Menu } = require('electron');
 const isDev = require('electron-is-dev');
 require('dotenv').config();
 // const Store = require("secure-electron-store").default;
@@ -16,6 +16,8 @@ function createw_indow() {
   //   console.log(`${!success ? "Un-s" : "S"}uccessfully retrieved store in main process.`);
   //   console.log(initialStore); // {"key1": "value1", ... }
   // };
+  let nativeImg = nativeImage.createFromPath(path.join(__dirname,'/icon.ico'))
+    tray = new Tray(nativeImg)
   win = new BrowserWindow({
     width: 1001,
     hasShadow: false,
@@ -35,7 +37,17 @@ function createw_indow() {
   const URL = isDev
     ? `http://localhost:${process.env.PORT}`
     : `file://${path.join(__dirname, '../dist/index.html')}`;
-
+    
+    
+    // tray.setImage(nativeImg, []);
+    // const contextMenu = Menu.buildFromTemplate([
+    //   { label: 'Item1', type: 'radio' },
+    //   { label: 'Item2', type: 'radio' },
+    //   { label: 'Item3', type: 'radio', checked: true },
+    //   { label: 'Item4', type: 'radio' }
+    // ])
+    // tray.setToolTip('')
+    // tray.setContextMenu(contextMenu)
   win.loadURL(URL);
 }
 app.on('window-all-closed', () => {

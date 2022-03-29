@@ -14,6 +14,7 @@ const Bon = types.model({
     CArticle: types.string,
     CBon: types.string,
     // codeStation:types.string,
+    uuid: types.maybeNull(types.string),
     CBar: types.string,
     DBon: types.string,
     Count: types.maybeNull(types.string),

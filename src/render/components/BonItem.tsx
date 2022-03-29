@@ -1,47 +1,47 @@
 import React, {useState} from "react"
 import styled from "styled-components";
 interface Props {
-    bon?: any
-    edit_action?: () => void
+    bon?: any,
+    edit_action?: () => void,
     active?: boolean,
     order:number
 }
-function BonItem({ active = true,order, edit_action, bon, ...props }: Props) {
-    const [Activestate, setActive] = useState(active)
+function BonItem({ active = true, order, edit_action, bon, ...props }: Props) {
+    const [Activestate, setActive] = useState(active);
     return (
-        <ItemBody onClick={()=>setActive(!Activestate)}>
+        <ItemBody onClick={()=>null}>
             <ItemLeftBody>
               <Letter>
-                  {bon?.letter}
+                  {String(bon?.CBon||"-").replace(/[^a-zA-Z]/g, "")}
               </Letter>
               <CodeAndOrder>
                 <Code>
-                  {bon.code}
+                {String(bon?.CBon||"-").replace(/[^0-9]/g,"")}
                 </Code>
                 <Order>
                  {'N:'+order}
                 </Order>
             </CodeAndOrder>
             <DateAndFactu>
-                <DateF date={bon.date}>
+                <DateF date={bon&&bon.DBon ? `${bon.DBon.substr(2,2)}/${bon.DBon.substr(0,2)}/${bon.DBon.substr(4,4)}`: new Date()}>
                     {"Le...............................بتاريخ"}
                 </DateF>
-                <Factu number={bon.facNum}>
-                    {"Nº de facture:           "}
+                <Factu number={bon.CBar}>
+                    {"Code bar:             "}
                 </Factu>
                 </DateAndFactu>
             </ItemLeftBody>
             
-            <ItemRightBody active={Activestate}>
-                {Activestate ? "Bien facturée" : "Non facturée"}
+            <ItemRightBody active={true}>
+                {true ? "Bien facturée" : "Non facturée"}
             </ItemRightBody>
         </ItemBody>
     )
 }
 const ItemBody = styled.div`
     width: 574.43px;
-    margin: 3px 0px;
-    height: 58px;
+    margin: 1px 0px;
+    height: 54px;
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -71,9 +71,10 @@ const Letter = styled.span`
    height:42px;
    color: #F30505;
    font-family: Arial, Helvetica, sans-serif;
-   font-size: 43px;
+   font-size: 37px;
    font-weight: 500;
    margin: 0px 5px;
+   line-height: normal;
 `;
 const CodeAndOrder = styled.div`
    max-width: 100%;
@@ -83,6 +84,7 @@ const CodeAndOrder = styled.div`
    justify-content: center;
    align-items: flex-start;
    color: #6C6C6C;
+   width: inherit;
 `;
 const DateAndFactu = styled.div`
    width: 100%;

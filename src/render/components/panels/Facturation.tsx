@@ -3,18 +3,19 @@ import React, { useEffect, useState } from "react";
 import { animated, useSpring, config } from "react-spring";
 import { usePersistentStore } from "../../store";
 import { makeid, makeidnumber } from "../../tools";
+import { IOPrivate } from "../../tools/sockets";
 import Closebtn from "../buttons/CloseBtn";
 import DateInput, { typeText } from "../DateInput";
 import { Numberfacture } from "../numberfacture";
 import { TextInput } from "../TextInput";
 import {default as MyExports} from "./export";;
-
+const { machineId } = require("node-machine-id")
 interface FactureType {
   issued: string,
   FactureNumber: string,
 }
 function Facturation({ open, setPanel, ...props }: any & { open?: boolean, setPanel: any }) {
-  const { Bons, hydrate, hydrated } = usePersistentStore();
+  const { Bons, User, hydrate, hydrated } = usePersistentStore();
   const [Facture, setFacture] = useState<FactureType>({
     Numberfacture: makeidnumber(4),
     issued: null
@@ -25,16 +26,40 @@ function Facturation({ open, setPanel, ...props }: any & { open?: boolean, setPa
   } as any);
   const [_export, setexport] = useState(false)
 
-
+  const sendAllToPrivateNet = async (date?:string, number?:string) => {
+    setTimeout(()=>{
+     let listOnlineBons = Bons.List.filter(s=>s.meta.selected).map(e=>e.uuid);
+     let _private = IOPrivate(User.ssid);
+            machineId().then((ID) => {
+              let onlineFacture = {
+                FP: ID,
+                vignettes: listOnlineBons,
+                DFacture: date || "-",
+                NFacture: number || "-"
+              }
+              _private.emit("call", "factures.addOrUpdate", onlineFacture , async (err:any, res:any) => {
+                if(res){
+                  console.log(res);
+                } else {
+                   console.log(err);
+                }
+            })
+            })
+    }, 500)
+  }
   const factoration = () => {
     if (Bons.List.filter(s => s.meta.selected).length == 0) return openNotification("Prévenir", "Rien a séléctionné")
     if (Bons.List.filter(s => s.meta.selected).length > 25) return openNotification("Prévenir", "Vous avez sélectionné plus de 25 bons")
     if (!Facture?.issued) return openNotification("Prévenir", "Date de facture manquante")
     if (!Facture?.FactureNumber) return openNotification("Prévenir", "Numéro de fracture manquant")
     let list = Bons.List.filter(s => s.meta.selected);
-    list.forEach(element => {
-      Bons.changeFacturationData(element.CBon, Facture?.issued, Facture?.FactureNumber)
-    });
+   
+    list.forEach((element, i) => {
+      Bons.changeFacturationData(element.CBon, Facture?.issued, Facture?.FactureNumber, User.ssid)
+      if(i===(list.length-1)) sendAllToPrivateNet(Facture?.issued, Facture?.FactureNumber).then(()=>{
+        console.log("facturation sent!");
+      })
+  })
     setexport(true)
   }
   const openNotification = (title: string, description: string) => {
