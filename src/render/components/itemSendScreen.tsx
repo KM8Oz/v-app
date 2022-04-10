@@ -72,7 +72,7 @@ function ItemSendScreen({ selected = false, remove, factured, bon,edit, ...props
       </Button>
       {bon.meta.factured &&<Button type="dashed" size="small"
         onClick={() => {
-          Bons.deFacturationData(bon.CBon).then((res)=>{
+          Bons.deFacturationData(bon.uuid).then((res)=>{
             machineId().then((ID) => {
                let onlineBon:VignettestypeFromServer|any = {
                   factured:false,

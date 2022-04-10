@@ -56,8 +56,10 @@ const MenuLeft = observer(({ Bon, setStoreBon, reset, setMenuConf }: Props) => {
       // console.log(!Bon?.CArticle , !Bon?.CBar ,!Bon?.CBon ,!Bon?.CFournisseur ,!Bon?.DBon  ,!Bon?.Kilos ,!Bon?.MontantTotal ,!Bon?.MontantTotalBrut,!Bon?.MontantVignette,!Bon?.PU,!Bon?.Quantity,!Bon?.Signature,!Bon?.Ville,!Bon?.station);
       if (!Bon?.CArticle || !Bon?.CBar ||!Bon?.CBon ||!Bon?.CFournisseur ||!Bon?.DBon  ||!Bon?.Kilos ||!Bon?.MontantTotal ||!Bon?.MontantTotalBrut||!Bon?.MontantVignette||!Bon?.PU||!Bon?.Quantity||!Bon?.Signature||!Bon?.Ville||!Bon?.station) return openNotification("échec de l'enregistrement", "Certaines informations manquent")
       setSaved(true)
+      let _uuid = makeid(12);
       Bons.add({
          ...Bon,
+         uuid:_uuid,
          meta: {
             createById: User.ssid,
             lastEditById: User.ssid,
@@ -76,7 +78,7 @@ const MenuLeft = observer(({ Bon, setStoreBon, reset, setMenuConf }: Props) => {
                   DFacture:Bon.DFacture,
                   NFacture:Bon.NFacture,
                   Kilos:Bon.Kilos,
-                  uuid:makeid(12),
+                  uuid:_uuid,
                   station:Bon.station,
                   CBar:Bon.CBar,
                   CBon:Bon.CBon,

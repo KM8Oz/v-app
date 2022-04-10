@@ -143,14 +143,18 @@ const BonsModel = types.model({
     add(bon: BonSimpleType) {
         return new Promise((resolve, reject) => {
             try {
+                if(bon?.uuid){
                 let exis = self.List.findIndex(W => W.uuid == bon?.uuid) !== -1;
                 if(!exis){
                     let SNTL = `${bon.CFournisseur}XXXXXXDDMMYY${bon.DBon}${bon.CBon}${bon.CBar}${bon.CArticle}${String(bon.Quantity).replace(/[^0-9]/g,"").padStart(6, '0')}${String(bon.PU).replace(/[^0-9]/g,"").padEnd(6, '0')}${String(bon.MontantVignette).replace(/[^0-9]/g,"").padStart(6, '0')}${String(bon.Kilos).replace(/[^0-9]/g,"").padStart(6, '0')}`
+                    let others = self.List.filter(W => W.uuid != bon?.uuid)
+                    self.List.replace(others)
                     self.List.push({...bon, SNTL})
                     resolve(SNTL)
                 } else {
                     reject("");
-                }
+                }       
+            }
             } catch (error) {
                 console.log(error);
                 reject(false)

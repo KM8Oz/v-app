@@ -67,6 +67,8 @@ const BodyWorkComponent = observer((props: any) => {
 
               list.forEach((elem: VignettestypeFromServer) => {
                 if (elem && !elem.archived) {
+                  
+                console.log(elem)
                   let bon: BonSimpleType = {
                     CArticle: elem.CArticle,
                     CBar: elem.CBar,
@@ -75,7 +77,7 @@ const BodyWorkComponent = observer((props: any) => {
                     DBon: elem.DBon,
                     DFacture:  elem.facture? elem.facture.DFacture : null,
                     Kilos: elem.Kilos,
-                    uuid: elem?.uuid,
+                    uuid: elem.uuid,
                     MontantTotal: elem.MontantTotal,
                     MontantTotalBrut: elem.MontantTotalBrut,
                     MontantVignette: elem.MontantVignette,
