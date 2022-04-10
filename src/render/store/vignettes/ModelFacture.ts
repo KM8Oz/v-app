@@ -50,6 +50,7 @@ const FactureModel = types.model({
 }).views((self) => ({
     list:()=> isAlive(self) ? self.List : [],
     active:()=> isAlive(self) && self.List.find(s=>s.active) ? self.List.find(s=>s.active)?.vignettes : [],
+    selected:(id:number)=> isAlive(self) && self.List.find(s=>s.id == id) ? self.List.find(s=>s.id == id).selected : false,
     listselected: ()=> isAlive(self) ? self.List.filter(s=>s.selected) : []
 })).actions((self) => ({
     addReplaceFacture(facture:any){
@@ -58,6 +59,13 @@ const FactureModel = types.model({
             self.List = self.List.filter(s=>s.NFacture != facture.NFacture &&  s.vignettes && s.vignettes.length > 0) as any;
             self.List.push(facture)
             }
+        }
+    },
+    unselectAll(){
+        if(isAlive(self)){
+            self.List.forEach(s=>{
+                s.selected = false;
+             })
         }
     },
     editActive(id:number){

@@ -340,7 +340,7 @@ function Login(props: any) {
           fill={color[0]}
           stroke={color[0]}
         />}
-        {!showqrcode && <rect
+        {!showqrcode && <AnimatedRect
           x={16.5}
           y={184.5}
           width={257}
@@ -375,10 +375,13 @@ const BtnAction = styled.p`
     font-size:19px;
     color:white;
     margin-bottom:unset !important;
+    transition: all ease-in-out 200ms;
+    &:active{
+      transform: scale(.98);
+    }
 `;
 const AnimatedRect = styled.rect`
-    transition: all;
-     transition-timing-function: ease-in-out;
+    transition: all ease-in-out 200ms;
      cursor:pointer;
     :hover{
      transform:scale(1.01);
