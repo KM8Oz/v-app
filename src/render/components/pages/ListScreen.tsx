@@ -6,20 +6,21 @@ import Facturation from "../panels/Facturation";
 import styled from "styled-components";
 import bodySvg from "@render/assets/body.svg";
 import DaterangePicker from "../panels/daterangePicker";
-import CalandarIcon from "../buttons/CalandarIcon";
-import SearchIcon from "../buttons/SearchIcon";
+// import CalandarIcon from "../buttons/CalandarIcon";
+// import SearchIcon from "../buttons/SearchIcon";
 import { BonItem } from "../BonItem";
-import { usePersistentStore }  from "@render/store";
+import { usePersistentStore } from "@render/store";
 import { observer } from "mobx-react-lite";
 import { IOPrivate } from "../../tools/sockets";
 import { Checkbox, Spin } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
+import { exportReleve } from "../../tools/releve";
 const { machineId } = require("node-machine-id")
 // import useOrbitdb from "../../hooks/useOrbitdb";
 function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
-  }
-const ListScreen = observer((props: React.SVGProps<SVGSVGElement>)=>{
+}
+const ListScreen = observer((props: React.SVGProps<SVGSVGElement>) => {
     const { Bons, hydrate, hydrated, User, Factures, OnlineFactures } = usePersistentStore();
     const [list, setlist] = useState<any[]>([] as any[]);
     // const { db } = useOrbitdb();
@@ -28,26 +29,26 @@ const ListScreen = observer((props: React.SVGProps<SVGSVGElement>)=>{
     const [order, setOrder] = useState([true, false, false]);
     const [ScrollingLeftPerCen, setScrollingLeftPerCen] = useState(0);
     const [panel, setPanel] = useState(false);
-    const [loading, setLoading]=useState(false);
+    const [loading, setLoading] = useState(false);
     const leftListRef = useRef(null);
     useEffect(() => {
         hydrate()
         // setlist(Bons);
         let _private = IOPrivate(User.ssid);
         machineId().then((ID) => {
-            _private.emit("call", "factures.getAll", {  FP: ID }, async (err: any, res: any) => {
-              if (res&&res.status) {
-                Array.from(res?.payload)?.forEach((el:any, i:number)=>{
-                    if(el){
-                        OnlineFactures.addReplaceFacture({...el, active:i==0?true:false, selected:false})
-                    }
-                })
-                setTimeout(()=>{
-                    setLoading(false)
-                },100)
-              }
-              })
+            _private.emit("call", "factures.getAll", { FP: ID }, async (err: any, res: any) => {
+                if (res && res.status) {
+                    Array.from(res?.payload)?.forEach((el: any, i: number) => {
+                        if (el) {
+                            OnlineFactures.addReplaceFacture({ ...el, active: i == 0 ? true : false, selected: false })
+                        }
+                    })
+                    setTimeout(() => {
+                        setLoading(false)
+                    }, 100)
+                }
             })
+        })
         return () => {
             setlist(list);
         };
@@ -57,9 +58,9 @@ const ListScreen = observer((props: React.SVGProps<SVGSVGElement>)=>{
     const [number, setNumber] = useState(null)
     const scrolled = useRef(null);
     const [search, setSearch] = useState({
-        ville:"",
-        station:"",
-        number:""
+        ville: "",
+        station: "",
+        number: ""
     })
     const [ShowDatePicker, setShowDatePicker] = useState(false);
     //  useEffect(() => {
@@ -68,30 +69,45 @@ const ListScreen = observer((props: React.SVGProps<SVGSVGElement>)=>{
         top: `${scrollX}%`,
         config: { mass: 5, tension: 500, friction: 80 },
     })
-    const myfilter = ()=>{
-     return  order[0] ? (a,b)=>{
-                // number
-                return Number(b.DFacture) - Number(a.DFacture)
-       } : order[1] ? (a,b)=>{
-                // date
-                let dt_b = new Date(`${b.DFacture.substr(2,2)}/${b.DFacture.substr(0,2)}/20${b.DFacture.substr(4,4)}`) as any;
-                let dt_a = new Date(`${a.DFacture.substr(2,2)}/${a.DFacture.substr(0,2)}/20${a.DFacture.substr(4,4)}`) as any;
-                return dt_b-dt_a;
-    }: (a,b)=>{
-                // id/year
-                return Number(b.id) - Number(a.id)
-        return 
+    const myfilter = () => {
+        return order[0] ? (a, b) => {
+            // number
+            return Number(b.DFacture) - Number(a.DFacture)
+        } : order[1] ? (a, b) => {
+            // date
+            let dt_b = new Date(`${b.DFacture.substr(2, 2)}/${b.DFacture.substr(0, 2)}/20${b.DFacture.substr(4, 4)}`) as any;
+            let dt_a = new Date(`${a.DFacture.substr(2, 2)}/${a.DFacture.substr(0, 2)}/20${a.DFacture.substr(4, 4)}`) as any;
+            return dt_b - dt_a;
+        } : (a, b) => {
+            // id/year
+            return Number(b.id) - Number(a.id)
+            return
+        }
     }
+    const EXPORT = () => {
+        let freeMap = JSON.parse(JSON.stringify(OnlineFactures.listselected()));
+        let exported = freeMap.map((s)=>s={
+            NFacture:s.NFacture,
+            DFacture:s.DFacture,
+            Station:s.vignettes[0]?.station,
+            number:s.vignettes?.length,
+            MVignettes:s.vignettes.reduce((a,b)=>Number(a.MontantVignette||0)+Number(b.MontantVignette||0),0),
+            MBrut:s.vignettes.reduce((a,b)=>Number(a.MontantTotalBrut||0)+Number(b.MontantTotalBrut||0),0),
+            MNet:s.vignettes.reduce((a,b)=>Number(a.MontantTotal||0)+Number(b.MontantTotal||0),0)
+          })
+        exportReleve({
+            data: exported,
+            dfacture: new Date()
+        })
+        OnlineFactures.unselectAll()
     }
-    // useEffect(()=>{
-    // }, [order])
     return loading ? (<div style={{
-        width:"100%",
-        height:"100%",
-        flexDirection:"row",
-        justifyContent:"center",
-        alignItems:"center"
-    }}><Spin indicator={antIcon} /></div>):(
+        width: "100%",
+        height: "100%",
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center"
+    }}><Spin indicator={antIcon} /></div>) : (
         <Corp className="undraggbleimportant">
             <LeftCorp >
                 <LeftCorpHeader>
@@ -122,59 +138,62 @@ const ListScreen = observer((props: React.SVGProps<SVGSVGElement>)=>{
                 scrollRate={ScrollingLeftPerCen} /> */}
                 <ListScroller ref={leftListRef} onScroll={(ev) => setScrollingLeftPerCen(ev.currentTarget.scrollTop / (ev.currentTarget.scrollHeight - 17.8 * 20))}>
                     {
-                    // Array(20).fill({ fac_code: "091231238071", date: "03/04/2021", fac_num: "019/2021" })
-                    OnlineFactures.list().slice().sort(myfilter())
-                        ?.map((e, i) => <ListScrollerItm key={i} {...e} />)}
+                        // Array(20).fill({ fac_code: "091231238071", date: "03/04/2021", fac_num: "019/2021" })
+                        OnlineFactures.list().slice().sort(myfilter())
+                            ?.map((e, i) => <ListScrollerItm key={i} {...e} />)}
                 </ListScroller>
             </LeftCorp>
             <RightCorp>
                 <SearchTools>
                     <SearchToolsInputs>
-                        <SearchToolsInput onChange={(ev)=>{
+                        <SearchToolsInput onChange={(ev) => {
                             ev.preventDefault()
-                            setSearch(s=>({
-                                number:"",
-                                station:""
-                                , ville:capitalizeFirstLetter(ev?.currentTarget.value)}))
+                            setSearch(s => ({
+                                number: "",
+                                station: ""
+                                , ville: capitalizeFirstLetter(ev?.currentTarget.value)
+                            }))
                         }} placeholder="Ville _" type="text" pattern="\d*" maxLength={15} />
-                        <SearchToolsInput 
-                        onChange={(ev)=>{
-                            ev.preventDefault()
-                            setSearch(s=>({
-                                ville:"",
-                                station:""
-                                , number:ev?.currentTarget.value}))
-                        }} placeholder="Nº de Bon _" type="text" pattern="\d*" maxLength={15} />
                         <SearchToolsInput
-                        onChange={(ev)=>{
-                            ev.preventDefault()
-                            setSearch(s=>({
-                                number:"",
-                                ville:""
-                                , station:ev?.currentTarget.value}))
-                        }} placeholder="Station_" type="text" pattern="[A-Za-z0-9]+" maxLength={15} />
+                            onChange={(ev) => {
+                                ev.preventDefault()
+                                setSearch(s => ({
+                                    ville: "",
+                                    station: ""
+                                    , number: ev?.currentTarget.value
+                                }))
+                            }} placeholder="Nº de Bon _" type="text" pattern="\d*" maxLength={15} />
+                        <SearchToolsInput
+                            onChange={(ev) => {
+                                ev.preventDefault()
+                                setSearch(s => ({
+                                    number: "",
+                                    ville: ""
+                                    , station: ev?.currentTarget.value
+                                }))
+                            }} placeholder="Station_" type="text" pattern="[A-Za-z0-9]+" maxLength={15} />
                     </SearchToolsInputs>
                     <IconsSearch>
                         {/* <CalandarIcon onClick={() => setShowDatePicker(!ShowDatePicker)} />
                         <SearchIcon /> */}
-                        <MutiActionBtn active={OnlineFactures.listselected().length > 0}>
-                            {OnlineFactures.listselected().length > 1 ? "Relevé" : "Facturé"}
-                        </MutiActionBtn>
+                        {OnlineFactures.listselected().length > 0 && <MutiActionBtn onClick={EXPORT} active={OnlineFactures.listselected().length > 0}>
+                            {"Relevé"}
+                        </MutiActionBtn>}
                     </IconsSearch>
                 </SearchTools>
                 <ListBonsScroller>
                     {
                         // Array(10).fill({ letter: "M", code: "208472", date: "01/01/2021", facNum: "091231238071" })
                         OnlineFactures
-                        .active()
-                        .slice()
-                        .filter((f)=>{
-                           if(search.number) return f.CBon.search(search.number) != -1
-                           if(search.ville) return f.Ville.search(search.ville) != -1
-                           if(search.station) return f.station.search(search.station) != -1
-                           return true
-                        })
-                        .map((e, i) => <BonItem bon={e} order={i} key={i} />)
+                            .active()
+                            .slice()
+                            .filter((f) => {
+                                if (search.number) return f.CBon.search(search.number) != -1
+                                if (search.ville) return f.Ville.search(search.ville) != -1
+                                if (search.station) return f.station.search(search.station) != -1
+                                return true
+                            })
+                            .map((e, i) => <BonItem bon={e} order={i} key={i} />)
                     }
                 </ListBonsScroller>
             </RightCorp>
@@ -194,26 +213,27 @@ const ListScrollerItm = ({
     NFacture: string;
     DFacture: string;
     id: string;
-    archived:boolean;
+    archived: boolean;
     vignettes: any;
-    active?:boolean
-    selected?:boolean
+    active?: boolean
+    selected?: boolean
 }) => {
     const { OnlineFactures } = usePersistentStore()
-    const onChange =  (e:any)=>{
-        OnlineFactures.editSelected(Number(id),e.target.checked)
+    const onChange = (e: any) => {
+        OnlineFactures.editSelected(Number(id), e.target.checked)
     }
     return (
-        <Item className="undraggble" active={active} onClick={()=>{
-                OnlineFactures.editActive(Number(id))
+        <Item className="undraggble" active={active} onClick={() => {
+            OnlineFactures.editActive(Number(id))
+            OnlineFactures.editSelected(Number(id), !OnlineFactures.selected(Number(id)))
         }}>
-            <CodeAndDate before={NFacture} after={`${DFacture.substr(2,2)}/${DFacture.substr(0,2)}/20${DFacture.substr(4,4)}`}>
+            <CodeAndDate before={NFacture} after={`${DFacture.substr(2, 2)}/${DFacture.substr(0, 2)}/20${DFacture.substr(4, 4)}`}>
                 <hr />
             </CodeAndDate>
             <FacNum factured={!archived}>
-                {id}/{String(DFacture ||"22")?.substr(4,2)}
+                {id}/{String(DFacture || "22")?.substr(4, 2)}
             </FacNum>
-            <MycheckBox onChange={onChange}/>
+            <MycheckBox onChange={onChange} checked={OnlineFactures.selected(Number(id))} />
         </Item>
     )
 }
@@ -239,10 +259,10 @@ const LeftCorp = styled.div`
      /* justify-content: center; */
      align-items: center;
 `;
-const MutiActionBtn = styled.div<{active?:boolean}>`
+const MutiActionBtn = styled.div<{ active?: boolean }>`
 width: 90px;
 height: 26px;
-cursor: ${({active})=>active ? 'pointer' : 'not-allowed'};
+cursor: ${({ active }) => active ? 'pointer' : 'not-allowed'};
 font-family: 'Arial Hebrew';
 font-style: normal;
 font-weight: 700;
@@ -288,20 +308,28 @@ const RightCorp = styled.div`
     border-radius: 9px;
 `;
 const MycheckBox = styled(Checkbox)`
-,.ant-checkbox{
-    right: -1px;
-    top: 2.97px;
-    border: .5px #444 solid;
+    height: 17px;
+.ant-checkbox{
+    right: 0px;
+    top: -0.03px;
+    border: 0.1px #52c41a solid;
     border-radius: 15px;
     overflow: hidden;
+    width: 15px;
+    height: 15px;
 }
 ::selection {
     color: #444;
     background: #5CF47D;
   }
-  ,.ant-checkbox-checked::after {
+.ant-checkbox-checked::after {
     border: unset;
   }
+.ant-checkbox-inner{
+    width: 13px;
+    height: 13.5px;
+    border:unset !important;
+}
 `;
 const SearchToolsInputs = styled.div`
     width: 125.29px;
@@ -421,9 +449,9 @@ const ListBonsScroller = styled.div`
   }
 `;
 
-const Item = styled.div<{active?:boolean}>`
+const Item = styled.div<{ active?: boolean }>`
   border-radius: 76px;
-  border:.5px solid${({active})=>{return active? "#23b720" :"#6C6C6C"}} ;
+  border:.5px solid${({ active }) => { return active ? "#23b720" : "#6C6C6C" }} ;
   margin: 2px 0px;
   width: 240px;
   height: 17px;
@@ -440,8 +468,8 @@ const Item = styled.div<{active?:boolean}>`
   /* margin: 3px 3px; */
   justify-content: space-between;
 `;
-const FacNum = styled.span<{factured?:boolean}>`
-    background-color: ${({factured})=>factured?"#4C7A6C":"#F45C5C"};
+const FacNum = styled.span<{ factured?: boolean }>`
+    background-color: ${({ factured }) => factured ? "#4C7A6C" : "#F45C5C"};
     border-radius: 8px;
     color: #fff;
     width: 47px;

@@ -60,10 +60,8 @@ const BodyWorkComponent = observer((props: any) => {
         machineId().then((ID) => {
           _private.emit("call", "vignettes.getAll", { issuedto: "no_company_name", deviceid: ID }, async (err: any, res: any) => {
             if (res) {
-              
               let number_of_machines: number = res && typeof res == "object" ? res.length : [].length
               let list: Array<VignettestypeFromServer | any> = Array.from(res).flat<any>();
-              console.log(res);
 
               list.forEach((elem: VignettestypeFromServer) => {
                 if (elem && !elem.archived) {
