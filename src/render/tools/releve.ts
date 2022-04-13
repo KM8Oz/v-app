@@ -46,7 +46,7 @@ export async function exportReleve({ data, dfacture}: {
                         worksheet.getRow(13+i).getCell("E").value = ce.number;
                         worksheet.getRow(13+i).getCell("F").value = ce.MVignettes;
                         worksheet.getRow(13+i).getCell("G").value = ce.MBrut;
-                        worksheet.getRow(13+i).getCell("H").value = Number(ce.MVignettes - ce.MBrut);
+                        worksheet.getRow(13+i).getCell("H").value = Number(ce.MBrut-ce.MVignettes);
                         worksheet.getRow(13+i).getCell("I").value = ce.MNet;
                 })
                 workbook.xlsx.writeBuffer({ filename: name }).then((buffer) => {
