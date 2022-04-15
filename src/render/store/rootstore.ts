@@ -22,6 +22,7 @@ const TempBon = types.model({
     PU: types.maybeNull(types.string),
     Quantity: types.maybeNull(types.string),
     Signature: types.maybeNull(types.string),
+    uuid: types.maybeNull(types.string)
 }).
 actions((self)=>({
    async setTempBon(bon:any){
@@ -40,6 +41,7 @@ actions((self)=>({
         self.PU= bon?.PU,
         self.Quantity= bon?.Quantity,
         self.Signature= bon?.Signature
+        self.uuid = bon?.uuid
         return true
        } catch (error) {
         throw error

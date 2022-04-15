@@ -117,7 +117,8 @@ function ItemSendScreen({ selected = false, remove, factured, bon,edit, ...props
           MontantTotal: bon.MontantTotal,
           PU: bon.PU,
           Quantity: bon.Quantity,
-          Signature: bon.Signature
+          Signature: bon.Signature,
+          uuid:bon.uuid
         }
         TempBon.setTempBon(_bon).then(()=>{
           edit()
