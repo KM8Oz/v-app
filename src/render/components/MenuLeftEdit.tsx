@@ -67,7 +67,7 @@ const MenuLeftEdit = observer(({ Bon, setStoreBon, reset, setMenuConf }: Props) 
             machineId().then((ID) => {
                let onlineBon = {
                   bon:{
-                     MontantTotalBrut:Bon.MontantTotalBrut,
+                  MontantTotalBrut:Bon.MontantTotalBrut,
                   MontantVignette:Bon.MontantVignette,
                   MontantTotal:Bon.MontantTotal,
                   CFournisseur:Bon.CFournisseur,
@@ -101,6 +101,8 @@ const MenuLeftEdit = observer(({ Bon, setStoreBon, reset, setMenuConf }: Props) 
          })
          .catch((err) => {
             setSaved(false)
+            console.log(Bon);
+            
             openNotification("échec de l'enregistrement", "le bon a n'existe pas ou bien malformé")
          })
    }

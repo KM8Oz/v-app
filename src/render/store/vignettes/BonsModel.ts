@@ -171,7 +171,7 @@ const BonsModel = types.model({
                     self.List.push({...bon, SNTL})
                     resolve(SNTL)
                 } else {
-                    reject("");
+                    reject("nots");
                 }
             } catch (error) {
                 console.log(error);

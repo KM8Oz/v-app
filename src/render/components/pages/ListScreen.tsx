@@ -227,7 +227,7 @@ const ListScrollerItm = ({
             OnlineFactures.editActive(Number(id))
             OnlineFactures.editSelected(Number(id), !OnlineFactures.selected(Number(id)))
         }}>
-            <CodeAndDate before={NFacture} after={`${DFacture.substr(2, 2)}/${DFacture.substr(0, 2)}/20${DFacture.substr(4, 4)}`}>
+            <CodeAndDate before={NFacture} after={`${DFacture?.substr(2, 2)}/${DFacture?.substr(0, 2)}/20${DFacture?.substr(4, 4)}`}>
                 <hr />
             </CodeAndDate>
             <FacNum factured={!archived}>

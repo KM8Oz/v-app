@@ -48,6 +48,16 @@ export default observer(({ setMenuConf }: Props): ReactElement => {
     const [formats, setFormats] = useState<BonSimpleType>({} as any)
     useEffect(() => {
         // hydrate()
+        if(Object.keys(StoreBon).length == 0){
+            setStoreBonTemp((s:any)=>({
+                ...s,
+                ...TempBon
+            }))
+            setStoreBon((s:any)=>({
+                ...s,
+                ...TempBon
+            }))
+        }
         let dispatch = onSnapshot(TempBon, (snap)=>{
             setStoreBonTemp((s:any)=>({
                 ...s,
@@ -95,16 +105,7 @@ export default observer(({ setMenuConf }: Props): ReactElement => {
         setStoreBon({});
         setStoreBonTemp({})
     }
-    if(Object.keys(StoreBon).length == 0){
-        setStoreBonTemp((s:any)=>({
-            ...s,
-            ...TempBon
-        }))
-        setStoreBon((s:any)=>({
-            ...s,
-            ...TempBon
-        }))
-    }
+    
     return (
         <>
             <svg width="782" height="417" id="addscreen" viewBox="0 0 782 417" fill="none" className='undraggbleimportant'>

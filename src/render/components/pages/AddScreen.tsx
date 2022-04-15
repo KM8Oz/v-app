@@ -200,7 +200,7 @@ export default observer(({ setMenuConf }: Props): ReactElement => {
                         })
                         setStoreBonTemp({
                             ...StoreBonTemp,
-                            MontantTotal: writtenNumber(Number(StoreBon.MontantTotal?.replace(/[^0-9.]/g, '')))
+                            MontantTotal: writtenNumber(_value.replace(/[^0-9.]/g, ''), {lang:"fr"})
                         })
                         }} />
                     )
@@ -223,7 +223,7 @@ export default observer(({ setMenuConf }: Props): ReactElement => {
                         if (e.keyCode === 13) {
                             setStoreBonTemp({
                                 ...StoreBonTemp,
-                                MontantTotal: writtenNumber(Number(StoreBon.MontantTotal?.replace(/[^0-9.]/g, '')))
+                                MontantTotal: writtenNumber(Number(StoreBon.MontantTotal?.replace(/[^0-9.]/g, '')), {lang:"fr"})
                             })
                         }
                     }}
@@ -319,11 +319,11 @@ export default observer(({ setMenuConf }: Props): ReactElement => {
                         setStoreBonTemp({
                             ...StoreBonTemp,
                             // Quantity: dirhame_formatter.format(value.formattedValue.replace(/[^0-9]/g, ""))
-                            Quantity: value.formattedValue
+                            Quantity: value.value
                         })
                         setStoreBon({
                             ...StoreBon,
-                            Quantity: value.formattedValue
+                            Quantity: value.value
                         })
                     }}
                     width={75}
@@ -409,7 +409,7 @@ export default observer(({ setMenuConf }: Props): ReactElement => {
                     onchange={(ev: any) => {
                         setStoreBon({
                             ...StoreBon,
-                            Signature: String(ev).replace(/[^a-zA-Z]/g, '')
+                            Signature: String(ev).replace(/[^a-zA-Z ]/g, '')
                         })
                     }} />
                 <foreignObject x="3" y="18" width="112" height="380">
