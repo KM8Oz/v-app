@@ -12,9 +12,11 @@ jobs:
         - os: macos-latest
           TARGET: build-mac
           ARTI: release/*.exe
+          SET: export
         - os: windows-latest
           TARGET: build-win
           ARTI: release/*.zip
+          SET: set
     steps:
       - uses: actions/checkout@v1
       - run: echo ${{matrix.TARGET}}
@@ -22,6 +24,8 @@ jobs:
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: echo "$GITHUB_CONTEXT"
+      - name: set gh_token
+      - run: ${{matrix.SET}} GH_TOKEN=${{ secrets.TOKEN }}
       - uses: actions/checkout@v1
         with:
           fetch-depth: 1
