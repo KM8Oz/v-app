@@ -10,7 +10,7 @@ jobs:
         os: [macos-latest, windows2019]
         include:
         - os: macos-latest
-          TARGET: GH_TOKEN=${{secrets.TOKEN}} && yarn build-mac
+          TARGET: GH_TOKEN=${{ secrets.TOKEN }} && yarn build-mac
           ARTI: release/*.exe
           SET: export CSC_IDENTITY_AUTO_DISCOVERY=false && export
         - os: windows-latest
@@ -19,7 +19,7 @@ jobs:
           SET: set
     steps:
       - uses: actions/checkout@v1
-      - run: echo ${{matrix.TARGET}}
+      - run: echo ${{ matrix.TARGET }}
       - name: Context
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
