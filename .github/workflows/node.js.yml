@@ -10,12 +10,12 @@ jobs:
         os: [macos-latest, windows2019]
         include:
         - os: macos-latest
-          TARGET: GH_TOKEN=${{ secrets.TOKEN }} && yarn build-mac
+          TARGET: build-mac
           ARTI: release/*.exe
-          SET: export CSC_IDENTITY_AUTO_DISCOVERY=false && export
+          SET: export
         - os: windows-latest
-          TARGET: yarn build-win
-          ARTI: release/*.zip
+          TARGET: build-win
+          ARTI: release/*.dmg
           SET: set
     steps:
       - uses: actions/checkout@v1
@@ -36,7 +36,7 @@ jobs:
       - name: yarn install
         run: yarn install
       - name: Publish
-        run: ${{matrix.TARGET}}
+        run: ${{matrix.SET}} CSC_IDENTITY_AUTO_DISCOVERY=false && ${{matrix.SET}} GH_TOKEN=${{ secrets.TOKEN }} && yarn ${{matrix.TARGET}}
       - name: Upload artifacts
         uses: actions/upload-artifact@v1
         env:
