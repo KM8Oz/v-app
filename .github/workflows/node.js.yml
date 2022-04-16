@@ -35,6 +35,8 @@ jobs:
         run: yarn ${{matrix.TARGET}}
       - name: Upload artifacts
         uses: actions/upload-artifact@v1
+        env:
+         GH_TOKEN: ${{ secrets.TOKEN }}
         with:
           name: ${{ matrix.os }}
           path: release
