@@ -4,25 +4,17 @@ on: [push]
 
 jobs:
   build:
-
     runs-on: ${{ matrix.os }}
-
     strategy:
       matrix:
-        os: [macos-latest, ubuntu-latest, ubuntu-latest]
+        os: [macos-latest, windows-latest]
         include:
         - os: macos-latest
-          TARGET: x86_64-apple-darwin
-          COMPILER: clang
-          LINKER: clang
-        - os: ubuntu-latest
-          TARGET: armv7-unknown-linux-musleabihf
-          COMPILER: arm-linux-gnueabihf-gcc-5
-          LINKER: gcc-5-arm-linux-gnueabihf
-        - os: ubuntu-latest
-          TARGET: x86_64-unknown-linux-musl
-          COMPILER: gcc
-          LINKER: gcc
+          TARGET: build-mac
+          ARTI: release/*.exe
+        - os: windows-latest
+          TARGET: build-win
+          ARTI: release/*.zip
     steps:
       - uses: actions/checkout@v1
       - run: echo ${{matrix.TARGET}}
@@ -30,26 +22,26 @@ jobs:
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: echo "$GITHUB_CONTEXT"
-#       - uses: actions/checkout@v1
-#         with:
-#           fetch-depth: 1
-#       - name: Use Node.js 10.x
-#         uses: actions/setup-node@v1
-#         with:
-#           node-version: 10.x
-#       - name: yarn install
-#         run: yarn install
-#       - name: Publish
-#         run: yarn build-win
-#       - name: Upload artifacts
-#         uses: actions/upload-artifact@v1
-#         with:
-#           name: ${{ matrix.os }}
-#           path: dist
-#       - name: Release
-#         uses: softprops/action-gh-release@v1
-#         if: startsWith(github.ref, 'refs/tags/')
-#         with:
-#           files: "dist/**"
-#         env:
-#           GITHUB_TOKEN: ${{ secrets.TOKEN }}
+      - uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+      - name: Use Node.js 10.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+      - name: yarn install
+        run: yarn install
+      - name: Publish
+        run: yarn ${{matrix.TARGET}}
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v1
+        with:
+          name: ${{ matrix.os }}
+          path: release
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: ${{matrix.ARTI}}
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
