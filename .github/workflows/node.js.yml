@@ -25,7 +25,7 @@ jobs:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: echo "$GITHUB_CONTEXT"
       - name: set gh_token
-      - run: ${{matrix.SET}} GH_TOKEN=${{ secrets.TOKEN }}
+        run: ${{matrix.SET}} GH_TOKEN=${{ secrets.TOKEN }}
       - uses: actions/checkout@v1
         with:
           fetch-depth: 1
