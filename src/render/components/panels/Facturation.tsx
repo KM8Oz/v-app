@@ -17,11 +17,11 @@ interface FactureType {
 function Facturation({ open, setPanel, ...props }: any & { open?: boolean, setPanel: any }) {
   const { Bons, User, hydrate, hydrated } = usePersistentStore();
   const [Facture, setFacture] = useState<FactureType>({
-    Numberfacture: makeidnumber(4),
+    Numberfacture: String(new Date().getFullYear()).slice(-2)+makeidnumber(4),
     issued: null
   } as any);
   const [FactureTemp, setFactureTemp] = useState<FactureType>({
-    Numberfacture: 0,
+    Numberfacture: String(new Date().getFullYear()).slice(-2),
     issued: new Date()
   } as any);
   const [_export, setexport] = useState(false)
@@ -52,6 +52,7 @@ function Facturation({ open, setPanel, ...props }: any & { open?: boolean, setPa
     if (Bons.List.filter(s => s.meta.selected).length > 25) return openNotification("Prévenir", "Vous avez sélectionné plus de 25 bons")
     if (!Facture?.issued) return openNotification("Prévenir", "Date de facture manquante")
     if (!Facture?.FactureNumber) return openNotification("Prévenir", "Numéro de fracture manquant")
+    if (Facture.FactureNumber.length < 6) return openNotification("Prévenir", "Numéro de fracture < 6")
     let list = Bons.List.filter(s => s.meta.selected);
    
     list.forEach((element, i) => {
@@ -150,14 +151,13 @@ function Facturation({ open, setPanel, ...props }: any & { open?: boolean, setPa
               height: "100%",
               border: "unset"
             }}
-            maxLength={4}
-            max={999999}
-            onFocus={() => {
-              setFactureTemp({
-                ...FactureTemp,
-                FactureNumber: String(new Date("12/12/2022").getFullYear()).slice(-2)
-              })
-            }}
+            maxLength={6}
+            // onFocus={() => {
+            //   setFactureTemp({
+            //     ...FactureTemp,
+            //     FactureNumber: String(new Date("12/12/2022").getFullYear()).slice(-2)
+            //   })
+            // }}
             type="number"
             placeholder={"Nº de facture"} value={FactureTemp?.FactureNumber}
             onChange={(ev: any) => {
@@ -167,22 +167,22 @@ function Facturation({ open, setPanel, ...props }: any & { open?: boolean, setPa
               })
               setFactureTemp({
                 ...FactureTemp,
-                FactureNumber: String(ev.currentTarget.value || "").match(/([0-9]{2,6})/g) ? String(ev.currentTarget.value || "").match(/([0-9]{2,6})/g)[0] : String(new Date("12/12/2022").getFullYear()).slice(-2)
+                FactureNumber: String(ev.currentTarget.value || "").match(/([0-9]{0,6})/g)[0]
               })
             }}
-            onKeyDown={(ev: any) => {
-              if (ev.keyCode === 13) {
-                setFactureTemp({
-                  ...FactureTemp,
-                  FactureNumber: String(ev.currentTarget.value || "").padStart(6, "0")
-                })
-                setFacture({
-                  ...Facture,
-                  FactureNumber: String(ev.currentTarget.value || "").padStart(6, "0")
-                })
-              }
-            }
-            }
+            // onKeyDown={(ev: any) => {
+            //   if (ev.keyCode === 13) {
+            //     setFactureTemp({
+            //       ...FactureTemp,
+            //       FactureNumber: String(ev.currentTarget.value || "").padStart(6, "0")
+            //     })
+            //     setFacture({
+            //       ...Facture,
+            //       FactureNumber: String(ev.currentTarget.value || "").padStart(6, "0")
+            //     })
+            //   }
+            // }
+            // }
           />
         </foreignObject>
         {/* <g filter="url(#prefix__filter1_i)">

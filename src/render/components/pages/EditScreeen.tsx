@@ -43,7 +43,6 @@ export default observer(({ setMenuConf }: Props): ReactElement => {
     const [StoreBon, setStoreBon] = useState<BonSimpleType>({} as any)
     const [StoreBonTemp, setStoreBonTemp] = useState<BonSimpleType>({} as any)
     // const [CBon, setCBon] = useState("");
-    
     const [formats, setFormats] = useState<BonSimpleType>({} as any)
     useEffect(() => {
         // hydrate()

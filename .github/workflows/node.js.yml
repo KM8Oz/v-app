@@ -1,0 +1,53 @@
+name: Electron CD
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest, windows2019]
+        include:
+        - os: macos-latest
+          TARGET: build-mac
+          ARTI: release/*.exe
+          SET: export
+        - os: windows-latest
+          TARGET: build-win
+          ARTI: release/*.dmg
+          SET: set
+    steps:
+      - uses: actions/checkout@v1
+      - run: echo ${{ matrix.TARGET }}
+      - name: Context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
+      - name: set gh_token
+        run: ${{matrix.SET}} GH_TOKEN=${{ secrets.TOKEN }}
+      - uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+      - name: Use Node.js 14.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+      - name: yarn install
+        run: yarn install
+      - name: Publish
+        run: ${{matrix.SET}} CSC_IDENTITY_AUTO_DISCOVERY=false && ${{matrix.SET}} GH_TOKEN=${{ secrets.TOKEN }} && yarn ${{matrix.TARGET}}
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v1
+        env:
+         GH_TOKEN: ${{ secrets.TOKEN }}
+        with:
+          name: ${{ matrix.os }}
+          path: release
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: ${{matrix.ARTI}}
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}

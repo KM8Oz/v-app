@@ -29,8 +29,8 @@ module.exports = function (env) {
           options: {
             presets: ["@babel/preset-typescript"],
             plugins: [
-              ["@babel/plugin-proposal-class-properties", { "loose": true }],
-              ["@babel/plugin-proposal-private-methods", { "loose": true }]
+              ["@babel/plugin-proposal-class-properties"],
+              ["@babel/plugin-proposal-private-methods"]
             ],
             cacheDirectory: true,
           },
