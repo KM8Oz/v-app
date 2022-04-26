@@ -29,7 +29,7 @@ function createw_indow() {
         zoomToPageWidth: false,
         maximizable: false,
         webPreferences: {
-            // devTools:false,
+            devTools:false,
             nodeIntegration: true,
         },
     });
