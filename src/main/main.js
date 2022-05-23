@@ -2,20 +2,47 @@
  * 主进程入口文件
  */
 const path = require('path');
-const { app, BrowserWindow, ipcMain, Tray, nativeImage, Menu } = require('electron');
+const { app, BrowserWindow, ipcMain, Tray, nativeImage,autoUpdater, Menu } = require('electron');
 const isDev = require('electron-is-dev');
+require('update-electron-app')()
 require('dotenv').config();
 // const Store = require("secure-electron-store").default;
 // const { machineId } = require("node-machine-id")
 
 let win = null;
-
+autoUpdater.setFeedURL({
+    provider: 'github',
+    repo: 'v-app',
+    owner: 'KM8Oz',
+    private: true,
+    token: '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'
+})
+autoUpdater.on('error', message => {
+    console.error('There was a problem updating the application')
+    console.error(message)
+  })
+autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
+    const dialogOpts = {
+      type: 'info',
+      buttons: ['Restart', 'Later'],
+      title: 'Application Update',
+      message: process.platform === 'win32' ? releaseNotes : releaseName,
+      detail: 'A new version has been downloaded. Restart the application to apply the updates.'
+    }
+  
+    dialog.showMessageBox(dialogOpts).then((returnValue) => {
+      if (returnValue.response === 0) autoUpdater.quitAndInstall()
+    })
+  })
 function createw_indow() {
     // 创建浏览器窗口
     // const callback = function (success, initialStore) {
     //   console.log(`${!success ? "Un-s" : "S"}uccessfully retrieved store in main process.`);
     //   console.log(initialStore); // {"key1": "value1", ... }
     // };
+    setInterval(() => {
+        autoUpdater.checkForUpdates()
+      }, 60000)
     let nativeImg = nativeImage.createFromPath(path.join(__dirname, '/icon.ico'))
     tray = new Tray(nativeImg)
     win = new BrowserWindow({

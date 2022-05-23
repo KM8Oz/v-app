@@ -48,7 +48,8 @@
             ]
         },
         "dmg": {
-            "contents": [{
+            "contents": [
+                {
                     "x": 130,
                     "y": 220
                 },
@@ -112,6 +113,7 @@
         "socket.io-client": "2",
         "styled-components": "^5.3.1",
         "ui-glassmorphism": "^0.0.1",
+        "update-electron-app": "^2.0.1",
         "written-number": "^0.11.1"
     },
     "devDependencies": {
