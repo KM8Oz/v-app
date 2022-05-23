@@ -15,7 +15,8 @@ interface Props {
   width: number,
   height: number,
   setBon:React.Dispatch<React.SetStateAction<BonSimpleType>>,
-  max: number | 1
+  max: number | 1,
+  defaultValue?:any
 }
 enum Carburant {
   Diesel = "Diesel",
@@ -45,7 +46,9 @@ const colourOptions = [
   { value: Designations.Carrnet, label: Designations.Carrnet },
   { value: Designations.FraisDImmatriculation, label: Designations.FraisDImmatriculation },
 ];
-export default observer(({ max, y, x,setBon, width, height }: Props): ReactElement =>{
+export default observer(({ max, y, x,setBon, width, height, defaultValue }: Props): ReactElement =>{
+  console.log(defaultValue);
+  
   const { Settings } = usePersistentStore()
   const Menu = (props: any) => {
     const optionSelectedLength = props.getValue().length || 0;
@@ -182,7 +185,7 @@ export default observer(({ max, y, x,setBon, width, height }: Props): ReactEleme
           },
         }}
         isMulti
-      
+        defaultValue={Settings.Articles() ? Settings.Articles().find(s=>s.value == defaultValue) : {} as any}
         options={Settings.Articles()}
       />
     </foreignObject>

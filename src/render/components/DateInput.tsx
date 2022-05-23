@@ -22,7 +22,7 @@ export default function TextInput({x, y,id, placeholder, width,maxchars, height,
     return (
        <foreignObject x={x} y={y} width={width} height={height}>
            <ContextMenuTrigger id={id}>
-             <input placeholder={placeholder} pattern='DDMMYYYY' type="date" value={value} maxLength={maxchars || 25} className={`v-text-input ${typeText}`} {...rest}  onChange={onchange}/>
+             <input placeholder={placeholder} pattern='MMYYYY' type="month" value={value} maxLength={maxchars || 25} className={`v-text-input ${typeText}`} {...rest}  onChange={onchange}/>
              </ContextMenuTrigger>
        </foreignObject>
     )

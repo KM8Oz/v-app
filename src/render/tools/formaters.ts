@@ -51,8 +51,17 @@ export function getDATE(event, format) {
      let date = new Date();
      date.setDate(Number(event.substring(SIntD, EIntD)));
      date.setFullYear(Number(event.substring(SIntY, EIntY)));
-     date.setMonth(Number(event.substring(SIntM, EIntM)));
+     date.setMonth(Number(event.substring(SIntM, EIntM))-1);
      return date;
+}
+export function formatDate(event:Date, format:String) {
+     let SIntD = event.getDate()?.toString()?.padStart(2,"0");
+     let EIntD = format.replace(/[DD]/g, SIntD);
+     let SIntM = event.getMonth()?.toString()?.padStart(2,"0");
+     let EIntM = EIntD.replace(/[MM]/g, SIntM);
+     let SIntY = event.getFullYear().toString();
+     let EIntY = EIntM.replace(/[YYYY]/g, SIntY);
+     return EIntY;
 }
 export const copytext = (text: string) => {
      // console.log(text);

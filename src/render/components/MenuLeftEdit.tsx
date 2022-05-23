@@ -7,6 +7,8 @@ import { BonSimpleType, BonsModel } from '../store/vignettes/BonsModel';
 import { makeid } from '../tools';
 import { VignettestypeFromServer } from '../tools/formatters';
 import { IOPrivate } from '../tools/sockets';
+import moment from 'moment';
+import { formatDate } from '../tools/formaters';
 const { machineId } = require("node-machine-id")
 interface Props {
    setMenuConf: any,
@@ -46,7 +48,7 @@ const MenuLeftEdit = observer(({ Bon, setStoreBon, reset, setMenuConf }: Props) 
          }} />
       </div>
    );
-   const { Bons, User } = usePersistentStore()
+   const { Bons, User,Settings } = usePersistentStore()
    //  const [ShowModel, setShowModel] = useState(false);
    const [saved, setSaved] = useState(false);
    const save = () => {
@@ -55,6 +57,10 @@ const MenuLeftEdit = observer(({ Bon, setStoreBon, reset, setMenuConf }: Props) 
       
       if (!Bon?.CArticle || !Bon?.CBar ||!Bon?.CBon ||!Bon?.CFournisseur ||!Bon?.DBon  ||!Bon?.Kilos ||!Bon?.MontantTotal ||!Bon?.MontantTotalBrut||!Bon?.MontantVignette||!Bon?.PU||!Bon?.Quantity||!Bon?.Signature||!Bon?.Ville||!Bon?.station) return openNotification("échec de l'enregistrement", "Certaines informations manquent")
       setSaved(true)
+      //  let datebon = moment(Bon.DBon, "fom").toDate();
+      // console.log("datebon",Bon.DBon);
+      
+      // let _DBon = `${datebon?.getDate()?.toString()?.padStart(2,"0")}${datebon?.getMonth()?.toString()?.padStart(2,"0")}${datebon?.getFullYear()}`;
       Bons.edit({
          ...Bon,
          meta: {
@@ -78,6 +84,7 @@ const MenuLeftEdit = observer(({ Bon, setStoreBon, reset, setMenuConf }: Props) 
                   uuid:Bon.uuid,
                   CBar:Bon.CBar,
                   CBon:Bon.CBon,
+                  // DBon:formatDate(new Date(Bon.DBon), Settings.DBon[0]?.format || "DDMMYYYY"),
                   DBon:Bon.DBon,
                   PU:Bon.PU,
                   SNTL:res,
@@ -147,8 +154,9 @@ const ResetBtn = styled.button`
    background-color: #F45C5C;
 `;
 const MenuLeftWrapper = styled.div`
-  width: 100%;
+  width: 96%;
   height:100%;
+  margin: auto;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -204,7 +212,7 @@ const Commentaire = styled.button`
 const ProfileName = styled.p`
    margin: unset;
    padding: unset;
-   font-size: 12px;
+   font-size: 11px;
    font-family:Arial, Helvetica, sans-serif;
    font-weight:400;
    color: #444;

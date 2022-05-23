@@ -14,20 +14,21 @@ interface Props {
     maxchars?:number,
     placeholder:string
     id?:string,
-    format?:string
+    format?:string,
 }
 export enum typeText {
     normal="v-normal-text",
     small="v-small-text"
 }
-function DateInputSend({x, y,id, format,placeholder, width,maxchars, height, value,typeText, onchange, ...rest}: Props): ReactElement {
+function DateInputSend({x, y,id, format,placeholder, width,maxchars, height, value,typeText, onchange, ...rest}: Props&any): ReactElement {
+    const ContextMenuTriggerTyped = ContextMenuTrigger as any;
     return (
        <foreignObject x={x} y={y} width={width} height={height}>
-           <ContextMenuTrigger id={id}>
+           <ContextMenuTriggerTyped id={id}>
            <ItemDate size='small'  
            className={`v-text-input ${typeText}`} {...rest}
             format={format} onChange={onchange} />
-             </ContextMenuTrigger>
+             </ContextMenuTriggerTyped>
        </foreignObject>
     )
 }

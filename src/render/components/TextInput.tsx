@@ -24,7 +24,7 @@ enum typeText {
     normal = "v-normal-text",
     small = "v-small-text",
 }
-function TextInput({ x, y, options, placeholder, suggestions = [], width, maxchars, height, value, typeText, onchange, ...rest }: Props&AutoCompleteProps): ReactElement {
+function TextInput({ x, y, options, placeholder, suggestions = [], width, maxchars, height, value, typeText, onchange, ...rest }: Props & AutoCompleteProps): ReactElement {
     const uniqueId = makeid(8);
     useEffect(() => {
         const isAuto = suggestions.length > 0;
@@ -35,7 +35,7 @@ function TextInput({ x, y, options, placeholder, suggestions = [], width, maxcha
     return (
         <foreignObject x={x} y={y} width={width} height={height}>
             <StyledAutoComplete
-             {...rest}
+                {...rest}
                 options={options}
                 filterOption={(inputValue, option) =>
                     option!.value.toUpperCase().search(inputValue.toUpperCase()) !== -1
@@ -55,6 +55,13 @@ const StyledAutoComplete = styled(AutoComplete)`
           box-shadow: unset !important;
           background: transparent !important;
           height: 20px !important;
+        .ant-select-selection-search-input {
+            width: 100%;
+            /* padding-left: 1em; */
+            font-size: smaller;
+            /* text-align: left; */
+            text-align: center;
+        }
       }
 `;
 export { TextInput, typeText }

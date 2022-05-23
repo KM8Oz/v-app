@@ -12,6 +12,7 @@
 **/
 import { Instance, types, isAlive } from "mobx-state-tree";
 import { maybeNull } from "mobx-state-tree/dist/internal";
+import moment from "moment";
 import { makeid } from "../../tools";
 import { IOPrivate } from '../../tools/sockets';
 const { machineId } = require("node-machine-id")
@@ -71,9 +72,13 @@ const BonsModel = types.model({
             try {
                 let _exist = self.List.find((s)=>s.uuid == code);
                 if(!_exist) reject(false);
-                let __f = _exist.SNTL.substring(0,3) + number + _exist.SNTL.slice(-58)
-                _exist.SNTL = __f.substring(0,9) + date + __f.slice(-52)
-                _exist.DFacture = date
+                // let __f = _exist.SNTL.substring(0,3) + number + _exist.SNTL.slice(-58)
+                // _exist.SNTL = __f.substring(0,9) + date + __f.slice(-52)
+                console.log("date",date);
+                _exist.SNTL = _exist.SNTL.substring(0,3) + `${number}${date.slice(-6)}` + _exist.SNTL.slice(-51)
+                console.log("date:", date);
+                
+                _exist.DFacture = date.slice(-6)
                 _exist.NFacture = number
                 _exist.meta.factured = true
                 let _private = IOPrivate(ssid);
@@ -104,8 +109,8 @@ const BonsModel = types.model({
             try {
                 let _exist = self.List.find((s)=>s.uuid == code);
                 if(!_exist) reject(false);
-                let __f = _exist.SNTL.substring(3) + "XXXXXX" + _exist.SNTL.slice(-58)
-                _exist.SNTL = __f.substring(9) + "DDMMYY" + __f.slice(-52)
+                _exist.SNTL = _exist.SNTL.substring(0,3) + "XXXXXXMMYYYY" + _exist.SNTL.slice(-51)
+                // _exist.SNTL = __f.substring(9) + "DDMMYYYY" + __f.slice(-51)
                 _exist.DFacture = null
                 _exist.NFacture = null
                 _exist.meta.factured = false
@@ -146,7 +151,11 @@ const BonsModel = types.model({
                 if(bon?.uuid){
                 let exis = self.List.findIndex(W => W.uuid == bon?.uuid) !== -1;
                 if(!exis){
-                    let SNTL = `${bon.CFournisseur}XXXXXXDDMMYY${bon.DBon}${bon.CBon}${bon.CBar}${bon.CArticle}${String(bon.Quantity).replace(/[^0-9]/g,"").padStart(6, '0')}${String(bon.PU).replace(/[^0-9]/g,"").padEnd(6, '0')}${String(bon.MontantVignette).replace(/[^0-9]/g,"").padStart(6, '0')}${String(bon.Kilos).replace(/[^0-9]/g,"").padStart(6, '0')}`
+                    let bonCBar =  bon.CBar ? bon.CBar.replace(/[BL]/g, "") : "XXXXXXXX";
+                    //1+2+6+6+8+8+8+3+6+5+6+8 = 67
+                    //1+2+0+0+8+8+8+3+6+5+6+8 = 55
+                    //0+0+0+0+8+8+8+3+6+5+6+8 = 52
+                    let SNTL = `${bon.CFournisseur}XXXXXXMMYYYY${bon.DBon}${bon.CBon}${bonCBar}${bon.CArticle}${String(bon.Quantity).replace(/[^0-9]/g,"").padStart(6, '0')}${String(bon.PU).replace(/[^0-9]/g,"").padEnd(5, '0')}${String(bon.MontantVignette).replace(/[^0-9]/g,"").padStart(6, '0')}${String(bon.Kilos).replace(/[^0-9]/g,"").padStart(8, '0')}`
                     let others = self.List.filter(W => W.uuid != bon?.uuid)
                     self.List.replace(others)
                     self.List.push({...bon, SNTL})
@@ -166,7 +175,11 @@ const BonsModel = types.model({
             try {
                 let exis = self.List.findIndex(W => W.uuid == bon?.uuid) !== -1;
                 if(exis){
-                    let SNTL = `${bon.CFournisseur}XXXXXXDDMMYY${bon.DBon}${bon.CBon}${bon.CBar}${bon.CArticle}${String(bon.Quantity).replace(/[^0-9]/g,"").padStart(6, '0')}${String(bon.PU).replace(/[^0-9]/g,"").padEnd(6, '0')}${String(bon.MontantVignette).replace(/[^0-9]/g,"").padStart(6, '0')}${String(bon.Kilos).replace(/[^0-9]/g,"").padStart(6, '0')}`
+                    let bonCBar =  bon.CBar ? bon.CBar.replace(/[BL]/g, "") : "XXXXXXXX";
+                    //1+2+6+6+8+8+8+3+6+5+6+8 = 67
+                    //1+2+0+0+8+8+8+3+6+5+6+8 = 55
+                    //0+0+0+0+8+8+8+3+6+5+6+8 = 52
+                    let SNTL = `${bon.CFournisseur}XXXXXXMMYYYY${bon.DBon}${bon.CBon}${bonCBar}${bon.CArticle}${String(bon.Quantity).replace(/[^0-9]/g,"").padStart(6, '0')}${String(bon.PU).replace(/[^0-9]/g,"").padEnd(5, '0')}${String(bon.MontantVignette).replace(/[^0-9]/g,"").padStart(6, '0')}${String(bon.Kilos).replace(/[^0-9]/g,"").padStart(8, '0')}`
                     self.List.replace(self.List.filter(s=>s.CBon!=bon?.CBon));
                     self.List.push({...bon, SNTL})
                     resolve(SNTL)
@@ -191,14 +204,16 @@ const BonsModel = types.model({
             try {
                 let exis = self.List.find(W => W.uuid == id);
                 if (!exis) reject(false);
-                let _SNTL = exis.SNTL.replace("XXXXXX", fnumber)
-                let SNTL = _SNTL.replace("DDMMYY", fdate)
-                self.List.remove(exis)
+                let _SNTL = exis.SNTL.replace("XXXXXX", fnumber);
+                let ndate = moment(fdate, "DDMMYY").toDate();
+                let _ndate = `${new Date()?.getMonth()?.toString()?.padStart(2,"0")}${ndate.getFullYear()}`;
+                let SNTL = _SNTL.replace("MMYYYY", _ndate);
+                self.List.remove(exis);
                 self.List.push({...exis, SNTL});
                 resolve(true)
             } catch (error) {
                 console.log(error);
-                reject(false)
+                reject(false);
             }
         })
     }

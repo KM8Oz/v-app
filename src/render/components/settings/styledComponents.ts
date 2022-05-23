@@ -153,7 +153,7 @@ export const ItemDate = styled(DatePicker)<{area?:string}>`
 
 export const ItemNom = styled.input`
   font-family: Archivo;
-  font-size: 14px;
+  font-size: 11px;
   font-weight: 500;
   text-align: center;
   width: 61px;

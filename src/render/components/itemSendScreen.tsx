@@ -108,7 +108,7 @@ function ItemSendScreen({ selected = false, remove, factured, bon,edit, ...props
           CBon: bon.CBon,
           station:bon.station,
           CBar:bon.CBar,
-          DBon: bon.DBon,
+          DBon: moment(bon.DBon, "DDMMYYYY").toDate(), //04262022
           Count: bon.Count,
           MontantTotalBrut: bon.MontantTotalBrut,
           Kilos: bon.Kilos,
@@ -120,6 +120,7 @@ function ItemSendScreen({ selected = false, remove, factured, bon,edit, ...props
           Signature: bon.Signature,
           uuid:bon.uuid
         }
+        // console.log(bon.CArticle);
         TempBon.setTempBon(_bon).then(()=>{
           edit()
         }).catch((err)=>{

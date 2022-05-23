@@ -7,6 +7,8 @@ import { BonSimpleType, BonsModel } from '../store/vignettes/BonsModel';
 import { makeid } from '../tools';
 import { VignettestypeFromServer } from '../tools/formatters';
 import { IOPrivate } from '../tools/sockets';
+import moment from 'moment';
+import { formatDate, getDATE } from '../tools/formaters';
 const computerName = require("os").userInfo().username
 console.log(computerName);
 
@@ -48,17 +50,20 @@ const MenuLeft = observer(({ Bon, setStoreBon, reset, setMenuConf }: Props) => {
          }} />
       </div>
    );
-   const { Bons, User } = usePersistentStore()
+   const { Bons, User, Settings } = usePersistentStore()
    //  const [ShowModel, setShowModel] = useState(false);
    const [saved, setSaved] = useState(false);
    const save = () => {
       if (Math.abs(Number(Bon.MontantTotalBrut) - Number(Bon.MontantVignette)) >= 5) return openNotification("échec de l'enregistrement", "(MontantVignette - MontantTotalBrut) > 5 dh")
       // console.log(!Bon?.CArticle , !Bon?.CBar ,!Bon?.CBon ,!Bon?.CFournisseur ,!Bon?.DBon  ,!Bon?.Kilos ,!Bon?.MontantTotal ,!Bon?.MontantTotalBrut,!Bon?.MontantVignette,!Bon?.PU,!Bon?.Quantity,!Bon?.Signature,!Bon?.Ville,!Bon?.station);
-      if (!Bon?.CArticle || !Bon?.CBar ||!Bon?.CBon ||!Bon?.CFournisseur ||!Bon?.DBon  ||!Bon?.Kilos ||!Bon?.MontantTotal ||!Bon?.MontantTotalBrut||!Bon?.MontantVignette||!Bon?.PU||!Bon?.Quantity||!Bon?.Signature||!Bon?.Ville||!Bon?.station) return openNotification("échec de l'enregistrement", "Certaines informations manquent")
+      if (!Bon?.CArticle || !Bon?.CBar ||!Bon?.CBon ||!Bon?.CFournisseur ||!Bon?.DBon  ||!Bon?.Kilos ||!Bon?.MontantTotal ||!Bon?.MontantTotalBrut||!Bon?.MontantVignette||!Bon?.PU||!Bon?.Quantity||!Bon?.Ville||!Bon?.station) return openNotification("échec de l'enregistrement", "Certaines informations manquent")
       setSaved(true)
       let _uuid = makeid(12);
+      console.log(Bon.DBon);
+      
       Bons.add({
          ...Bon,
+         // DBon:formatDate(new Date(Bon.DBon), Settings.DBon[0]?.format || "DDMMYYYY"),
          uuid:_uuid,
          meta: {
             createById: User.ssid,
@@ -82,10 +87,11 @@ const MenuLeft = observer(({ Bon, setStoreBon, reset, setMenuConf }: Props) => {
                   station:Bon.station,
                   CBar:Bon.CBar,
                   CBon:Bon.CBon,
+                  // DBon:formatDate(new Date(Bon.DBon), Settings.DBon[0]?.format || "DDMMYYYY"),
                   DBon:Bon.DBon,
                   PU:Bon.PU,
                   SNTL:res,
-                  Signature:Bon.Signature,
+                  Signature:Bon.Signature || "",
                   Ville:Bon.Ville,
                   archived:false,
                   factured:false,
@@ -207,7 +213,7 @@ const Commentaire = styled.button`
 const ProfileName = styled.p`
    margin: unset;
    padding: unset;
-   font-size: 12px;
+   font-size: 11px;
    font-family:Arial, Helvetica, sans-serif;
    font-weight:400;
    color: #444;

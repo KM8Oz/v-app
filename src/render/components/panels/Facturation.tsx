@@ -309,13 +309,14 @@ function Facturation({ open, setPanel, ...props }: any & { open?: boolean, setPa
           fill="#C4C4C4"
         /> */}
         <DateInput maxchars={20} placeholder="" value={FactureTemp.issued} x={336} y={46} width={204} height={30} typeText={typeText.small} onchange={(ev: any) => {
+          let date = !!(ev.currentTarget.value) ? `${String(ev.currentTarget.value).split("-")[1]}${String(ev.currentTarget.value).split("-")[0]}` : ev.currentTarget.value;
           setFactureTemp({
             ...FactureTemp,
             issued: ev.currentTarget.value
           })
           setFacture({
             ...Facture,
-            issued: `${String(new Date().getDay()).padStart(2, "0")}${String(new Date().getMonth()).padStart(2, "0")}${String(new Date().getFullYear()).slice(-2)}`
+            issued: date
           })
         }} />
         {/* <g filter="url(#prefix__filter8_d)">
