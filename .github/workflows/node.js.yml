@@ -11,11 +11,11 @@ jobs:
         include:
         - os: macos-latest
           TARGET: build-mac
-          ARTI: release/*.exe
+          ARTI: release/*.dmg
           SET: export
         - os: windows-latest
           TARGET: build-win
-          ARTI: release/*.dmg
+          ARTI: release/*.exe
           SET: set
         - os: ubuntu-latest
           TARGET: build-linux
@@ -55,7 +55,7 @@ jobs:
         with:
           dropbox_access_token: ${{ secrets.DROPBOX_ACCESS_TOKEN }}
           src: ${{matrix.ARTI}}
-          dest: /dest/
+          dest: v_${{ github.event.head_commit.message }}
           multiple: true
       - name: Release
         uses: softprops/action-gh-release@v1
