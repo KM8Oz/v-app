@@ -12,14 +12,17 @@ jobs:
         - os: macos-latest
           TARGET: build-mac
           ARTI: release/*.dmg
+          ARTID: release/*.dmg
           SET: export
         - os: windows-latest
           TARGET: build-win
           ARTI: release/*.7z
+          ARTID: release/*.(7z|exe)
           SET: set
         - os: ubuntu-latest
           TARGET: build-linux
           ARTI: release/*.AppImage
+          ARTID: release/*.(AppImage|snap)
           SET: set
     steps:
       - uses: actions/checkout@v1
@@ -51,15 +54,11 @@ jobs:
           name: ${{ matrix.os }}
           path: release
           # if-no-files-found: warn # 'warn' or 'ignore'
-      - uses: deka0106/upload-to-dropbox@v2
+      - uses: nagata-yoshiteru/deploy-to-dropbox@master
         with:
-          dropbox_access_token: ${{ secrets.DROPBOX_ACCESS_TOKEN }}
-          src: ${{matrix.ARTI}}
-          dest: "/${{ github.event.head_commit.message }}/"
-          multiple: true
-          mode: add
-          autorename: true
-          mute: false
+         DROPBOX_ACCESS_TOKEN: ${{ secrets.DROPBOX_ACCESS_TOKEN }}
+         GLOB: ${{matrix.ARTID}}
+         FILE_WRITE_MODE: overwrite
       - name: Release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
