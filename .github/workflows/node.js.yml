@@ -16,7 +16,7 @@ jobs:
           SET: export
         - os: windows-latest
           TARGET: build-win
-          ARTI: release/*.exe
+          ARTI: release/*.msi
           ARTID: release/*.(msi|exe)
           SET: set
         - os: ubuntu-latest
