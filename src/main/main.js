@@ -16,7 +16,7 @@ if(!isDev) autoUpdater.setFeedURL({
     owner: 'KM8Oz',
     url:"https://github.com/KM8Oz/v-app.git", 
     private: true,
-    token: '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'
+    token: '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'
 })
 if(!isDev) autoUpdater.on('error', message => {
     console.error('There was a problem updating the application')

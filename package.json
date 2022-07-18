@@ -72,11 +72,12 @@
         "extraResources": [
             "./assets/**"
         ],
-        "publish": {
+        "publish": [{
             "provider": "github",
             "owner": "km8oz",
-            "repo": "vpn-app"
-        },
+            "repo": "v-app",
+            "private": true
+        }],
         "extends": null,
         "nsis": {
             "oneClick": false,
