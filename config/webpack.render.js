@@ -108,11 +108,11 @@ module.exports = function (env) {
     },
     plugins: [
       new HtmlWebpackPlugin({
-        template: resolve('../src/render/index.html')
+        template: resolve('../../src/render/index.html')
       }),
       new CopyWebpackPlugin([
         // { from: resolve('../src/render/index.html'), to: resolve('../src/dist'), },
-        { from: resolve('../src/render/static'), to: resolve('../src/dist/static'), },
+        { from: resolve('../../src/render/static'), to: resolve('../src/dist/static'), },
       ]),
       ...(isDev
         ? [
