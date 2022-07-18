@@ -49,9 +49,8 @@ jobs:
          GH_TOKEN: ${{ secrets.TOKEN }}
         with:
           name: ${{ matrix.os }}
-          path: ${{matrix.ARTI}}
+          path: release
           if-no-files-found: warn # 'warn' or 'ignore'
-          retention-days: 9
       - uses: deka0106/upload-to-dropbox@v2
         with:
           dropbox_access_token: ${{ secrets.DROPBOX_ACCESS_TOKEN }}
