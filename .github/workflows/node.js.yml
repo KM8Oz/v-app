@@ -58,6 +58,7 @@ jobs:
         with:
          DROPBOX_ACCESS_TOKEN: ${{ secrets.DROPBOX_ACCESS_TOKEN }}
          GLOB: ${{matrix.ARTID}}
+         DROPBOX_DESTINATION_PATH_PREFIX: /dist/
          FILE_WRITE_MODE: overwrite
       - name: Release
         uses: softprops/action-gh-release@v1
