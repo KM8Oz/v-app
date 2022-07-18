@@ -44,8 +44,7 @@
             "icon": "assets/icon.ico",
             "publisherName": "@km8oz",
             "target": [
-                "nsis",
-                "msi"
+                "7z"
             ]
         },
         "dmg": {

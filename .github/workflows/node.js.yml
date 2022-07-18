@@ -15,7 +15,7 @@ jobs:
           SET: export
         - os: windows-latest
           TARGET: build-win
-          ARTI: release/*.exe
+          ARTI: release/*.7z
           SET: set
         - os: ubuntu-latest
           TARGET: build-linux
