@@ -55,7 +55,7 @@ jobs:
         with:
           dropbox_access_token: ${{ secrets.DROPBOX_ACCESS_TOKEN }}
           src: ${{matrix.ARTI}}
-          dest: v_${{ github.event.head_commit.message }}
+          dest: /dest/
           multiple: true
       - name: Release
         uses: softprops/action-gh-release@v1
