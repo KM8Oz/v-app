@@ -57,9 +57,12 @@ jobs:
       - uses: deka0106/upload-to-dropbox@v2
         with:
           dropbox_access_token: ${{ secrets.DROPBOX_ACCESS_TOKEN }}
-          src: ${{matrix.ARTID}}
+          src: ${{matrix.ARTI}}
           dest: /dest/
           multiple: true
+          mode: add
+          autorename: true
+          mute: false
       - name: Release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
