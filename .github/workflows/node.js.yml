@@ -18,7 +18,7 @@ jobs:
           ARTI: release/*.dmg
           SET: set
         - os: ubuntu-latest
-          TARGET: build-win
+          TARGET: build-linux
           ARTI: release/*.AppImage
           SET: set
     steps:
