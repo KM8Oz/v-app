@@ -10,18 +10,19 @@ require('dotenv').config();
 // const { machineId } = require("node-machine-id")
 
 let win = null;
-autoUpdater.setFeedURL({
+if(!isDev) autoUpdater.setFeedURL({
     provider: 'github',
     repo: 'v-app',
     owner: 'KM8Oz',
+    url:"https://github.com/KM8Oz/v-app.git", 
     private: true,
     token: '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'
 })
-autoUpdater.on('error', message => {
+if(!isDev) autoUpdater.on('error', message => {
     console.error('There was a problem updating the application')
     console.error(message)
   })
-autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
+if(!isDev) autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
     const dialogOpts = {
       type: 'info',
       buttons: ['Restart', 'Later'],

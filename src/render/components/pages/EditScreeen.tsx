@@ -176,7 +176,7 @@ export default observer(({ setMenuConf }: Props): ReactElement => {
                         code: e.id,
                     })) as any}
                     placeholder="Station"
-                    value={StoreBon.station} x={604} y={178} width={132} height={20}
+                    value={StoreBon.station} x={618} y={180} width={132} height={20}
                     typeText={typeText.small} onchange={(ev: any) => {
                         setStoreBon({
                             ...StoreBon,

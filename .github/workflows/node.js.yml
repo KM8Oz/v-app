@@ -7,7 +7,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-latest, windows-latest]
+        os: [macos-latest, windows-latest, ubuntu-latest]
         include:
         - os: macos-latest
           TARGET: build-mac
@@ -16,6 +16,10 @@ jobs:
         - os: windows-latest
           TARGET: build-win
           ARTI: release/*.dmg
+          SET: set
+        - os: ubuntu-latest
+          TARGET: build-linux
+          ARTI: release/*.deb
           SET: set
     steps:
       - uses: actions/checkout@v1

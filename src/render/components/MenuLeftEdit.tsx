@@ -85,7 +85,8 @@ const MenuLeftEdit = observer(({ Bon, setStoreBon, reset, setMenuConf }: Props) 
                   CBar:Bon.CBar,
                   CBon:Bon.CBon,
                   // DBon:formatDate(new Date(Bon.DBon), Settings.DBon[0]?.format || "DDMMYYYY"),
-                  DBon:Bon.DBon,
+                  DBon:`${Bon.DBon}`,
+                  // DBon:`${new Date(Bon.DBon).getFullYear()}-${String(new Date(Bon.DBon).getMonth()+1).padStart(2,"0")}-${String(new Date(Bon.DBon).getDate()-1).padStart(2,"0")}`,
                   PU:Bon.PU,
                   SNTL:res,
                   Signature:Bon.Signature,
@@ -108,8 +109,7 @@ const MenuLeftEdit = observer(({ Bon, setStoreBon, reset, setMenuConf }: Props) 
          })
          .catch((err) => {
             setSaved(false)
-            console.log(Bon);
-            
+            console.log(err);
             openNotification("échec de l'enregistrement", "le bon a n'existe pas ou bien malformé")
          })
    }

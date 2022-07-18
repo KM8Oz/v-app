@@ -97,39 +97,40 @@ function ItemSendScreen({ selected = false, remove, factured, bon,edit, ...props
         DeFacturé
       </Button>}
       {
-      !bon.meta.factured &&<Button style={{
-        marginLeft: 5,
-        marginRight: 5
-      }} 
-      onClick={()=>{
-        let _bon = {
-          CFournisseur: bon.CFournisseur,
-          CArticle: bon.CArticle,
-          CBon: bon.CBon,
-          station:bon.station,
-          CBar:bon.CBar,
-          DBon: moment(bon.DBon, "DDMMYYYY").toDate(), //04262022
-          Count: bon.Count,
-          MontantTotalBrut: bon.MontantTotalBrut,
-          Kilos: bon.Kilos,
-          Ville: bon.Ville,
-          MontantVignette:bon.MontantVignette,
-          MontantTotal: bon.MontantTotal,
-          PU: bon.PU,
-          Quantity: bon.Quantity,
-          Signature: bon.Signature,
-          uuid:bon.uuid
-        }
-        // console.log(bon.CArticle);
-        TempBon.setTempBon(_bon).then(()=>{
-          edit()
-        }).catch((err)=>{
-          console.log(err);
-        })
-        }}
-      type="primary" size="small">
-        modifier
-      </Button>}
+      // !bon.meta.factured &&<Button style={{
+      //   marginLeft: 5,
+      //   marginRight: 5
+      // }} 
+      // onClick={()=>{
+      //   let _bon = {
+      //     CFournisseur: bon.CFournisseur,
+      //     CArticle: bon.CArticle,
+      //     CBon: bon.CBon,
+      //     station:bon.station,
+      //     CBar:bon.CBar,
+      //     DBon: moment(bon.DBon, "DDMMYYYY").toDate(), //04262022
+      //     Count: bon.Count,
+      //     MontantTotalBrut: bon.MontantTotalBrut,
+      //     Kilos: bon.Kilos,
+      //     Ville: bon.Ville,
+      //     MontantVignette:bon.MontantVignette,
+      //     MontantTotal: bon.MontantTotal,
+      //     PU: bon.PU,
+      //     Quantity: bon.Quantity,
+      //     Signature: bon.Signature,
+      //     uuid:bon.uuid
+      //   }
+      //   // console.log(bon.CArticle);
+      //   TempBon.setTempBon(_bon).then(()=>{
+      //     edit()
+      //   }).catch((err)=>{
+      //     console.log(err);
+      //   })
+      //   }}
+      // type="primary" size="small">
+      //   modifier
+      // </Button>
+      }
     </div>
   )
 
