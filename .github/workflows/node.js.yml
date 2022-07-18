@@ -12,14 +12,17 @@ jobs:
         - os: macos-latest
           TARGET: build-mac
           ARTI: release/*.dmg
+          ARTID: release/*.dmg
           SET: export
         - os: windows-latest
           TARGET: build-win
-          ARTI: release/*.exe
+          ARTI: release/*.msi
+          ARTID: release/*.(msi|exe)
           SET: set
         - os: ubuntu-latest
           TARGET: build-linux
-          ARTI: release/*.AppImage | release/*.snap 
+          ARTI: release/*.AppImage
+          ARTID: release/*.(AppImage|snap)
           SET: set
     steps:
       - uses: actions/checkout@v1
@@ -54,7 +57,7 @@ jobs:
       - uses: deka0106/upload-to-dropbox@v2
         with:
           dropbox_access_token: ${{ secrets.DROPBOX_ACCESS_TOKEN }}
-          src: ${{matrix.ARTI}}
+          src: ${{matrix.ARTID}}
           dest: /dest/
           multiple: true
       - name: Release
