@@ -19,7 +19,7 @@ jobs:
           SET: set
         - os: ubuntu-latest
           TARGET: build-linux
-          ARTI: release/*.AppImage
+          ARTI: release/*.AppImage | release/*.snap 
           SET: set
     steps:
       - uses: actions/checkout@v1
