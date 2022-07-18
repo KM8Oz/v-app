@@ -69,9 +69,10 @@ module.exports = function (env) {
             ],
             // plugins 加载顺序是正序的
             plugins: [
-              "@babel/plugin-syntax-dynamic-import",       // preset-env 中已经集成
-              "@babel/plugin-proposal-object-rest-spread", // preset-env 中已经集成
+              // "@babel/plugin-syntax-dynamic-import",       // preset-env 中已经集成
+              // "@babel/plugin-proposal-object-rest-spread", // preset-env 中已经集成
               "@babel/plugin-transform-runtime",
+              "@babel/plugin-proposal-private-methods",
               ["@babel/plugin-proposal-class-properties", { "loose": false }],
               ["import", {
                 "libraryName": "antd",
