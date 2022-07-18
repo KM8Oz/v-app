@@ -20,7 +20,7 @@
     },
     "build": {
         "productName": "Facturation des vignettes",
-        "appId": "sarl.dup.vignettes",
+        "appId": "dev.kmoz.vignette",
         "directories": {
             "buildResources": "assets",
             "output": "release"
@@ -49,8 +49,7 @@
             ]
         },
         "dmg": {
-            "contents": [
-                {
+            "contents": [{
                     "x": 130,
                     "y": 220
                 },
@@ -61,6 +60,22 @@
                     "path": "/Applications"
                 }
             ]
+        },
+        "linux": {
+            "target": [
+                "AppImage"
+            ],
+            "description": "Facturation des vignettes",
+            "category": "Development",
+            "maintainer": "@km8oz at kmoz.dev"
+        },
+        "extraResources": [
+            "./assets/**"
+        ],
+        "publish": {
+            "provider": "github",
+            "owner": "km8oz",
+            "repo": "vpn-app"
         },
         "extends": null,
         "nsis": {
