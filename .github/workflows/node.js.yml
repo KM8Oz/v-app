@@ -41,6 +41,8 @@ jobs:
         run: yarn install
       - name: Publish
         run: ${{matrix.SET}} CSC_IDENTITY_AUTO_DISCOVERY=false && ${{matrix.SET}} GH_TOKEN=${{ secrets.TOKEN }} && yarn ${{matrix.TARGET}}
+        env:
+         GH_TOKEN: ${{ secrets.TOKEN }}
       - name: Upload artifacts
         uses: actions/upload-artifact@v1
         env:
