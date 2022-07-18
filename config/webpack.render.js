@@ -59,6 +59,7 @@ module.exports = function (env) {
                 // 为 usage main.js 主动引入 @babel/polyfill, 只会把用到的 polyfill 引入，
                 "useBuiltIns": "usage",
                 "corejs": 3,
+
                 // 默认是 false 开启后控制台会看到 哪些语法做了转换，Babel的日志信息，开发的时候强烈建议开启
                 // "debug": isDev,
               }
@@ -68,10 +69,10 @@ module.exports = function (env) {
             ],
             // plugins 加载顺序是正序的
             plugins: [
-              // "@babel/plugin-syntax-dynamic-import",       // preset-env 中已经集成
-              // "@babel/plugin-proposal-object-rest-spread", // preset-env 中已经集成
+              "@babel/plugin-syntax-dynamic-import",       // preset-env 中已经集成
+              "@babel/plugin-proposal-object-rest-spread", // preset-env 中已经集成
               "@babel/plugin-transform-runtime",
-              ["@babel/plugin-proposal-class-properties", { "loose": true }],
+              ["@babel/plugin-proposal-class-properties", { "loose": false }],
               ["import", {
                 "libraryName": "antd",
                 "style": true, // or 'css'
